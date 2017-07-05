@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.chengtech.chengtechmt.activity.business.BricheckManageActivity">
+
+   <!-- <Button
+        android:onClick="onAddNewItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="新增"/>-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="新增"
+        android:gravity="center"
+        android:drawablePadding="5dp"
+        android:onClick="onAddNewItem"
+        android:padding="2dp"
+        android:background="@drawable/default2_white_click"
+        android:drawableLeft="@drawable/ic_vector_add"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+</LinearLayout>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/obu_information"
+            style="@style/btn_rectangle_blue"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:text="设备信息"/>
+
+        <Button
+            android:id="@+id/card_information"
+            style="@style/btn_rectangle_blue"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:text="读卡信息"/>
+
+        <Button
+            android:id="@+id/credit_for_load"
+            style="@style/btn_rectangle_blue"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:text="圈存写卡(测试卡)"
+            />
+
+        <Button
+            android:id="@+id/card_owner"
+            style="@style/btn_rectangle_blue"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:text="读OBU系统信息"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/transaction_record"
+            style="@style/btn_rectangle_blue"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:text="读取交易记录"/>
+
+        <Button
+            android:id="@+id/consume_record"
+            style="@style/btn_rectangle_blue"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:text="读取消费记录"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_03"
+            android:layout_marginTop="@dimen/dimen_20"
+            android:background="#dddddd"/>
+
+        <TextView
+            android:id="@+id/result_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_10"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:lineSpacingExtra="@dimen/dimen_06"
+            android:text=""
+            android:textColor="@color/recharge_blue_txt"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_03"
+            android:layout_marginBottom="@dimen/dimen_20"
+            android:layout_marginTop="@dimen/dimen_20"
+            android:background="@null"/>
+
+
+    </LinearLayout>
+</ScrollView>

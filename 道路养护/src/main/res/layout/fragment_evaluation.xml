@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/chartTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="15dp"
+                android:background="#FF7F50"/>
+
+            <TextView
+                android:layout_width="40dp"
+                android:layout_height="20dp"
+                android:gravity="center"
+                android:text="PQI"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="10dp"
+                android:background="#87CEFA"/>
+
+            <TextView
+                android:layout_width="40dp"
+                android:layout_height="20dp"
+                android:gravity="center"
+                android:text="PCI"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="10dp"
+                android:background="#DA70D6"/>
+
+            <TextView
+                android:layout_width="40dp"
+                android:layout_height="20dp"
+                android:gravity="center"
+                android:text="RQI"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+
+        <lecho.lib.hellocharts.view.ColumnChartView
+            android:id="@+id/columnChart"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"/>
+
+        <Button
+            android:id="@+id/detail_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:background="@color/light_sky_blue"
+            android:padding="5dp"
+            android:text="查看详细数据"/>
+
+        <com.chengtech.chengtechmt.view.MyHorizontalScrollView2
+            android:id="@+id/recyclerView"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+        </com.chengtech.chengtechmt.view.MyHorizontalScrollView2>
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

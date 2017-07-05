@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="3dp"
+        android:text="管理局："
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="12sp" />
+
+    <com.chengtech.nicespinner.NiceSpinner
+        android:id="@+id/firstDept"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:arrowTint="@android:color/holo_orange_dark"
+        app:textTint="#605a5a" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@color/white"
+        android:padding="3dp"
+        android:text="管理单位："
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="12sp" />
+
+    <com.chengtech.nicespinner.NiceSpinner
+        android:id="@+id/secondDept"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:arrowTint="@android:color/holo_orange_dark"
+        app:textTint="#605a5a" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@color/white"
+        android:padding="3dp"
+        android:text="养护站："
+        android:visibility="gone"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="12sp" />
+
+    <com.chengtech.nicespinner.NiceSpinner
+        android:id="@+id/thirdDept"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:arrowTint="@android:color/holo_orange_dark"
+        app:textTint="#605a5a" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@color/white"
+        android:padding="3dp"
+        android:text="年份："
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="12sp"
+        android:visibility="gone" />
+
+    <com.chengtech.nicespinner.NiceSpinner
+        android:id="@+id/year"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:arrowTint="@android:color/holo_orange_dark"
+        app:textTint="#605a5a" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@color/white"
+        android:padding="3dp"
+        android:text="月份："
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="12sp"
+        android:visibility="gone" />
+
+    <com.chengtech.nicespinner.NiceSpinner
+        android:id="@+id/month"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:arrowTint="@android:color/holo_orange_dark"
+        app:textTint="#605a5a" />
+
+</LinearLayout>

@@ -1,0 +1,96 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:paddingBottom="26dp">
+
+    <ScrollView
+        android:id="@+id/noticedetail_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- 标题 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26dp"
+                android:layout_marginRight="26dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/noticedetail_time_shape"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@color/light_sky_blue"
+                    android:gravity="center"
+                    android:text="名称"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/noticedetail_content_title_text_size"/>
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:padding="10dp"
+                    android:text=""
+                    android:textSize="@dimen/noticedetail_content_content_text_size"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26dp"
+                android:layout_marginRight="26dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/noticedetail_time_shape"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@color/light_sky_blue"
+                    android:gravity="center"
+                    android:text="备注"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/noticedetail_content_title_text_size"/>
+
+                <TextView
+                    android:id="@+id/memo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:padding="10dp"
+                    android:text=""
+                    android:textSize="@dimen/noticedetail_content_content_text_size"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/light_sky_blue3"/>
+             <android.support.v7.widget.RecyclerView
+                 android:id="@id/recyclerView"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/light_sky_blue3"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

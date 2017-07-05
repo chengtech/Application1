@@ -1,0 +1,228 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="26dp">
+
+    <com.chengtech.chengtechmt.view.TitleLayout
+        android:id="@+id/mytitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:id="@+id/noticedetail_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/noticedetail_title_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/noticedetail_title_shape"
+                    android:text="公告信息"
+                    android:textColor="#4A708B"
+                    android:textSize="@dimen/noticedetail_title_1_text_size" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_toLeftOf="@id/noticedetail_title_1"
+                    android:background="#708090" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_toRightOf="@id/noticedetail_title_1"
+                    android:background="#708090" />
+            </RelativeLayout>
+
+            <!-- 标题 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26dp"
+                android:layout_marginRight="26dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/noticedetail_content_shape"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="#66CDAA"
+                    android:gravity="center"
+                    android:text="标题"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/noticedetail_content_title_text_size" />
+
+                <TextView
+                    android:id="@+id/noticedetail_subject"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:padding="10dp"
+                    android:text="标题飞凤飞凤飞飞凤飞飞凤飞飞飞"
+                    android:textColor="#9FB6CD"
+                    android:textSize="@dimen/noticedetail_content_content_text_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26dp"
+                android:layout_marginRight="26dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/noticedetail_content_shape"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="#66CDAA"
+                    android:gravity="center"
+                    android:text="紧急程度"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/noticedetail_content_title_text_size" />
+
+                <TextView
+                    android:id="@+id/noticedetail_urgency"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:padding="10dp"
+                    android:text="标题飞凤飞凤飞飞凤飞飞凤飞飞飞"
+                    android:textColor="#9FB6CD"
+                    android:textSize="@dimen/noticedetail_content_content_text_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26dp"
+                android:layout_marginRight="26dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/noticedetail_content_shape"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="#66CDAA"
+                    android:gravity="center"
+                    android:text="附件"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/noticedetail_content_title_text_size" />
+
+                <TextView
+                    android:id="@+id/noticedetail_attachment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:padding="10dp"
+                    android:textColor="#9FB6CD"
+                    android:textSize="@dimen/noticedetail_content_content_text_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26dp"
+                android:layout_marginRight="26dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/noticedetail_content_shape"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="#66CDAA"
+                    android:gravity="center"
+                    android:text="内容"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/noticedetail_content_title_text_size" />
+
+                <TextView
+                    android:id="@+id/noticedetail_content"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:padding="10dp"
+                    android:text="标题飞凤飞凤飞飞凤飞飞凤飞飞飞"
+                    android:textColor="#9FB6CD"
+                    android:textSize="@dimen/noticedetail_content_content_text_size" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/noticedetail_title_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/noticedetail_title_shape"
+                    android:text="浏览记录"
+                    android:textColor="#4A708B"
+                    android:textSize="@dimen/noticedetail_title_1_text_size" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_toLeftOf="@id/noticedetail_title_2"
+                    android:background="#708090" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_toRightOf="@id/noticedetail_title_2"
+                    android:background="#708090" />
+            </RelativeLayout>
+
+            <ListView
+                android:id="@+id/noticedetail_listview_1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="6dp"
+                android:paddingLeft="26dp"
+                android:paddingRight="26dp"
+                android:scrollbars="none"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

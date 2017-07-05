@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+   <!-- <com.chengtech.bliblitext.view.BliBliText
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="今天开始要好好努力学习，加油！"
+        />
+
+    <com.chengtech.bliblitext.view.MusicTip
+        android:layout_width="200dp"
+        android:layout_height="300dp"
+        />-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/move_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="左移"
+            />
+        <Button
+            android:id="@+id/move_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="右移"
+            />
+        <Button
+            android:id="@+id/move_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="上移"
+            />
+        <Button
+            android:id="@+id/move_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="下移"
+            />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--<com.chengtech.bliblitext.view.MyDiyView1
+            android:id="@+id/myView1"
+            android:layout_width="100dp"
+            android:background="@color/colorAccent"
+            android:layout_height="100dp"
+            />-->
+        <com.chengtech.bliblitext.view.MyDrawLine2
+        android:id="@+id/id_line"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+        <!--<com.chengtech.bliblitext.view.DrawCircle
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            />-->
+
+        <!--<com.chengtech.bliblitext.view.MyBitmapGradient
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />-->
+    </RelativeLayout>
+
+
+
+</LinearLayout>

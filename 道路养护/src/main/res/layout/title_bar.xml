@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="@dimen/tab_page_title_height"
+    tools:ignore="ObsoleteLayoutParam" 
+  >
+
+    <TextView
+        android:id="@+id/titleTxt"
+        style="@style/PanelTitleText"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="列表"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/title_text_size" />
+
+    <RelativeLayout
+        android:id="@+id/left_area"
+        android:layout_width="50dp"
+        android:layout_height="@dimen/tab_page_title_height"
+        android:layout_alignParentLeft="true"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="5dip"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/left_arrow" 
+            android:clickable="false"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/right_area"
+        android:layout_width="50dp"
+        android:layout_height="@dimen/tab_page_title_height"
+        android:layout_alignParentRight="true"
+         >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="5dip"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/right_arrow" 
+            android:clickable="false"
+            android:text="筛选"
+            android:textColor="@color/white"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

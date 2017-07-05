@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="dbm_group_1">
+        <item>路线信息</item>
+        <item>区间路段信息</item>
+        <item>养护路段信息</item>
+        <item>桥梁卡片</item>
+        <item>隧道卡片</item>
+        <item>涵洞卡片</item>
+        <!--  <item>路面信息</item>
+         <item>路面结构配置</item> -->
+        <item>沿线设施</item>
+        <item>边坡路堤挡墙</item>
+        <item>交安设施</item>
+        <item>绿化信息</item>
+        <item>交通量观测站</item>
+        <item>公路绿化</item>
+    </string-array>
+
+    <string-array name="dbm_group_1_url">
+        <item>mt/dbm/road/route/listRouteJson.action</item>
+        <item>mt/dbm/road/section/getTree.action</item>
+        <item>mt/dbm/road/worksection/getTree.action</item>
+        <item>mt/dbm/road/bridge/getTree.action</item>
+        <item>mt/dbm/road/tunnel/getTree.action</item>
+        <item>mt/dbm/road/culvert/getTree.action</item>
+        <item>mt/dbm/road/roadsidefacilities/rftree/getTree.action</item>
+        <item>mt/dbm/road/slope/getTree.action</item>
+        <!-- <item>mt/dbm/road/structure/getTree.action</item>
+        <item>mt/common/index.action</item> -->
+        <item>mt/dbm/road/safetyfacilities/getTree.action</item>
+        <item>mt/dbm/road/greening/getTree.action</item>
+        <item>mt/dbm/road/observatory/getTree.action</item>
+        <item>mt/dbm/road/roadgreening/getTree.action</item>
+    </string-array>
+
+    <string-array name="dbm_group_1_className">
+        <item>com.chengtech.chengtechmt.activity.dbm.RouteActivity</item>
+        <item>com.chengtech.chengtechmt.activity.dbm.DbmListActivity</item>
+        <item>com.chengtech.chengtechmt.activity.dbm.DbmListActivity</item>
+        <item>com.chengtech.chengtechmt.activity.dbm.DbmListActivity</item>
+        <item>com.chengtech.chengtechmt.activity.dbm.DbmListActivity</item>
+        <item>com.chengtech.chengtechmt.activity.dbm.DbmListActivity</item>
+        <item>com.chengtech.chengtechmt.activity.dbm.RoadSideFacilitiesActivity</item>
+        <item>com.chengtech.chengtechmt.activity.dbm.DbmListActivity</item>
+        <item>com.chengtech.chengtechmt.activity.dbm.DbmListActivity</item>
+        <item>com.chengtech.chengtechmt.activity.dbm.DbmListActivity</item>
+        <item>com.chengtech.chengtechmt.activity.dbm.DbmListActivity</item>
+        <item>com.chengtech.chengtechmt.activity.dbm.RoadGreeningActivity</item>
+        <!--   <item>com.chengtech.chengtechmt.activity.dbm.PavementConfigActivity</item> -->
+    </string-array>
+
+
+    <string-array name="bridge_a">
+        <item>路线编号</item>
+        <item>路线名称 </item>
+        <item>路线等级 </item>
+        <item>桥梁编号 </item>
+        <item>桥梁名称 </item>
+        <item>桥梁规模类型 </item>
+        <item>构造类型</item>
+        <item>管理单位</item>
+        <item>原始桩号</item>
+        <item>起始桩号</item>
+        <item>终点桩号</item>
+        <item>纠正桩号</item>
+        <item>桥位中心桩号</item>
+        <item>经度</item>
+        <item>纬度</item>
+        <item>桥梁左右幅</item>
+        <item>桥面铺装</item>
+        <item>弯斜坡度</item>
+        <item>功能类型</item>
+        <item>下穿通道名</item>
+        <item>下穿通道桩号</item>
+        <item>设计荷载</item>
+        <item>通行载重</item>
+        <item>建成年月/设计使用年限</item>
+    </string-array>
+
+    <string-array name="bridge_b">
+        <item>桥长（m）</item>
+        <item>桥面总宽（m）</item>
+        <item>车行道宽（m） </item>
+        <item>桥面标高（m）</item>
+        <item>桥下净高（m）</item>
+        <item>桥上净高（m）</item>
+        <item>引道总宽（m）</item>
+        <item>引道路面宽（m）</item>
+        <item>引道线形</item>
+        <item>伸缩缝类型</item>
+        <item>支座形式</item>
+        <item>地震动峰值加速度系数</item>
+        <item>桥台护坡</item>
+        <item>护墩体</item>
+        <item>调治构造物</item>
+        <item>常水位</item>
+        <item>设计水位</item>
+        <item>历史洪水位 </item>
+        <item>上部结构</item>
+        <item>下部结构</item>
+    </string-array>
+
+    <string-array name="bridge_c">
+        <item>设计图纸</item>
+        <item>设计文件</item>
+        <item>施工文件</item>
+        <item>竣工图纸</item>
+        <item>验收文件</item>
+        <item>行政文件</item>
+        <item>定期检查报告</item>
+        <item>特殊检查报告</item>
+        <item>历史维修资料</item>
+        <item>档案号</item>
+        <item>存档案</item>
+        <item>建档年/月 </item>
+    </string-array>
+
+    <string-array name="bridgeTech">
+        <item>检查年月</item>
+        <item>检查类型</item>
+        <item>评定等级</item>
+        <item>桥台与基础评定等级</item>
+        <item>桥墩与基</item>
+        <item>地基冲刷</item>
+        <item>上部结构</item>
+        <item>支座</item>
+        <item>经常保养小修</item>
+        <item>处治对策</item>
+        <item>下次检查年份</item>
+    </string-array>
+
+    <string-array name="bridgeRecord">
+        <item>施工日期</item>
+        <item>竣工日期</item>
+        <item>修建类别</item>
+        <item>修建原因</item>
+        <item>工程范围</item>
+        <item>工程费用(万元)</item>
+        <item>经费来源</item>
+        <item>质量评定</item>
+        <item>建设单位</item>
+        <item>设计单位</item>
+        <item>施工单位</item>
+        <item>监理单位</item>
+    </string-array>
+
+    <string-array name="tunnel_a">
+        <item>路线编码</item>
+        <item>路线名称</item>
+        <item>路线等级</item>
+        <item>隧道编号</item>
+        <item>隧道名称</item>
+        <item>隧道桩号</item>
+        <item>起始桩号</item>
+        <item>终点桩号</item>
+        <item>原始桩号</item>
+        <item>纠正桩号</item>
+        <item>隧道分类</item>
+        <item>建成年限</item>
+        <item>桥梁左右幅</item>
+        <item>经度</item>
+        <item>纬度</item>
+        <item>所属养护段</item>
+        <item>管理单位</item>
+    </string-array>
+
+    <string-array name="tunnel_b">
+        <item>隧道结构形式</item>
+        <item>上行洞长</item>
+        <item>隧道净宽</item>
+        <item>行车道宽度</item>
+        <item>下行洞长</item>
+        <item>路缘带</item>
+        <item>侧向余宽</item>
+        <item>检修道宽</item>
+        <item>隧道净高</item>
+        <item>通风</item>
+        <item>汽车横通道</item>
+        <item>人行横通道</item>
+        <item>上行洞纵坡</item>
+        <item>下行洞纵坡</item>
+        <item>横断面结构</item>
+        <item>明洞衬砌结构</item>
+        <item>上行端及其端墙材料</item>
+        <item>暗洞</item>
+        <item>下行端及其端墙材料</item>
+        <item>衬砌类型</item>
+        <item>衬砌厚度</item>
+        <item>衬砌长度</item>
+        <item>侧墙饰面</item>
+        <item>拱部内壁饰面</item>
+        <item>主线路面结构材料</item>
+        <item>横通路面结构材料</item>
+    </string-array>
+
+    <string-array name="tunnel_c">
+        <item>设计图纸</item>
+        <item>设计文件</item>
+        <item>施工文件</item>
+        <item>竣工图纸</item>
+        <item>验收文件</item>
+        <item>行政文件</item>
+        <item>定期检查报告</item>
+        <item>特殊检查报告</item>
+        <item>历次维修资料</item>
+        <item>档案号</item>
+        <item>存档案</item>
+        <item>建档年/月</item>
+    </string-array>
+
+    <string-array name="tunnelTech">
+        <item>检查年月</item>
+        <item>检查类型</item>
+        <item>评定等级</item>
+        <item>洞口评定</item>
+        <item>洞门评定</item>
+        <item>衬砌评定</item>
+        <item>路面评定</item>
+        <item>检修道评定</item>
+        <item>排水系统评定</item>
+        <item>内装</item>
+    </string-array>
+
+    <string-array name="tunnelRecord">
+        <item>施工日期</item>
+        <item>竣工日期</item>
+        <item>修建类别</item>
+        <item>修建原因</item>
+        <item>工程范围</item>
+        <item>工程费用(万元)</item>
+        <item>经费来源</item>
+        <item>质量评定</item>
+        <item>建设单位</item>
+    </string-array>
+
+
+    <string-array name="route_detail">
+        <item>路线编号</item>;
+        <item>路线等级</item>;
+        <item>路线名称</item>
+        <item>里程起点</item>;
+        <item>里程终点</item>;
+        <item>管理单位</item>;
+        <item>长度(km)</item>;
+        <item>路线走向</item>;
+        <item>建工日期</item>;
+        <item>通车日期</item>;
+        <item>备注</item>;
+    </string-array>
+
+    <string-array name="route_detail_property">
+        <item>code</item>
+        <item>routeGrade</item>
+        <item>name</item>
+        <item>startStake</item>
+        <item>endStake</item>
+        <item>dept.name</item>
+        <item>length</item>
+        <item>routeDirections</item>
+        <item>constructionDate</item>
+        <item>openingDate</item>
+        <item>memo</item>
+    </string-array>
+
+    <string-array name="projectmanagement_one">
+        <item>区段信息:</item>
+        <item>维修桥梁:</item>
+        <item>起点桩号: </item>
+        <item>终点桩号:</item>
+        <item>总投资(万元):</item>
+        <item>建设单位:</item>
+        <item>附件:</item>
+    </string-array>
+
+    <string-array name="projectmanagement_two">
+        <item>小计:</item>
+        <item>一级:</item>
+        <item>二级: </item>
+        <item>三级:</item>
+        <item>四级:</item>
+        <item>附件:</item>
+    </string-array>
+
+    <string-array name="projectmanagement_three">
+        <item>方案审批(文号):</item>
+        <item>审批时间: </item>
+        <item>审批单位:</item>
+        <item>审批估算(万元): </item>
+        <item>附件: </item>
+    </string-array>
+    <string-array name="projectmanagement_four">
+        <item>施工图审批(文号): </item>
+        <item>审批时间:</item>
+        <item>审批单位:</item>
+        <item>审批估算(万元): </item>
+        <item>附件: </item>
+    </string-array>
+
+    <string-array name="projectmanagement_five">
+        <item>设计招标完成时间</item>
+        <item>施工招标完成时间</item>
+        <item>监理招标完成时间</item>
+        <item>设计招标中标人 </item>
+        <item>施工招标中标人 </item>
+        <item>监理招标中标人 </item>
+        <item>附件 </item>
+    </string-array>
+
+
+    <string-array name="projectmanagement_six">
+        <item>合同价(万元)</item>
+        <item>预算评审审定额(万元)</item>
+        <item>结算评审审定额(万元)</item>
+        <item>是否使用省部补助资金</item>
+        <item>省部资金(万元)</item>
+        <item>地方资金(万元)</item>
+        <item>附件</item>
+    </string-array>
+
+    <string-array name="projectmanagement_eight">
+        <item>主要实施内容</item>
+        <item>是否办理施工许可</item>
+        <item>是否申报质量监督</item>
+        <item>合同工期</item>
+        <item>开始时间</item>
+        <item>施工进度</item>
+        <item>结束时间</item>
+        <item>附件</item>
+    </string-array>
+
+    <string-array name="projectmanagement_nine">
+        <item>交工验收时间:</item>
+        <item>竣工验收时间: </item>
+        <item>附件：</item>
+    </string-array>
+
+    <string-array name="taskTable_jiaodi">
+        <item>作业单位</item>
+        <item>编号</item>
+        <item>作业名称</item>
+        <item>作业班组</item>
+        <item>交底日期</item>
+        <item>交底内容</item>
+    </string-array>
+    <string-array name="taskTable_jilu">
+        <item>作业单位</item>
+        <item>检查日期</item>
+        <item>作业名称</item>
+        <item>编号</item>
+        <item>线路、桩号</item>
+        <item>作业依据</item>
+        <item>实施方案及作业内容要点</item>
+        <item>数量现场核定表</item>
+    </string-array>
+
+    <string-array name="taskTable_yanshou">
+        <item>验收单位</item>
+        <item>编号</item>
+        <item>作业名称</item>
+        <item>线路、桩号</item>
+        <item>造价</item>
+        <item>开工日期</item>
+        <item>完工日期</item>
+        <item>主要内容</item>
+        <item>数量核定</item>
+    </string-array>
+
+    <string-array name="histroyDisease_munitPatrol">
+        <item>巡查日期</item>
+        <item>巡查单位</item>
+        <item>巡查里程</item>
+        <item>检查类型</item>
+        <item>巡查人</item>
+    </string-array>
+
+    <string-array name="interquery_dbm">
+        <item>设施量统计</item>
+       <!-- <item>桥梁数据</item>
+        <item>隧道数据</item>
+        <item>涵洞数据</item>
+        <item>边坡数据</item>
+        <item>交通量观测点数据</item>
+        <item>服务交安设施</item>
+        <item>绿化数据</item>-->
+        <item>道路数据</item>
+        <!--<item>沿线设施</item>-->
+    </string-array>
+
+</resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/deptName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="3dp"
+        android:text="管理局："
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="12sp"/>
+
+    <com.chengtech.nicespinner.NiceSpinner
+        android:id="@+id/niceSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:arrowTint="@android:color/holo_orange_dark"
+        app:textTint="#605a5a"/>
+
+</LinearLayout>

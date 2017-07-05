@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">imooc_festsms</string>
+    <string name="title_activity_choose_msg">ChooseMsgActivity</string>
+</resources>

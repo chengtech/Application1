@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="shenlv">#22CB56</color>
+    <color name="font_color_gray">#565551</color>
+    <color name="white">#ffffff</color>
+    <color name="light_blue">#B2DFEE</color>
+    <color name="an_lv">#76EEC6</color>
+    <color name="while_gray">#EDEDED</color>
+    <color name="light_sky_blue">#87CEFA</color>
+    <color name="light_sky_blue2">#00BFFF</color>
+    <color name="light_sky_blue3">#ADD8E6</color>
+    <color name="light_sky_blue4">#B4CDE6</color>
+    <color name="title_background_color">#66CDAA</color>
+
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccentPress">#fc568e</color>
+    <color name="tabBlue">#6bdced</color>
+
+
+</resources>

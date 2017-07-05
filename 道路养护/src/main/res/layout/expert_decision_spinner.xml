@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- 第一个firstSpinner-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="3dp"
+        android:text="路线："
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="12sp"/>
+
+    <com.chengtech.nicespinner.NiceSpinner
+        android:id="@+id/firstSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:arrowTint="@android:color/holo_red_light"
+        app:textTint="#605a5a"/>
+
+    <!-- 第二个firstSpinner-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="3dp"
+        android:text="车道："
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="12sp"/>
+
+    <com.chengtech.nicespinner.NiceSpinner
+        android:id="@+id/secondSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:arrowTint="@android:color/holo_red_light"
+        app:textTint="#605a5a"/>
+
+    <!-- 第三个firstSpinner-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="3dp"
+        android:text="方向："
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="12sp"/>
+
+    <com.chengtech.nicespinner.NiceSpinner
+        android:id="@+id/thirdSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:arrowTint="@android:color/holo_red_light"
+        app:textTint="#605a5a"/>
+
+    <!-- 第四个firstSpinner-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="3dp"
+        android:text="年份："
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="12sp"/>
+
+    <com.chengtech.nicespinner.NiceSpinner
+        android:id="@+id/fourthSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:arrowTint="@android:color/holo_red_light"
+        app:textTint="#605a5a"/>
+
+    <!-- 第五个firstSpinner-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="3dp"
+        android:text="月份："
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="12sp"/>
+
+    <com.chengtech.nicespinner.NiceSpinner
+        android:id="@+id/fifthSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:arrowTint="@android:color/holo_red_light"
+        app:textTint="#605a5a"/>
+
+
+</LinearLayout>

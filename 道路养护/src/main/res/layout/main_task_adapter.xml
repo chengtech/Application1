@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:background="@drawable/default_white_click"
+    android:orientation="vertical"
+    android:paddingLeft="3dp"
+    android:paddingRight="3dp"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="我是一条主标题"
+        android:typeface="monospace"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        />
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/title"
+        android:layout_below="@+id/title"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:paddingRight="20dp"
+        android:text="总实施里程:61.2"
+        android:textColor="#88000000"
+        android:textSize="14sp"
+        />
+
+    <LinearLayout
+        android:id="@+id/plan_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default2_white_click"
+            android:drawableLeft="@drawable/small_green_point"
+            android:gravity="center_vertical"
+            android:drawablePadding="10dp"
+            android:paddingLeft="10dp"
+            android:text="计划内任务"
+            android:drawableRight="@drawable/ic_vector_ellipsis"
+            android:paddingRight="10dp"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/plan_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingTop="3dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/add_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default2_white_click"
+            android:drawableLeft="@drawable/small_red_point"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:drawableRight="@drawable/ic_vector_ellipsis"
+            android:paddingRight="10dp"
+            android:text="新增任务"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/add_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingTop="3dp"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="10dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/plan_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@android:color/holo_purple"
+        android:minHeight="20dp"
+        android:textSize="16sp"
+        android:text="计划内任务" />
+
+    <TextView
+        android:id="@+id/plan_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:paddingBottom="6dp"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        >
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/add_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:background="@android:color/holo_purple"
+        android:minHeight="20dp"
+        android:text="新增任务" />
+
+    <TextView
+        android:id="@+id/add_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:paddingBottom="6dp"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        >
+
+    </TextView>
+</LinearLayout>

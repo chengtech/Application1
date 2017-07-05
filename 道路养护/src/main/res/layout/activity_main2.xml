@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E0E0E0"
+        android:orientation="vertical"
+        >
+
+    <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            app:titleTextColor="@android:color/white"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppCompatAppThemeNoTitle.PopupOverlay"
+            app:title="公路养护综合管理系统"
+            >
+
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            >
+
+        <android.support.v4.view.ViewPager
+                android:id="@+id/id_viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+        <LinearLayout
+                android:id="@+id/id_pointGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                >
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/main_map_selector"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            >
+
+        <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="20dp"
+                android:clickable="false"
+                android:src="@mipmap/main_map_b"
+                />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:clickable="false"
+                android:text="GIS可视化视图查询"
+                android:textColor="#8B8682"
+                />
+    </LinearLayout>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="#9C9C9C"
+            />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            >
+
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycleView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                ></android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+    <!-- <GridView
+         android:id="@+id/main_gridview"
+         android:layout_width="match_parent"
+         android:layout_height="0dp"
+         android:layout_marginTop="5dp"
+         android:layout_weight="1"
+         android:background="@android:color/white"
+         android:cacheColorHint="#00000000"
+         android:dividerHeight="1dp"
+         android:drawSelectorOnTop="false"
+         android:fadeScrollbars="true"
+         android:numColumns="2">
+
+     </GridView>-->
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="#9C9C9C"
+            />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:orientation="horizontal"
+            >
+
+        <!-- 第一个relative-->
+        <RelativeLayout
+                android:id="@+id/bottom1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/main_bottom_selector"
+                android:paddingBottom="10dp"
+                >
+
+            <RelativeLayout
+                    android:id="@+id/img1"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    >
+
+
+                <ImageView
+                    android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:src="@drawable/main_bottom1_img_c"
+                        />
+
+                <TextView
+                    android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:background="@drawable/red_plot"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textColor="@android:color/white"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        />
+            </RelativeLayout>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/img1"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/main_bottom_selector"
+                    android:text="待办"
+                    android:textSize="11sp"
+                    />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:id="@+id/bottom2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/main_bottom_selector"
+                android:paddingBottom="6dp"
+                >
+
+            <RelativeLayout
+                    android:id="@+id/img2"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    >
+
+                <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/main_bottom2_img_b"
+                        />
+
+            </RelativeLayout>
+
+            <TextView
+                    android:id="@+id/main_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/img2"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/main_bottom_selector"
+                    android:text="超级管理员"
+                    android:textSize="11sp"
+                    />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:id="@+id/bottom3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/main_bottom_selector"
+                android:paddingBottom="10dp"
+                >
+
+
+            <RelativeLayout
+                    android:id="@+id/img3"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    >
+
+                <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:src="@drawable/main_bottom3_img_c"
+                        />
+
+                <TextView
+                    android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:background="@drawable/red_plot"
+                        android:gravity="center"
+                        android:text="12"
+                        android:textColor="@android:color/white"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        />
+            </RelativeLayout>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/img3"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/main_bottom_selector"
+                    android:text="阅办"
+                    android:textSize="11sp"
+                    />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

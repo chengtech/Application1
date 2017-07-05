@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:descendantFocusability="blocksDescendants"
+        android:minHeight="40dp"
+        android:orientation="horizontal"
+        >
+
+    <TextView
+            android:id="@+id/tv1"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="标题"
+            android:textSize="14sp"
+            android:background="@drawable/noticedetail_time_shape"
+            android:gravity="center"
+            android:textColor="@color/font_color_gray"
+            />
+
+    <EditText
+            android:id="@+id/et1"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:editable="false"
+            android:focusable="false"
+            android:layout_height="match_parent"
+            android:background="@drawable/noticedetail_time_shape"
+            android:textSize="14sp"
+            android:text="内容"
+            android:gravity="center"
+            android:textColor="#404040"
+            android:paddingLeft="5dp"
+            />
+
+    <Button
+            android:id="@+id/detail_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:layout_margin="5dp"
+            android:background="@drawable/login_btn_selector"
+            android:text="详情"
+            />
+</LinearLayout>

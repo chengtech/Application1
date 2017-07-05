@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@android:color/holo_blue_bright"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:onClick="onClick"
+        android:layout_width="wrap_content"
+        android:text="下拉或者隐藏"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@android:color/holo_orange_dark"></LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/hideLayout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="120dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="asdfasfasfasfasfasfasdfasdfasf"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="cccccccccccccccccccccccccccccccccccccccccccc"/>
+    </LinearLayout>
+
+
+    <com.chengtech.chengtechmt.view.MyHorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="2dp">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycleView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+    </com.chengtech.chengtechmt.view.MyHorizontalScrollView>
+
+
+    <com.chengtech.chengtechmt.view.MyHorizontalScrollView2
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="wrap_content"></com.chengtech.chengtechmt.view.MyHorizontalScrollView2>
+</LinearLayout>

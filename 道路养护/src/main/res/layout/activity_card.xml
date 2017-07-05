@@ -1,0 +1,235 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#87CEFA"
+        android:orientation="vertical">
+
+        <com.chengtech.chengtechmt.view.TitleLayout
+            android:id="@+id/mytitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></com.chengtech.chengtechmt.view.TitleLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="5dp"
+                    app:contentPadding="10dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="主管负责任人：王宝强"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.1dp"
+                            android:layout_below="@+id/tv1"
+                            android:layout_marginTop="3dp"
+                            android:background="#82847d7d" />
+
+                        <TextView
+                            android:id="@+id/tv2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tv1"
+                            android:layout_marginTop="5dp"
+                            android:text="填卡人：王宝强" />
+
+                        <TextView
+                            android:id="@+id/tv3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBaseline="@+id/tv2"
+                            android:layout_marginLeft="40dp"
+                            android:layout_toRightOf="@+id/tv2"
+                            android:text="填卡日期：2015-12-21" />
+
+
+                        <TextView
+                            android:id="@+id/tv5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tv2"
+                            android:layout_marginTop="5dp"
+                            android:text="备注：今晚打老虎！" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.1dp"
+                            android:layout_below="@+id/tv5"
+                            android:layout_marginTop="3dp"
+                            android:background="#82847d7d" />
+
+                        <LinearLayout
+                            android:id="@+id/photoContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tv5"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+
+                            <FrameLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+
+                                <ImageView
+                                    android:id="@+id/img1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="150dp"
+                                    android:maxHeight="250dp"
+                                    android:scaleType="fitXY" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginRight="5dp"
+                                    android:background="#40000000"
+                                    android:gravity="center"
+                                    android:padding="5dp"
+                                    android:text="桥面立面照"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="12sp" />
+                            </FrameLayout>
+
+                            <FrameLayout
+
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="10dp"
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/img2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="150dp"
+                                    android:maxHeight="250dp"
+                                    android:scaleType="fitXY" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginRight="5dp"
+                                    android:background="#30000000"
+                                    android:gravity="center"
+                                    android:padding="5dp"
+                                    android:text="桥面正面照"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="12sp" />
+                            </FrameLayout>
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+
+                </android.support.v7.widget.CardView>
+
+                <ExpandableListView
+                    android:id="@+id/card_activity_expandlistview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:background="@color/white"
+                    android:dividerHeight="2dp"
+                     />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <!--<android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="end|bottom"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:onClick="showSheetDialog"
+        android:src="@mipmap/attachment"
+        android:translationZ="6dp"
+        app:borderWidth="1dp"
+        app:elevation="6dp"
+        app:fabSize="normal"
+        app:pressedTranslationZ="12dp"
+        app:rippleColor="#5bc406" />-->
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="@dimen/fab_actions_spacing"
+        android:layout_marginBottom="@dimen/fab_actions_spacing"
+        fab:fab_addButtonColorNormal="?attr/colorAccent"
+        fab:fab_addButtonColorPressed="@color/colorAccentPress"
+        fab:fab_addButtonPlusIconColor="@android:color/white"
+        fab:fab_addButtonSize="mini"
+        fab:fab_labelsPosition="left"
+        fab:fab_labelStyle="@style/menu_labels_style"
+        >
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_gps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="?attr/colorAccent"
+            fab:fab_title="经纬度"
+            fab:fab_size="mini"
+            app:fab_icon="@drawable/ic_gps"
+            fab:fab_colorPressed="@color/colorAccentPress"
+            />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="?attr/colorAccent"
+            fab:fab_size="mini"
+            app:fab_icon="@drawable/ic_location"
+            fab:fab_title="定位"
+            fab:fab_colorPressed="@color/colorAccentPress"
+            />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_attachment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="?attr/colorAccent"
+            fab:fab_size="mini"
+            app:fab_icon="@drawable/ic_attachment"
+            fab:fab_title="附件"
+            fab:fab_colorPressed="@color/colorAccentPress"
+            />
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+</RelativeLayout>

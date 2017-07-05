@@ -1,0 +1,92 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <!--style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light"-->  
+    <style name="AppBaseTheme" parent="@android:style/Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+    
+    <!--style name="StyledIndicators" parent="AppBaseTheme">
+        <item name="vpiTabPageIndicatorStyle">@style/CustomTabPageIndicator</item>
+    </style-->
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:screenOrientation">portrait</item>
+    </style>
+    
+     <!-- Base application theme is the default theme. -->
+    <style name="Theme" parent="android:Theme">
+    </style>
+
+ <!--
+  A theme that has a translucent background. Here we explicitly specify
+  that this theme is to inherit from the system's translucent theme,
+  which sets up various attributes correctly..
+ -->
+ <style name="Theme.Translucent" parent="android:style/Theme.Translucent">
+  <item name="android:windowBackground">@drawable/translucent_background</item>
+  <item name="android:windowNoTitle">true</item>
+  <item name="android:colorForeground">#fff</item>
+ </style>
+ <!--
+  Variation on our application theme that has a transparent background;
+  this example completely removes the background, allowing the activity
+  to decide how to composite. Also here we force the translucency
+  ourself rather than making use of the built-in translucent theme.
+ -->
+ <style name="Theme.Transparent">
+  <item name="android:windowIsTranslucent">true</item>
+  <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
+  <item name="android:windowBackground">@drawable/transparent_background</item>
+  <item name="android:windowNoTitle">true</item>
+  <item name="android:colorForeground">#fff</item>
+ </style>
+
+
+    <style name="btn_rectangle_blue">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dimen_40</item>
+        <item name="android:textSize">@dimen/dimen_16</item>
+        <item name="android:textColor">@drawable/btn_rectangle_blue_text</item>
+        <item name="android:background">@drawable/btn_rectangle_blue_bg</item>
+    </style>
+
+    <style name="configure_radio">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:drawablePadding">@dimen/dimen_20</item>
+        <item name="android:paddingLeft">@dimen/dimen_30</item>
+        <item name="android:paddingRight">@dimen/dimen_0</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/fontsize_16</item>
+        <item name="android:button">@null</item>
+    </style>
+
+    <style name="configure_bar_layout">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/dimen_10</item>
+        <item name="android:layout_marginBottom">@dimen/dimen_10</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="configure_bar_sub_layout">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/dimen_05</item>
+        <item name="android:layout_marginBottom">@dimen/dimen_05</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+
+</resources>

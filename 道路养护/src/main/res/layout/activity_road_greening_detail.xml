@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:fab="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/light_sky_blue"
+    >
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:padding="16dp"
+        android:scrollbars="none"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/detail_listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/login_btn_selector"
+                android:onClick="onShowSubTable"
+                android:text="展开详情"
+                android:layout_gravity="center_horizontal"
+                ></Button>
+
+            <com.chengtech.chengtechmt.view.MyHorizontalScrollView2
+                android:id="@+id/horizontalScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"></com.chengtech.chengtechmt.view.MyHorizontalScrollView2>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                >
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:visibility="gone"
+                    />
+
+                <LinearLayout
+                    android:id="@+id/id_pointGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:background="#44000000"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:padding="3dp"
+                    android:visibility="gone"
+                    />
+
+            </RelativeLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <!-- <android.support.design.widget.FloatingActionButton
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentBottom="true"
+         android:layout_alignParentRight="true"
+         android:layout_gravity="end|bottom"
+         android:layout_marginBottom="16dp"
+         android:layout_marginRight="16dp"
+         android:onClick="showSheetDialog"
+         android:src="@mipmap/attachment"
+         android:translationZ="6dp"
+         app:borderWidth="1dp"
+         app:elevation="6dp"
+         app:fabSize="normal"
+         app:pressedTranslationZ="12dp"
+         app:rippleColor="#5bc406" />-->
+
+    <!--<com.joaquimley.faboptions.FabOptions
+            android:id="@+id/faboptions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            app:button_menu="@menu/menu_faboptions"
+            ></com.joaquimley.faboptions.FabOptions>-->
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/fab_actions_spacing"
+        android:layout_marginRight="@dimen/fab_actions_spacing"
+        fab:fab_addButtonColorNormal="?attr/colorAccent"
+        fab:fab_addButtonColorPressed="@color/colorAccentPress"
+        fab:fab_addButtonPlusIconColor="@android:color/white"
+        fab:fab_addButtonSize="mini"
+        fab:fab_labelStyle="@style/menu_labels_style"
+        fab:fab_labelsPosition="left"
+        >
+        <!-- <com.getbase.floatingactionbutton.FloatingActionButton
+                 android:id="@+id/fab_gps"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 fab:fab_colorNormal="?attr/colorAccent"
+                 fab:fab_title="经纬度"
+                 fab:fab_size="mini"
+                 app:fab_icon="@drawable/ic_gps"
+                 fab:fab_colorPressed="@color/colorAccentPress"
+                 />
+
+         <com.getbase.floatingactionbutton.FloatingActionButton
+                 android:id="@+id/fab_location"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 fab:fab_colorNormal="?attr/colorAccent"
+                 fab:fab_size="mini"
+                 app:fab_icon="@drawable/ic_location"
+                 fab:fab_title="定位"
+                 fab:fab_colorPressed="@color/colorAccentPress"
+                 />-->
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_attachment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_icon="@drawable/ic_attachment"
+            fab:fab_colorNormal="?attr/colorAccent"
+            fab:fab_colorPressed="@color/colorAccentPress"
+            fab:fab_size="mini"
+            fab:fab_title="附件"
+            />
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+</RelativeLayout>

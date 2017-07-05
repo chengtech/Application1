@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">道路养护</string>
+
+
+    <!-- 系统配置的常量名称 -->
+    <string name="title_activity_hello_chart">HelloChartActivity</string>
+    <string name="title_activity_base">BaseActivity</string>
+</resources>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.chengtech.chengtechmt">
+
+    <uses-sdk tools:overrideLibrary="com.chengtai.faboptions"/>
+
+    <!-- 用于申请调用A-GPS模块 -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <!-- 用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <!-- 用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!-- 用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!-- 获取网络状态 -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- 网络通信 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <!-- 获取设备信息 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- 读写sdcard，storage等等 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+
+    <!-- 允许程序录制音频 -->
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/logo"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppCompatAppThemeNoTitle"
+        tools:replace="android:icon">
+        <activity android:name=".MainActivity"/>
+        <activity
+            android:name=".activity.LoginActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.dbm.DbmActivity"/>
+        <activity
+            android:name=".activity.WebViewActivity"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".activity.AboutMeActivity"/>
+        <activity android:name=".activity.NoticeActivity"/>
+        <activity android:name=".activity.NoticeDetailActivity"/>
+        <activity android:name=".activity.ScheduleActivity"/>
+        <activity android:name=".activity.dbm.RouteActivity"/>
+        <activity android:name=".activity.dbm.DbmListActivity"/>
+        <activity android:name=".activity.dbm.CardActivity"/>
+        <activity android:name=".activity.dbm.RoadSideFacilitiesActivity"/>
+        <activity android:name=".activity.dbm.PavementConfigActivity"/>
+        <activity android:name=".activity.dbm.DetailActivity"/>
+        <activity android:name=".activity.dbm.RoadGreeningDetailActivity"/>
+        <activity android:name=".activity.dbm.OnePictureDisplayActivity"/>
+        <activity android:name=".activity.integratequery.IntegrateQueryActivity"/>
+        <activity android:name=".activity.business.BusinessActivity"/>
+        <activity android:name=".activity.business.ListPageActivity"/>
+        <activity
+            android:name=".activity.business.MediumReportActivity"
+            android:screenOrientation="landscape"/>
+
+        <!-- 蒲公英自动更新key -->
+        <meta-data
+            android:name="PGYER_APPID"
+            android:value="459444bef624e50c7f9cfa33b78b3d5c"/>
+
+        <!-- 高德地图定位key -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="41d493ae0887ca26a6187a403588eff2"/>
+
+        <activity android:name=".activity.business.ProjectManagementActivity"/>
+        <activity android:name=".TestActivity">
+        </activity>
+        <activity android:name=".activity.integratequery.QueryListActivity"/>
+        <activity
+            android:name=".activity.integratequery.routequery.RouteQueryActivity"
+            android:theme="@style/AppCompatAppThemeNoTitle"/>
+        <activity
+            android:name=".hellochart.HelloChartActivity"
+            android:label="@string/title_activity_hello_chart"
+            android:theme="@style/AppCompatAppThemeNoTitle"/>
+        <activity
+            android:name=".BaseActivity"
+            android:label="@string/title_activity_base"
+            android:theme="@style/AppCompatAppThemeNoTitle"/>
+        <activity android:name=".activity.business.MaintenanceListActivity"/>
+        <activity android:name=".TestActivity2">
+        </activity>
+        <activity android:name=".activity.standard.StandardActivity"/>
+        <activity android:name=".activity.standard.StandardListActivity"/>
+        <activity android:name=".activity.MapQueryActivity"/>
+        <activity android:name=".activity.expertdecision.ExpertDecisionActivity">
+        </activity>
+        <activity android:name=".activity.standard.StandardTechActivity">
+        </activity>
+        <activity android:name=".activity.expertdecision.ExpertDecisionListActivity">
+        </activity>
+        <activity android:name=".activity.expertdecision.EvaluationdetailListActivity">
+        </activity>
+        <activity android:name=".activity.expertdecision.EvaluationSummaryActivity">
+        </activity>
+        <activity android:name=".activity.dbm.RoadGreeningActivity">
+        </activity>
+        <activity android:name=".activity.business.BricheckManageActivity">
+        </activity>
+        <activity android:name=".activity.business.OftenCheckDetailActivity">
+        </activity>
+        <activity android:name=".activity.business.BridgeOftenCheckAddActivity">
+        </activity>
+        <activity android:name=".activity.business.CulvertOftenCheckAddActivity">
+        </activity>
+        <activity android:name=".thirdlibrary.wxpictureselector.PictureSelectorActivity">
+        </activity>
+        <activity android:name=".activity.business.TunnelOftenCheckAddActivity">
+        </activity>
+        <activity android:name=".activity.monitoremergency.slopemonitor.SlopeMonitorActivity">
+        </activity>
+        <activity android:name=".activity.monitoremergency.MonitorEmergencyActivity">
+        </activity>
+        <activity android:name=".activity.monitoremergency.slopemonitor.SideMonitorTypeActivity"
+                  android:screenOrientation="landscape"
+            >
+        </activity>
+    </application>
+
+</manifest>
