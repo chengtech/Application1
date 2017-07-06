@@ -356,10 +356,6 @@ public class SideMonitorTypeActivity extends BaseActivity {
         intent.putExtra("title", title);
         intent.putExtra("data", (Serializable) sideMonitorTypeList);
         intent.putExtra("url", jspUrl);
-        intent.putExtra("url", jspUrl);
-        intent.putExtra("url", jspUrl);
-        intent.putExtra("url", jspUrl);
-        intent.putExtra("url", jspUrl);
         context.startActivity(intent);
     }
 
