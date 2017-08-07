@@ -33,8 +33,6 @@ import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +40,6 @@ import java.util.List;
 import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import me.gujun.android.taggroup.TagGroup;
 
 /**
  * 边坡监测activity-2017-06-05
@@ -55,23 +52,16 @@ public class SlopeMonitorActivity extends BaseActivity {
     public MyViewPager viewPager;
     public Route route;
     public String deptId;
-    public TagGroup tagGroup;
-    public TagGroup.OnTagClickListener tagClickListener = new TagGroup.OnTagClickListener() {
-        @Override
-        public void onTagClick(String tag) {
-
-        }
-    };
     public List<Fragment> fragmentList = new ArrayList<>();
     ;
     public String[] mTitle = new String[]{"地理位置", "列表信息", "告警级别", "已/未确认图形展示"};
     public SweetAlertDialog sweetAlertDialog;
     public List<SideMonitorTree> slopeList = new ArrayList<>();
-    private Spinner slopeSpinner;
+    private Spinner slopeSpinner, monitorTypeSpinner;
     public List<WarningManage> warningManages = new ArrayList<>();
     public Map<String, Integer> charData = new HashMap<>();
     public Map<String, Integer> charData2 = new HashMap<>();
-    public Map<String, List<SideMonitorType>> SideMonitorTypeMap = new HashMap<>();
+    public Map<String, List<SideMonitorType>> sideMonitorTypeMap = new HashMap<>();
 
 
     public Handler handler = new Handler() {
@@ -103,14 +93,16 @@ public class SlopeMonitorActivity extends BaseActivity {
                                     SideMonitorTree sideMonitorTreeParent = slopeList.get(position);
                                     List<SideMonitorTree> sideMonitorTreeList = sideMonitorTreeParent.listSideMonitorTreeByParentId;
                                     List<String> data = new ArrayList<String>();
+                                    data.add("请选择");
                                     for (int i = 0; i < sideMonitorTreeList.size(); i++) {
-                                        String treeName = (position + 1) + sideMonitorTreeList.get(i).name;
+                                        String treeName = sideMonitorTreeList.get(i).name;
                                         List<SideMonitorType> sideMonitorTypeList = sideMonitorTreeList.get(i).listSideMonitorType;
                                         data.add(treeName);
-                                        SideMonitorTypeMap.put(treeName, sideMonitorTypeList);
+                                        sideMonitorTypeMap.put(treeName, sideMonitorTypeList);
 
                                     }
-                                    tagGroup.setTags(data);
+                                    monitorTypeSpinner.setAdapter(new ArrayAdapter<String>(SlopeMonitorActivity.this,
+                                            android.R.layout.simple_spinner_item, data));
 
                                 }
 
@@ -141,11 +133,8 @@ public class SlopeMonitorActivity extends BaseActivity {
         setNavigationIcon(true);
         hidePagerNavigation(true);
         setAppBarLayoutScroll(false);
-
-
-//        initData();
-
         initView();
+        initEvent();
 
 //        if (sweetAlertDialog==null) {
 //            sweetAlertDialog =new SweetAlertDialog(this,SweetAlertDialog.PROGRESS_TYPE);
@@ -161,6 +150,45 @@ public class SlopeMonitorActivity extends BaseActivity {
         }).start();
 
 
+    }
+
+    private void initEvent() {
+        monitorTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = (String) parent.getSelectedItem();
+                if (sideMonitorTypeMap != null && sideMonitorTypeMap.size() > 0) {
+                    List<SideMonitorType> sideMonitorTypes = sideMonitorTypeMap.get(selectedItem);
+                    if (sideMonitorTypes != null) {
+                        if (selectedItem.contains("温湿度")) {
+                            String jspUrl = MyConstants.PRE_URL + "mt/monitoremergency/sidemonitor/temphumidata/listTempHumiDataPhone.jsp";
+                            SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, selectedItem, sideMonitorTypes, jspUrl);
+                        } else if (selectedItem.contains("地下水")) {
+                            String jspUrl = MyConstants.PRE_URL + "mt/monitoremergency/sidemonitor/vibratingwiredata/listVibratingWireDataPhone.jsp";
+                            SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, selectedItem, sideMonitorTypes, jspUrl);
+                        } else if (selectedItem.contains("拉线式")) {
+                            String jspUrl = MyConstants.PRE_URL + "mt/monitoremergency/sidemonitor/lvdtdata/listLVDTDataPhone.jsp";
+                            SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, selectedItem, sideMonitorTypes, jspUrl);
+                        } else if (selectedItem.contains("内部位移")) {
+                            String jspUrl = MyConstants.PRE_URL + "mt/monitoremergency/sidemonitor/inclinationdata/listInclinationDataPhone.jsp";
+                            SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, selectedItem, sideMonitorTypes, jspUrl);
+                        } else if (selectedItem.contains("降雨量")) {
+                            String jspUrl = MyConstants.PRE_URL + "mt/monitoremergency/sidemonitor/rainfalldata/listRainFallDataPhone.jsp";
+                            SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, selectedItem, sideMonitorTypes, jspUrl);
+                        } else if (selectedItem.contains("GPS")) {
+                            String jspUrl = MyConstants.PRE_URL + "mt/monitoremergency/sidemonitor/cdmonitorsession/listCdMonitorSessionPhone.jsp";
+                            SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, selectedItem, sideMonitorTypes, jspUrl);
+                        }
+                    }
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void addMapMarker(List<SideMonitorTree> sideMonitorTreeList) {
@@ -247,36 +275,9 @@ public class SlopeMonitorActivity extends BaseActivity {
 
     private void initView() {
         slopeSpinner = (Spinner) findViewById(R.id.slope);
+        monitorTypeSpinner = (Spinner) findViewById(R.id.monitorType);
         tabLayout = (TabLayout) findViewById(R.id.id_tabLayout);
         viewPager = (MyViewPager) findViewById(R.id.id_viewPager);
         viewPager.setScrollable(false);
-        tagGroup = (TagGroup) findViewById(R.id.tagGroup);
-        tagGroup.setOnTagClickListener(new TagGroup.OnTagClickListener() {
-            @Override
-            public void onTagClick(String tag) {
-                List<SideMonitorType> sideMonitorTypes = SideMonitorTypeMap.get(tag);
-                if (sideMonitorTypes != null) {
-                    if (tag.contains("温湿度")) {
-                        String jspUrl = MyConstants.PRE_URL + "mt/monitoremergency/sidemonitor/temphumidata/listTempHumiDataPhone.jsp";
-                        SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, tag.substring(1), sideMonitorTypes, jspUrl);
-                    } else if (tag.contains("地下水")) {
-                        String jspUrl = MyConstants.PRE_URL + "mt/monitoremergency/sidemonitor/vibratingwiredata/listVibratingWireDataPhone.jsp";
-                        SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, tag.substring(1), sideMonitorTypes, jspUrl);
-                    } else if (tag.contains("拉线式")) {
-                        String jspUrl = MyConstants.PRE_URL +"mt/monitoremergency/sidemonitor/lvdtdata/listLVDTDataPhone.jsp";
-                        SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, tag.substring(1), sideMonitorTypes, jspUrl);
-                    } else if (tag.contains("内部位移")) {
-                        String jspUrl = MyConstants.PRE_URL +"mt/monitoremergency/sidemonitor/inclinationdata/listInclinationDataPhone.jsp";
-                        SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, tag.substring(1), sideMonitorTypes, jspUrl);
-                    } else if (tag.contains("降雨量")) {
-                        String jspUrl = MyConstants.PRE_URL +"mt/monitoremergency/sidemonitor/rainfalldata/listRainFallDataPhone.jsp";
-                        SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, tag.substring(1), sideMonitorTypes, jspUrl);
-                    } else if (tag.contains("GPS")) {
-                        String jspUrl = MyConstants.PRE_URL +"mt/monitoremergency/sidemonitor/cdmonitorsession/listCdMonitorSessionPhone.jsp";
-                        SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, tag.substring(1), sideMonitorTypes, jspUrl);
-                    }
-                }
-            }
-        });
     }
 }
