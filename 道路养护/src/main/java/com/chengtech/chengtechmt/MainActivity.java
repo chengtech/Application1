@@ -335,6 +335,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         attachment_rl = (RelativeLayout) findViewById(R.id.attachment_bt);
         attachment_rl.setOnClickListener(this);
 
+        //讯飞语音听写
+        findViewById(R.id.speech).setOnClickListener(this);
+
         username_tv = (TextView) findViewById(R.id.main_username);
         username_tv.setText(AppAccount.name);
 
@@ -388,6 +391,11 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 showAttachmentsDialog();
                 break;
 
+            //讯飞语音听写
+            case R.id.speech:
+                Intent intent4  = new Intent(this,SpeechActivity.class);
+                startActivity(intent4);
+                break;
             case R.id.bottom2:
                 leftmenu.toggle();
                 break;

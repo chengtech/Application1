@@ -126,9 +126,11 @@
         </activity>
         <activity android:name=".activity.monitoremergency.MonitorEmergencyActivity">
         </activity>
-        <activity android:name=".activity.monitoremergency.slopemonitor.SideMonitorTypeActivity"
-                  android:screenOrientation="landscape"
-            >
+        <activity
+            android:name=".activity.monitoremergency.slopemonitor.SideMonitorTypeActivity"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity android:name=".SpeechActivity">
         </activity>
     </application>
 

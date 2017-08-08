@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@null" >
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <RelativeLayout
-             android:id="@+id/leftmenu_aboutme"
+            android:id="@+id/leftmenu_aboutme"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/leftmenu_img1"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:scaleType="fitCenter"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:src="@mipmap/main_aboutme" />
+                android:scaleType="fitCenter"
+                android:src="@mipmap/main_aboutme"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -33,23 +33,23 @@
                 android:layout_toRightOf="@id/leftmenu_img1"
                 android:text="个人信息"
                 android:textColor="#ffffff"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
         </RelativeLayout>
 
         <RelativeLayout
-             android:id="@+id/logout_bt"
+            android:id="@+id/logout_bt"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/leftmenu_img2"
                 android:layout_width="40dp"
-                android:scaleType="fitCenter"
                 android:layout_height="40dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:src="@mipmap/main_logout" />
+                android:scaleType="fitCenter"
+                android:src="@mipmap/main_logout"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -59,23 +59,23 @@
                 android:layout_toRightOf="@id/leftmenu_img2"
                 android:text="注销"
                 android:textColor="#ffffff"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/attachment_bt"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/leftmenu_img3"
                 android:layout_width="40dp"
-                android:scaleType="fitCenter"
                 android:layout_height="40dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:background="@mipmap/main_attachment" />
+                android:background="@mipmap/main_attachment"
+                android:scaleType="fitCenter"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -85,12 +85,13 @@
                 android:layout_toRightOf="@id/leftmenu_img3"
                 android:text="附件"
                 android:textColor="#ffffff"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
         </RelativeLayout>
 
-      <!--   <RelativeLayout
+        <RelativeLayout
+            android:id="@+id/speech"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/id_img3"
@@ -99,7 +100,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/main_item_img3" />
+                android:src="@mipmap/ic_launcher"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -107,11 +108,12 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@id/id_img3"
-                android:text="第三个Item"
+                android:text="语音听写"
                 android:textColor="#ffffff"
-                android:textSize="20sp" />
+                android:textSize="20sp"/>
         </RelativeLayout>
 
+        <!--
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" >

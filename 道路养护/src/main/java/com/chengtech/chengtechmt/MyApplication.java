@@ -6,6 +6,8 @@ import android.content.IntentFilter;
 
 import com.chengtech.chengtechmt.receiver.DownCompleteReceiver;
 import com.chengtech.chengtechmt.util.MyConstants;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechUtility;
 import com.pgyersdk.crash.PgyCrashManager;
 
 
@@ -19,6 +21,7 @@ public class MyApplication extends Application {
         super.onCreate();
 //        Fresco.initialize(this);
         PgyCrashManager.register(this);
+        initSpeech();
         initReceiver();
         MyConstants.imageDict.put("路线信息", R.mipmap.file);
         MyConstants.imageDict.put("道路数据", R.mipmap.analysis);
@@ -70,6 +73,10 @@ public class MyApplication extends Application {
         MyConstants.imageDict.put("水泥路面状况", R.mipmap.file3);
         MyConstants.imageDict.put("评定明细", R.mipmap.file4);
         MyConstants.imageDict.put("评定汇总", R.mipmap.order_history);
+    }
+
+    private void initSpeech() {
+        SpeechUtility.createUtility(this, SpeechConstant.APPID+"= 595dd926");
     }
 
     private void initReceiver() {
