@@ -56,7 +56,8 @@ import java.util.Map;
 
 import io.realm.Realm;
 
-public class DetailActivity extends BaseActivity implements IView<Object>, View.OnClickListener {
+public class
+DetailActivity extends BaseActivity implements IView<Object>, View.OnClickListener {
 
     public RecyclerView recyclerView;
     public List<String> originalData;

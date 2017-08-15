@@ -63,10 +63,11 @@ public class SpeechActivity extends AppCompatActivity {
         });
 
         result_show = (TextView) findViewById(R.id.result_show);
-        mToast = Toast.makeText(this,"",Toast.LENGTH_SHORT);
+        mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 //        recognizer =SpeechRecognizer.createRecognizer(this, mInitListener);
-        recognizerDialog = new RecognizerDialog(this,mInitListener);
-        recognizerDialog.setParameter(SpeechConstant.LANGUAGE,"zh_cn");
+//        recognizerDialog = new RecognizerDialog(this,mInitListener);
+        recognizerDialog = new RecognizerDialog(this, null);
+        recognizerDialog.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
         recognizerDialog.setParameter(SpeechConstant.VAD_BOS, "5000");
 
         // 选择云端or本地
@@ -78,11 +79,11 @@ public class SpeechActivity extends AppCompatActivity {
                 switch (checkedId) {
                     case R.id.iatRadioCloud:
                         mEngineType = SpeechConstant.TYPE_CLOUD;
-                        recognizerDialog.setParameter(SpeechConstant.ENGINE_TYPE,mEngineType);
+                        recognizerDialog.setParameter(SpeechConstant.ENGINE_TYPE, mEngineType);
                         break;
                     case R.id.iatRadioLocal:
                         mEngineType = SpeechConstant.TYPE_LOCAL;
-                        recognizerDialog.setParameter(SpeechConstant.ENGINE_TYPE,mEngineType);
+                        recognizerDialog.setParameter(SpeechConstant.ENGINE_TYPE, mEngineType);
                         /**
                          * 选择本地听写 判断是否安装语记,未安装则跳转到提示安装页面
                          */
@@ -178,6 +179,7 @@ public class SpeechActivity extends AppCompatActivity {
         mToast.setText(str);
         mToast.show();
     }
+
     private void printResult(RecognizerResult results) {
         String text = JsonParser.parseIatResult(results.getResultString());
 

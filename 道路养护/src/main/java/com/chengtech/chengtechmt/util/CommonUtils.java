@@ -9,10 +9,13 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -53,7 +56,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -72,6 +77,8 @@ public class CommonUtils {
     public static final int GB = 1024 * 1024 * 1024;
     public static final int MB = 1024 * 1024;
     public static final int KB = 1024;
+    public static final int TAKE_PHOTO = 0x111;
+    public static final String CAMERA_DEFAULT_NAME = "output_image.jpg";
 
     //使用系统downloadmanager服务下载文件
     public static void downFile(Context context, String downPath, String fileName, String id) {
@@ -96,6 +103,7 @@ public class CommonUtils {
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
         manager.enqueue(request);
     }
+
     //使用系统downloadmanager服务下载文件
     public static void downApk(Context context, String downPath, String fileName) {
         //注册接收者
@@ -199,9 +207,9 @@ public class CommonUtils {
     public static void openFile(Context context, String filePath) {
         try {
             //判断文件是否存在,将中文的文件名进行编码，否侧会因为特殊字符而报错
-            String fileName = filePath.substring(filePath.lastIndexOf("/")+1);
+            String fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
             fileName = URLEncoder.encode(fileName);
-            filePath = filePath.substring(0,filePath.lastIndexOf("/")+1)+fileName;
+            filePath = filePath.substring(0, filePath.lastIndexOf("/") + 1) + fileName;
             File file = new File(URI.create(filePath));
             if (file.exists()) {
                 Intent intent = new Intent();
@@ -426,9 +434,9 @@ public class CommonUtils {
         try {
             URL url = new URL(path);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            if (urlConnection.getResponseCode()==200) {
+            if (urlConnection.getResponseCode() == 200) {
                 return true;
-            }else {
+            } else {
                 return false;
             }
         } catch (Exception e) {
@@ -447,6 +455,30 @@ public class CommonUtils {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         int width = metrics.widthPixels;
         return width;
+    }
+
+    public static String camera(Context context) {
+        Uri imageUri = null;
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File mfile = new File(context.getExternalCacheDir(), CAMERA_DEFAULT_NAME);
+        try {
+            if (mfile.exists()) {
+                mfile.delete();
+            }
+            mfile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (Build.VERSION.SDK_INT >= 24) {
+            imageUri = FileProvider.getUriForFile(context, "com.chengtechmt.fileprovider", mfile);
+        } else {
+            imageUri = Uri.fromFile(mfile);
+        }
+        Activity activity = (Activity) context;
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        activity.startActivityForResult(intent, TAKE_PHOTO);
+        return context.getExternalCacheDir() + "/" + CommonUtils.CAMERA_DEFAULT_NAME;
     }
 
 }

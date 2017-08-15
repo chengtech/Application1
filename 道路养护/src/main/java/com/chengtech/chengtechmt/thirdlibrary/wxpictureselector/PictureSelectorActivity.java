@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Set;
 
 public class PictureSelectorActivity extends Activity {
-    public static final int SELECTED_RESULT = 0x01;
+//    public static final int SELECTED_RESULT = 0x01;
     private GridView gridView;
     private List<String> picturePaths;
     private MyPictureAdapter adapter;
@@ -185,6 +185,10 @@ public class PictureSelectorActivity extends Activity {
                             mMaxCount = count;
                             mCurrentDir = parentFile;
                         }
+//                        if (path.contains("/DCIM")) {
+//                            mMaxCount = count;
+//                            mCurrentDir = parentFile;
+//                        }
 
 
                     }
@@ -214,12 +218,12 @@ public class PictureSelectorActivity extends Activity {
     public void onBackPressed() {
         Intent intent = new Intent();
         ArrayList<String> picPath = new ArrayList<>();
-        Iterator<String> iterator = MyPictureAdapter.checkedState.iterator();
+        Iterator<String> iterator = adapter.getCheckedState().iterator();
         while (iterator.hasNext()) {
             picPath.add(iterator.next());
         }
         intent.putStringArrayListExtra("PicturePath", picPath);
-        setResult(SELECTED_RESULT,intent);
+        setResult(RESULT_OK,intent);
         super.onBackPressed();
     }
 }

@@ -38,11 +38,11 @@
         <activity
             android:name=".activity.LoginActivity"
             android:windowSoftInputMode="adjustResize|stateHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+             <!--<intent-filter>
+                 <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+                 <category android:name="android.intent.category.LAUNCHER"/>
+             </intent-filter>-->
         </activity>
         <activity android:name=".activity.dbm.DbmActivity"/>
         <activity
@@ -132,6 +132,24 @@
         </activity>
         <activity android:name=".SpeechActivity">
         </activity>
+        <activity android:name=".activity.business.DiseaseRegistrationActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.chengtechmt.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path"
+                ></meta-data>
+        </provider>
     </application>
 
 </manifest>

@@ -32,6 +32,9 @@ public class OnePictureDisplayActivity extends Activity {
         ImageView imageView = (ImageView) findViewById(R.id.imageview);
         Intent intent = getIntent();
         String url = intent.getStringExtra("url");
+        if (!url.contains("http://")) {
+            url = "file://" + url;
+        }
         Picasso.with(this).load(url).placeholder(R.mipmap.placeholder).error(R.mipmap.placeholder2).into(imageView);
         photoViewAttacher = new PhotoViewAttacher(imageView);
 //        photoViewAttacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {

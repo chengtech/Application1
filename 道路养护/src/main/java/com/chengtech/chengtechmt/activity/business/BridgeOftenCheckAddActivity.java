@@ -208,7 +208,7 @@ public class BridgeOftenCheckAddActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 0x00 && resultCode == PictureSelectorActivity.SELECTED_RESULT && data != null) {
+        if (requestCode == 0x00 && resultCode == RESULT_OK && data != null) {
             picPaths.clear();
             ArrayList<String> picturePath = data.getStringArrayListExtra("PicturePath");
             for (int i = 0; i < picturePath.size(); i++) {

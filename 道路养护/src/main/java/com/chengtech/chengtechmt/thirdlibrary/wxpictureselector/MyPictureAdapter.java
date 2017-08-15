@@ -20,7 +20,7 @@ import java.util.Set;
  * Created by Administrator on 2016/3/16.
  */
 public class MyPictureAdapter extends BaseAdapter {
-    public static Set<String> checkedState = new HashSet<>();
+    private Set<String> checkedState = new HashSet<>();
     private List<String> imgPaths;
     private String dirPath;
     private LayoutInflater mInflater;
@@ -87,6 +87,11 @@ public class MyPictureAdapter extends BaseAdapter {
         }
         return convertView;
     }
+
+    public Set<String> getCheckedState() {
+        return checkedState;
+    }
+
 
     private class ViewHolder{
         ImageView imageView;
