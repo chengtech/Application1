@@ -21,22 +21,24 @@ public class BusinessActivity extends BaseActivity {
 
     public RecyclerView recyclerView;
 
-    String [] title;
-    int [] imageIds;
-    String [] urlList;
-    String [] typeArray;
-    String [] acitivtyName;
+    String[] title;
+    int[] imageIds;
+    String[] urlList;
+    String[] typeArray;
+    String[] acitivtyName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addContentView(R.layout.activity_business);
 
+        MyConstants.userRights.put("病害登记",true);
         initView();
 
         setNavigationIcon(true);
         hidePagerNavigation(true);
         initData();
-        
+
         initEvent();
 
     }
@@ -45,35 +47,38 @@ public class BusinessActivity extends BaseActivity {
     }
 
     private void initData() {
-        imageIds = new int[] {R.mipmap.business_a_01,R.mipmap.business_a_02,R.mipmap.month_checked,R.mipmap.maintaintask,
-        R.mipmap.minorrepair,R.mipmap.minorrepair};
-        title = new String[]{"月度检查","保养作业","小修作业","小额专项维修","大中修、改造（善）及省部补助项目","桥隧涵养护"};
+        imageIds = new int[]{R.mipmap.business_a_01, R.mipmap.business_a_02, R.mipmap.month_checked, R.mipmap.maintaintask,
+                R.mipmap.minorrepair, R.mipmap.minorrepair};
+        title = new String[]{"月度检查", "保养作业", "小修作业", "小额专项维修", "大中修、改造（善）及省部补助项目", "桥隧涵养护", "病害登记"};
         urlList = new String[]{
-                MyConstants.PRE_URL+"mt/business/maintainworkcheck/monthlyinspect/maintainregister/listMaintainRegisterJson.action",
-                MyConstants.PRE_URL+"mt/business/tinkermaintainpatrol/maintaintask/listMaintainTaskJson.action",
-                MyConstants.PRE_URL+"mt/business/tinkermaintainpatrol/minorrepair/listMinorRepairJson.action",
-                MyConstants.PRE_URL+"mt/business/maintenance/projectaccount/mediumplanprogress/listMediumPlanprogressJson.action",
-                MyConstants.PRE_URL+"mt/business/maintenance/projectaccount/projectmanagement/listProjectManagementJson.action",
-                "f"
+                MyConstants.PRE_URL + "mt/business/maintainworkcheck/monthlyinspect/maintainregister/listMaintainRegisterJson.action",
+                MyConstants.PRE_URL + "mt/business/tinkermaintainpatrol/maintaintask/listMaintainTaskJson.action",
+                MyConstants.PRE_URL + "mt/business/tinkermaintainpatrol/minorrepair/listMinorRepairJson.action",
+                MyConstants.PRE_URL + "mt/business/maintenance/projectaccount/mediumplanprogress/listMediumPlanprogressJson.action",
+                MyConstants.PRE_URL + "mt/business/maintenance/projectaccount/projectmanagement/listProjectManagementJson.action",
+                "f",
+                "g"
         };
-        typeArray = new String [] {
+        typeArray = new String[]{
                 "MaintainRegister",
                 "MaintainTask",
                 "MinorRepair",
                 "MediumPlanprogress",
                 "ProjectManagement",
-                "Patrol"
+                "Patrol",
+                "DiseaseRegistration"
         };
 
-        acitivtyName = new String [] {
+        acitivtyName = new String[]{
                 "com.chengtech.chengtechmt.activity.business.MaintenanceListActivity",
                 "com.chengtech.chengtechmt.activity.business.MaintenanceListActivity",
                 "com.chengtech.chengtechmt.activity.business.MaintenanceListActivity",
                 "com.chengtech.chengtechmt.activity.business.ListPageActivity",
                 "com.chengtech.chengtechmt.activity.business.ListPageActivity",
                 "com.chengtech.chengtechmt.activity.business.BricheckManageActivity",
+                "com.chengtech.chengtechmt.activity.business.DiseaseRegistrationListActivity"
         };
-        RecycleViewAdapter adapter = new RecycleViewAdapter(this,title,imageIds,R.layout.item_recycle2);
+        RecycleViewAdapter adapter = new RecycleViewAdapter(this, title, imageIds, R.layout.item_recycle2);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new RecycleViewDivider(this, LinearLayout.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -85,9 +90,9 @@ public class BusinessActivity extends BaseActivity {
                 try {
 
                     intent = new Intent(BusinessActivity.this, Class.forName(acitivtyName[position]));
-                    intent.putExtra("type",typeArray[position]);
-                    intent.putExtra("title",title[position]);
-                    intent.putExtra("urlList",urlList[position]);
+                    intent.putExtra("type", typeArray[position]);
+                    intent.putExtra("title", title[position]);
+                    intent.putExtra("urlList", urlList[position]);
                     startActivity(intent);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();

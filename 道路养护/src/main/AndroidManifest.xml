@@ -38,11 +38,11 @@
         <activity
             android:name=".activity.LoginActivity"
             android:windowSoftInputMode="adjustResize|stateHidden">
-             <!--<intent-filter>
+             <intent-filter>
                  <action android:name="android.intent.action.MAIN"/>
 
                  <category android:name="android.intent.category.LAUNCHER"/>
-             </intent-filter>-->
+             </intent-filter>
         </activity>
         <activity android:name=".activity.dbm.DbmActivity"/>
         <activity
@@ -133,11 +133,6 @@
         <activity android:name=".SpeechActivity">
         </activity>
         <activity android:name=".activity.business.DiseaseRegistrationActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
 
         <provider
@@ -147,9 +142,11 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_path"
-                ></meta-data>
+                android:resource="@xml/file_path"/>
         </provider>
+
+        <activity android:name=".activity.business.DiseaseRegistrationListActivity">
+        </activity>
     </application>
 
 </manifest>

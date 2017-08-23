@@ -12,9 +12,13 @@ import java.util.ArrayList;
 
 public class DiseaseRegistration implements Serializable {
 
-    public String recordTime;
-    public String describeMsg;
-    public String recordPaths;
-    public String recordLength;
-    public ArrayList<String> picPaths = new ArrayList<>();
+    public String recordDate; //登记日期
+    public String recordMan;  //登记人
+    public String describeMsg; //语音描述内容
+    public String recordPaths; //语音保存路径
+    public String recordLength; //语音长度
+    public ArrayList<String> picPaths = new ArrayList<>(); //图片保存的路径集合
+    public boolean isUpload;  //是否已经上存服务器
+    public String recordState = "0"; //记录状态，"0"表示是新增(默认)，"1"表示是已保存在本地，是编辑状态；
+
 }

@@ -2,52 +2,42 @@ package com.chengtech.chengtechmt.activity.business;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.chengtech.chengtechmt.BaseActivity;
 import com.chengtech.chengtechmt.R;
 import com.chengtech.chengtechmt.adapter.ImageAddAdapter;
-import com.chengtech.chengtechmt.adapter.business.BridgeOftenCheckAddAdapter;
 import com.chengtech.chengtechmt.entity.business.DiseaseRegistration;
 import com.chengtech.chengtechmt.runnable.WarterMarkRunnable;
+import com.chengtech.chengtechmt.util.AppAccount;
 import com.chengtech.chengtechmt.util.CommonUtils;
 import com.chengtech.chengtechmt.util.JsonParser;
 import com.chengtech.chengtechmt.util.ObjectSaveUtils;
-import com.github.jjobes.slidedatetimepicker.DateFragment;
 import com.iflytek.cloud.RecognizerResult;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.ui.RecognizerDialog;
 import com.iflytek.cloud.ui.RecognizerDialogListener;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -61,15 +51,14 @@ import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
+import static com.chengtech.chengtechmt.activity.business.DiseaseRegistrationListActivity.DISEASE_REGISTRATION_LIST;
 import static com.chengtech.chengtechmt.util.HttpclientUtil.SAVE_FAILED;
 import static com.chengtech.chengtechmt.util.HttpclientUtil.SAVE_SUCCESS;
 
 /**
  * 病害登记表
  */
-public class DiseaseRegistrationActivity extends AppCompatActivity {
-
-    private static final int REQUEST_CODE_CAMERA = 0x01;
+public class DiseaseRegistrationActivity extends BaseActivity {
 
     private ArrayList<String> picPaths;
     private String describeMsg;
@@ -92,8 +81,10 @@ public class DiseaseRegistrationActivity extends AppCompatActivity {
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            imageAddAdapter.notifyDataSetChanged();
             switch (msg.what) {
+                case WarterMarkRunnable.WATER_MARK_SUCCESS:
+                    imageAddAdapter.notifyDataSetChanged();
+                    break;
                 case SAVE_SUCCESS:
                     sweetAlertDialog.setContentText("保存成功!").changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
                     break;
@@ -144,14 +135,17 @@ public class DiseaseRegistrationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_disease_registration);
+        addContentView(R.layout.activity_disease_registration);
 
+        setNavigationIcon(true);
+        hidePagerNavigation(true);
+        toolbar.setTitle("病害详细信息登记");
 
         Intent intent = getIntent();
-//        diseaseRegistration = (DiseaseRegistration) intent.getSerializableExtra("data");
-//        diseaseRegPosition = (int) intent.getIntExtra("position", -1);
+        diseaseRegistration = (DiseaseRegistration) intent.getSerializableExtra("data");
+        diseaseRegPosition = intent.getIntExtra("position", 0);
 
-        diseaseRegistration = (DiseaseRegistration) ObjectSaveUtils.getObject(this, "DiseaseRegistration");
+//        diseaseRegistration = (DiseaseRegistration) ObjectSaveUtils.getObject(this, "DiseaseRegistration");
         initView();
         showSavedInstanceState();
     }
@@ -162,7 +156,11 @@ public class DiseaseRegistrationActivity extends AppCompatActivity {
             describeMsg = diseaseRegistration.describeMsg;
             recordPath = diseaseRegistration.recordPaths;
             recordLength = diseaseRegistration.recordLength;
-            videoCardView.setVisibility(View.VISIBLE);
+            if (TextUtils.isEmpty(recordLength)) {
+                videoCardView.setVisibility(View.GONE);
+            } else {
+                videoCardView.setVisibility(View.VISIBLE);
+            }
         } else {
             picPaths = new ArrayList<>();
             describeMsg = "";
@@ -347,12 +345,26 @@ public class DiseaseRegistrationActivity extends AppCompatActivity {
         diseaseRegistration.recordPaths = recordPath;
 
         sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        sweetAlertDialog.setTitleText("");
         sweetAlertDialog.setContentText("正在保存中...");
         sweetAlertDialog.show();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                int resultCode = ObjectSaveUtils.saveObject(DiseaseRegistrationActivity.this, "DiseaseRegistration", diseaseRegistration);
+                List<DiseaseRegistration> data = (List<DiseaseRegistration>) ObjectSaveUtils.getObject(DiseaseRegistrationActivity.this, DISEASE_REGISTRATION_LIST);
+                if (data == null)
+                    data = new ArrayList<DiseaseRegistration>();
+                if (diseaseRegistration.recordState.equals("0")) {
+                    diseaseRegistration.recordState = "1";
+                    diseaseRegistration.recordMan = AppAccount.name;
+                    diseaseRegistration.recordDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                    data.add(0, diseaseRegistration);
+                    EventBus.getDefault().post(new DiseaseRegistrationListActivity.MessageEvent(diseaseRegistration, 0, true));
+                } else {
+                    data.set(diseaseRegPosition, diseaseRegistration);
+                    EventBus.getDefault().post(new DiseaseRegistrationListActivity.MessageEvent(diseaseRegistration, diseaseRegPosition, false));
+                }
+                int resultCode = ObjectSaveUtils.saveObject(DiseaseRegistrationActivity.this, DISEASE_REGISTRATION_LIST, data);
                 if (resultCode == -1) {
                     handler.sendEmptyMessageDelayed(SAVE_SUCCESS, 2000);
                 } else {
