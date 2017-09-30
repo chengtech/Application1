@@ -81,7 +81,7 @@ public class WarterMarkRunnable implements Runnable {
 
         //设置字体paint
         Paint paint_t = new Paint();
-        paint_t.setColor(Color.WHITE);
+        paint_t.setColor(Color.RED);
         int textSize = width / 30;
         paint_t.setTextSize(textSize);
         paint_t.setAntiAlias(true);

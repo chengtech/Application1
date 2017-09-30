@@ -1,8 +1,6 @@
 package com.chengtech.chengtechmt.activity;
 
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,13 +32,14 @@ import com.chengtech.chengtechmt.util.MyConstants;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 
-import org.apache.http.client.CookieStore;
 import org.apache.http.client.protocol.ClientContext;
-import org.apache.http.cookie.Cookie;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+
+import cz.msebera.android.httpclient.client.CookieStore;
+import cz.msebera.android.httpclient.cookie.Cookie;
 
 public class MapQueryActivity extends BaseActivity implements GISMenuDialogFragment.ExchangeDataListener {
     private WebView webView;
@@ -160,7 +159,7 @@ public class MapQueryActivity extends BaseActivity implements GISMenuDialogFragm
         WebSettings ws = webView.getSettings();
         ws.setJavaScriptEnabled(true);
         ws.setAllowFileAccess(true);
-        ws.setCacheMode(WebSettings.LOAD_CACHE_ONLY);
+        ws.setCacheMode(WebSettings.LOAD_NO_CACHE);
         ws.setDomStorageEnabled(true);
         ws.setAppCacheEnabled(true);
         ws.setSupportZoom(true);

@@ -16,16 +16,16 @@ import java.util.List;
  * 作者: LiuFuYingWang on 2016/10/11 15:16.
  */
 
-public class MaintainTask  {
+public class MaintainTask {
 
     public String id;
     private Presenter presenter;
 
     public String workYear;                 //年份
-    public String workMonth;				 //月份
+    public String workMonth;                 //月份
     public String secondDeptName;           //养护所名称
     public String thirdDeptName;            //养护单位名称
-    public String taskMark;				 //作业状态 0：保洁作业，1：小修作业
+    public String taskMark;                 //作业状态 0：保洁作业，1：小修作业
 
     //不存数据库，只用来显示
     public int planInsideTaskCount;         //计划内任务量
@@ -37,7 +37,7 @@ public class MaintainTask  {
     public int planOutsideImpleCount;       //计划外已实施量
     public int planOutsideAcceptCount;      //计划外验收量
 
-    public MaintainTask (Presenter presenter) {
+    public MaintainTask(Presenter presenter) {
         this.presenter = presenter;
     }
 
@@ -49,33 +49,31 @@ public class MaintainTask  {
             public void onStart() {
                 super.onStart();
             }
-            @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 
+            @Override
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
                 try {
-                    String data = new String(arg2, "utf-8");
-                    Gson gson  = new Gson();
-                    MaintainTaskG m = gson.fromJson(data,MaintainTaskG.class);
-                    presenter.loadDataSuccess(m.rows,type);
+                    String data = new String(bytes, "utf-8");
+                    Gson gson = new Gson();
+                    MaintainTaskG m = gson.fromJson(data, MaintainTaskG.class);
+                    presenter.loadDataSuccess(m.rows, type);
                 } catch (Exception e) {
                     presenter.loadDataFailed();
                     e.printStackTrace();
                 }
-                super.onSuccess(arg0, arg1, arg2);
             }
 
             @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
                 presenter.loadDataFailed();
-                super.onFailure(arg0, arg1, arg2, arg3);
             }
+
         };
-        client.get(url+"&pager.pageNo="+pageNo,
+        client.get(url + "&pager.pageNo=" + pageNo,
                 responseHandler);
     }
 
-    public class MaintainTaskG{
+    public class MaintainTaskG {
         public List<MaintainTask> rows;
     }
 }

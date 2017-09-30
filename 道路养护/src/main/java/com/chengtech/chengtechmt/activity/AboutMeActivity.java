@@ -133,26 +133,24 @@ public class AboutMeActivity extends BaseActivity {
             }
 
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
                 loadDialog.dismiss();
                 try {
-                    String data = new String(arg2, "utf-8");
+                    String data = new String(bytes, "utf-8");
                     Message message = new Message();
                     message.obj = data;
                     handler.sendMessage(message);
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
-                super.onSuccess(arg0, arg1, arg2);
             }
 
             @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
                 loadDialog.dismiss();
                 Toast.makeText(AboutMeActivity.this, "服务器断开连接", Toast.LENGTH_SHORT).show();
-                super.onFailure(arg0, arg1, arg2, arg3);
             }
+
 
         };
 

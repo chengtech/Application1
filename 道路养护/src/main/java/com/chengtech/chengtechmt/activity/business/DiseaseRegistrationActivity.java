@@ -1,47 +1,57 @@
 package com.chengtech.chengtechmt.activity.business;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.media.MediaPlayer;
+import android.location.LocationManager;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
+import android.provider.Settings;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.chengtech.chengtechmt.BaseActivity;
 import com.chengtech.chengtechmt.R;
 import com.chengtech.chengtechmt.adapter.ImageAddAdapter;
+import com.chengtech.chengtechmt.adapter.RecordAdapter;
 import com.chengtech.chengtechmt.entity.business.DiseaseRegistration;
+import com.chengtech.chengtechmt.entity.business.DiseaseVoiceRecord;
 import com.chengtech.chengtechmt.runnable.WarterMarkRunnable;
 import com.chengtech.chengtechmt.util.AppAccount;
 import com.chengtech.chengtechmt.util.CommonUtils;
 import com.chengtech.chengtechmt.util.JsonParser;
 import com.chengtech.chengtechmt.util.ObjectSaveUtils;
+import com.chengtech.nicespinner.NiceSpinner;
 import com.iflytek.cloud.RecognizerResult;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
-import com.iflytek.cloud.ui.RecognizerDialog;
-import com.iflytek.cloud.ui.RecognizerDialogListener;
+import com.iflytek.cloud.SpeechRecognizer;
+import com.iflytek.cloud.RecognizerListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -60,24 +70,29 @@ import static com.chengtech.chengtechmt.util.HttpclientUtil.SAVE_SUCCESS;
  */
 public class DiseaseRegistrationActivity extends BaseActivity {
 
+    private static final int GET_LOCAL_INFO_SUCCESS = 0x13;
     private ArrayList<String> picPaths;
     private String describeMsg;
-    private String recordPath;
-    private String recordLength;
+    private String site;
+    private String weather;
+    private List<DiseaseVoiceRecord> myRecordList;
 
     private RecyclerView recyclerView;
+    private RecyclerView recordRecyclerView;
     private ImageAddAdapter imageAddAdapter;
-    private ImageButton imageButton;
     private EditText resultShow_et;
+    private TextView site_tv;
+    private NiceSpinner weatherSpinner;
+    private Button startSpeech;
     private long recognizeStartTime;
     private long recognizeEndTime;
 
-    private Button saveInLocal;
-    private TextView videoLength;
-    private CardView videoCardView;
     private DiseaseRegistration diseaseRegistration;
     private int diseaseRegPosition;
     private SweetAlertDialog sweetAlertDialog;
+    private AMapLocation myAMapLocation;
+    private String longitude, latitude;
+    private boolean isSaveLocal;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -87,6 +102,14 @@ public class DiseaseRegistrationActivity extends BaseActivity {
                     break;
                 case SAVE_SUCCESS:
                     sweetAlertDialog.setContentText("保存成功!").changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                    isSaveLocal = true;
+                    break;
+                case GET_LOCAL_INFO_SUCCESS:
+                    site_tv.setText(myAMapLocation.getAddress());
+                    site = myAMapLocation.getAddress();
+                    longitude = String.valueOf(myAMapLocation.getLongitude());
+                    latitude = String.valueOf(myAMapLocation.getLatitude());
+                    sweetAlertDialog.dismiss();
                     break;
             }
         }
@@ -94,18 +117,59 @@ public class DiseaseRegistrationActivity extends BaseActivity {
 
     // 用HashMap存储听写结果
     private HashMap<String, String> mIatResults = new LinkedHashMap<String, String>();
-    private RecognizerDialog recognizerDialog;
+    //    private RecognizerDialog recognizerDialog;
+    private SpeechRecognizer speechRecognizer;
+    private RecordAdapter recordAdapter;
 
-    private RecognizerDialogListener recognizerDialogListener = new RecognizerDialogListener() {
+
+    /**
+     * 听写监听器。
+     */
+    private RecognizerListener mRecognizerListener = new RecognizerListener() {
+
         @Override
-        public void onResult(RecognizerResult recognizerResult, boolean b) {
-            recognizeEndTime = System.currentTimeMillis();
-            printResult(recognizerResult);
+        public void onBeginOfSpeech() {
+            // 此回调表示：sdk内部录音机已经准备好了，用户可以开始语音输入
+            showTip("开始说话");
         }
 
         @Override
-        public void onError(SpeechError speechError) {
+        public void onError(SpeechError error) {
+            // Tips：
+            // 错误码：10118(您没有说话)，可能是录音机权限被禁，需要提示用户打开应用的录音权限。
+            // 如果使用本地功能（语记）需要提示用户开启语记的录音权限。
+            showTip(error.getPlainDescription(true));
+        }
 
+        @Override
+        public void onEndOfSpeech() {
+            // 此回调表示：检测到了语音的尾端点，已经进入识别过程，不再接受语音输入
+//            recognizeEndTime = System.currentTimeMillis();
+            showTip("结束说话");
+        }
+
+        @Override
+        public void onResult(RecognizerResult results, boolean isLast) {
+//            Log.i("tag", "jihao");
+            if (isLast) {
+            }
+            printResult(results);
+
+        }
+
+        @Override
+        public void onVolumeChanged(int volume, byte[] data) {
+            showTip("当前正在说话，音量大小：" + volume);
+        }
+
+        @Override
+        public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
+            // 以下代码用于获取与云端的会话id，当业务出错时将会话id提供给技术支持人员，可用于查询会话日志，定位出错原因
+            // 若使用本地能力，会话id为null
+            //	if (SpeechEvent.EVENT_SESSION_ID == eventType) {
+            //		String sid = obj.getString(SpeechEvent.KEY_EVENT_SESSION_ID);
+            //		Log.d(TAG, "session id =" + sid);
+            //	}
         }
     };
 
@@ -126,10 +190,12 @@ public class DiseaseRegistrationActivity extends BaseActivity {
         for (String key : mIatResults.keySet()) {
             resultBuffer.append(mIatResults.get(key));
         }
-        long recognizeTime = (recognizeEndTime - recognizeStartTime - 2000) / 1000;
-        recordLength = String.valueOf(recognizeTime);
-        videoLength.setText(recognizeTime + "\"");
-        resultShow_et.setText(resultBuffer.toString());
+        myRecordList.get(myRecordList.size() - 1).recordContent = resultBuffer.toString();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < myRecordList.size(); i++) {
+            sb.append(myRecordList.get(i).recordContent);
+        }
+        resultShow_et.setText(sb.toString());
     }
 
     @Override
@@ -144,110 +210,164 @@ public class DiseaseRegistrationActivity extends BaseActivity {
         Intent intent = getIntent();
         diseaseRegistration = (DiseaseRegistration) intent.getSerializableExtra("data");
         diseaseRegPosition = intent.getIntExtra("position", 0);
-
-//        diseaseRegistration = (DiseaseRegistration) ObjectSaveUtils.getObject(this, "DiseaseRegistration");
         initView();
         showSavedInstanceState();
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isSaveLocal) {
+                    if (sweetAlertDialog != null) {
+                        sweetAlertDialog.setTitleText("是否保存当前信息。").setConfirmText("保存").setCancelText("取消").changeAlertType(SweetAlertDialog.WARNING_TYPE);
+                        sweetAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                saveInLoacal();
+                                sweetAlertDialog.dismiss();
+
+                            }
+                        });
+                        sweetAlertDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        });
+                        sweetAlertDialog.show();
+                    } else {
+                        sweetAlertDialog = new SweetAlertDialog(DiseaseRegistrationActivity.this, SweetAlertDialog.WARNING_TYPE);
+
+                        sweetAlertDialog.setTitleText("是否保存当前信息。").setConfirmText("保存").setCancelText("取消");
+                        sweetAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                saveInLoacal();
+                                sweetAlertDialog.dismiss();
+                            }
+                        });
+                        sweetAlertDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        });
+                        sweetAlertDialog.show();
+                    }
+                } else {
+                    finish();
+                }
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add("保存").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        saveInLoacal();
+        return super.onOptionsItemSelected(item);
     }
 
     private void showSavedInstanceState() {
         if (diseaseRegistration != null) {
             picPaths = diseaseRegistration.picPaths;
-            describeMsg = diseaseRegistration.describeMsg;
-            recordPath = diseaseRegistration.recordPaths;
-            recordLength = diseaseRegistration.recordLength;
-            if (TextUtils.isEmpty(recordLength)) {
-                videoCardView.setVisibility(View.GONE);
-            } else {
-                videoCardView.setVisibility(View.VISIBLE);
-            }
+            describeMsg = diseaseRegistration.diseaseDescription;
+            myRecordList = diseaseRegistration.listDiseaseVoiceRecord;
+            site = diseaseRegistration.site;
+            weather = diseaseRegistration.weather;
+            longitude = diseaseRegistration.longitude;
+            latitude = diseaseRegistration.latitude;
         } else {
             picPaths = new ArrayList<>();
             describeMsg = "";
-            recordPath = "";
-            recordLength = "";
-            videoCardView.setVisibility(View.GONE);
+            site = "";
+            longitude = "";
+            latitude = "";
+            weather = "晴";//默认为晴
+            myRecordList = new ArrayList<>();
+            getLocationInfo();
         }
         imageAddAdapter = new ImageAddAdapter(this, picPaths);
         recyclerView.setAdapter(imageAddAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        recordAdapter = new RecordAdapter(this, myRecordList);
+        recordRecyclerView.setAdapter(recordAdapter);
+        recordRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         resultShow_et.setText(describeMsg);
-        videoLength.setText(recordLength + "\"");
+        site_tv.setText(site);
+        weatherSpinner.setText(weather);
+
     }
 
     private void initView() {
-        saveInLocal = (Button) findViewById(R.id.saveInLocal);
-        saveInLocal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveInLoacal();
-            }
-        });
+        recordRecyclerView = (RecyclerView) findViewById(R.id.recordRecyclerView);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         resultShow_et = (EditText) findViewById(R.id.showMsg);
-        videoLength = (TextView) findViewById(R.id.videoLength);
-        videoCardView = (CardView) findViewById(R.id.video);
-        imageButton = (ImageButton) findViewById(R.id.addRecord);
-        imageButton.setOnClickListener(new View.OnClickListener() {
+        site_tv = (TextView) findViewById(R.id.site);
+        weatherSpinner = (NiceSpinner) findViewById(R.id.weatherSpinner);
+        weatherSpinner.attachDataSource(Arrays.asList(new String[]{"", "晴", "阴", "小雨", "大雨"}));
+
+//        recognizerDialog = new RecognizerDialog(this, null);
+        speechRecognizer = SpeechRecognizer.createRecognizer(this, null);
+//        recognizerDialog.setListener(recognizerDialogListener);
+
+        startSpeech = (Button) findViewById(R.id.startSpeech);
+        startSpeech.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                videoCardView.setVisibility(View.VISIBLE);
-                setParameter();
-                recognizeStartTime = System.currentTimeMillis();
-                recognizerDialog.show();
-            }
-        });
-        videoCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final MediaPlayer mediaPlayer = new MediaPlayer();
-                try {
-                    mediaPlayer.setDataSource("file://" + recordPath);
-                    mediaPlayer.prepare();
-                    mediaPlayer.start();
-                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
-                            mediaPlayer.release();
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        DiseaseVoiceRecord record = new DiseaseVoiceRecord();
+                        String dateStr = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+                        record.recordPath = getExternalCacheDir() + "/record/iat-" + dateStr + ".wav";
+                        myRecordList.add(record);
+                        setParameter();
+                        recognizeStartTime = System.currentTimeMillis();
+                        speechRecognizer.startListening(mRecognizerListener);
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        recognizeEndTime = System.currentTimeMillis();
+                        myRecordList.get(myRecordList.size() - 1).recordLength = String.valueOf((recognizeEndTime - recognizeStartTime) / 1000);
+                        speechRecognizer.stopListening();
+                        recordRecyclerView.getAdapter().notifyDataSetChanged();
+                        break;
                 }
+                return true;
             }
         });
-        recognizerDialog = new RecognizerDialog(this, null);
-        recognizerDialog.setListener(recognizerDialogListener);
     }
 
     private void setParameter() {
-        recognizerDialog.setParameter(SpeechConstant.PARAMS, null); //清空上次的所有参数
-        recognizerDialog.setParameter(SpeechConstant.DOMAIN, "iat"); //语音识别引擎
-        recognizerDialog.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD); //语音听写在线
+        speechRecognizer.setParameter(SpeechConstant.PARAMS, null); //清空上次的所有参数
+        speechRecognizer.setParameter(SpeechConstant.DOMAIN, "iat"); //语音识别引擎
+        speechRecognizer.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD); //语音听写在线
         // 设置语音前端点:静音超时时间，即用户多长时间不说话则当做超时处理
-        recognizerDialog.setParameter(SpeechConstant.VAD_BOS, "4000");
+        speechRecognizer.setParameter(SpeechConstant.VAD_BOS, "4000");
 
         // 设置语音后端点:后端点静音检测时间，即用户停止说话多长时间内即认为不再输入， 自动停止录音
-        recognizerDialog.setParameter(SpeechConstant.VAD_EOS, "2000");
+        speechRecognizer.setParameter(SpeechConstant.VAD_EOS, "4000");
 
         // 设置标点符号,设置为"0"返回结果无标点,设置为"1"返回结果有标点
-        recognizerDialog.setParameter(SpeechConstant.ASR_PTT, "1");
+        speechRecognizer.setParameter(SpeechConstant.ASR_PTT, "1");
 
         //设置方言
-        recognizerDialog.setParameter(SpeechConstant.ACCENT, "mandarin");
+        speechRecognizer.setParameter(SpeechConstant.ACCENT, "mandarin");
 
         //设置语言
-        recognizerDialog.setParameter(SpeechConstant.LANGUAGE, "zh_en");
+        speechRecognizer.setParameter(SpeechConstant.LANGUAGE, "zh_en");
 
         //设置保存的格式
-        recognizerDialog.setParameter(SpeechConstant.AUDIO_FORMAT, "wav");
+        speechRecognizer.setParameter(SpeechConstant.AUDIO_FORMAT, "wav");
         //设置保存的路径
-        String dateStr = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-        recordPath = getExternalCacheDir() + "/record/iat-" + dateStr + ".wav";
-        recognizerDialog.setParameter(SpeechConstant.ASR_AUDIO_PATH, recordPath);
+        speechRecognizer.setParameter(SpeechConstant.ASR_AUDIO_PATH, myRecordList.get(myRecordList.size() - 1).recordPath);
         // 设置听写结果是否结果动态修正，为“1”则在听写过程中动态递增地返回结果，否则只在听写结束之后返回最终结果
         // 注：该参数暂时只对在线听写有效
-        recognizerDialog.setParameter(SpeechConstant.ASR_DWA, "0");
+        speechRecognizer.setParameter(SpeechConstant.ASR_DWA, "0");
 //        recognizerDialog.setParameter(SpeechConstant.KEY_SPEECH_TIMEOUT, "60000");
     }
 
@@ -257,7 +377,6 @@ public class DiseaseRegistrationActivity extends BaseActivity {
         if (requestCode == CommonUtils.TAKE_PHOTO && resultCode == RESULT_OK) {
             String picPath = imageAddAdapter.getCameraCachePath();
 
-            Bitmap bitmap = null;
             try {
                 File file = new File(picPath);
                 if (!file.exists())
@@ -265,15 +384,20 @@ public class DiseaseRegistrationActivity extends BaseActivity {
                 Map<String, Object> waterMarkParam = new HashMap<>();
                 Date date = new Date(System.currentTimeMillis());
                 DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-                String picName = "病害登记-" + format.format(date) + ".jpg";
-                String waterMarkMsg = "登记人:超级管理员;拍照时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+                String picName = "DiseaseRecord-" + format.format(date) + ".jpg";
+                StringBuffer sb = new StringBuffer();
+                sb.append("巡查人:" + AppAccount.name + ";拍照时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date) + ";");
+                if (!TextUtils.isEmpty(site)) {
+                    sb.append("经度:" + longitude + ";");
+                    sb.append("纬度:" + latitude + ";");
+                    sb.append("位置信息：" + site);
+                }
                 waterMarkParam.put("picName", picName);
-                waterMarkParam.put("waterMarkMsg", waterMarkMsg);
+                waterMarkParam.put("waterMarkMsg", sb.toString());
                 waterMarkParam.put("imgPath", picPath);
                 waterMarkParam.put("imgPaths", picPaths);
                 waterMarkParam.put("handler", handler);
                 new Thread(new WarterMarkRunnable(this, waterMarkParam)).run();
-//                bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(picUri));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -284,10 +408,16 @@ public class DiseaseRegistrationActivity extends BaseActivity {
             for (int i = 0; i < picturePath.size(); i++) {
                 Date date = new Date(System.currentTimeMillis() + i * 1000); //这里之所以要加上i*1000,是为了防止名称重复，造成重复加载。
                 DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-                String picName = "病害登记-" + format.format(date) + ".jpg";
-                String waterMarkMsg = "登记人:超级管理员;拍照时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+                String picName = "DiseaseRecord-" + format.format(date) + ".jpg";
+                StringBuffer sb = new StringBuffer();
+                sb.append("登记人:超级管理员;拍照时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date) + ";");
+                if (!TextUtils.isEmpty(site)) {
+                    sb.append("经度:" + longitude + ";");
+                    sb.append("纬度:" + latitude + ";");
+                    sb.append("位置信息：" + site);
+                }
                 waterMarkParam.put("picName", picName);
-                waterMarkParam.put("waterMarkMsg", waterMarkMsg);
+                waterMarkParam.put("waterMarkMsg", sb.toString());
                 waterMarkParam.put("imgPath", picturePath.get(i));
                 waterMarkParam.put("imgPaths", picPaths);
                 waterMarkParam.put("handler", handler);
@@ -295,38 +425,6 @@ public class DiseaseRegistrationActivity extends BaseActivity {
             }
         }
     }
-
-
-//    /**
-//     * 压缩图片
-//     *
-//     * @param path
-//     * @param reqWidth
-//     * @param reqHeight
-//     * @return
-//     */
-    /*private Bitmap compressBitmapFromPath(String path, int reqWidth, int reqHeight) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(path, options);
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-        options.inJustDecodeBounds = false;
-        Bitmap bitmap = BitmapFactory.decodeFile(path, options);
-        return bitmap;
-    }*/
-
-   /* private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        int width = options.outWidth;
-        int height = options.outHeight;
-
-        int inSampleSize = 1;
-        if (width > reqWidth || height > reqHeight) {
-            int widthRadio = Math.round(width * 1.0f / reqWidth);
-            int heightRadio = Math.round(height * 1.0f / reqHeight);
-            inSampleSize = Math.max(widthRadio, heightRadio);
-        }
-        return inSampleSize;
-    }*/
 
     public static void startAction(Context context, DiseaseRegistration diseaseRegistration, int position) {
         Intent intent = new Intent(context, DiseaseRegistrationActivity.class);
@@ -339,10 +437,13 @@ public class DiseaseRegistrationActivity extends BaseActivity {
         if (diseaseRegistration == null)
             diseaseRegistration = new DiseaseRegistration();
 
-        diseaseRegistration.describeMsg = resultShow_et.getText().toString().trim();
+        diseaseRegistration.diseaseDescription = resultShow_et.getText().toString().trim();
         diseaseRegistration.picPaths = picPaths;
-        diseaseRegistration.recordLength = recordLength;
-        diseaseRegistration.recordPaths = recordPath;
+        diseaseRegistration.listDiseaseVoiceRecord = myRecordList;
+        diseaseRegistration.site = site;
+        diseaseRegistration.weather = weatherSpinner.getText().toString();
+        diseaseRegistration.longitude = longitude;
+        diseaseRegistration.latitude = latitude;
 
         sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         sweetAlertDialog.setTitleText("");
@@ -356,8 +457,8 @@ public class DiseaseRegistrationActivity extends BaseActivity {
                     data = new ArrayList<DiseaseRegistration>();
                 if (diseaseRegistration.recordState.equals("0")) {
                     diseaseRegistration.recordState = "1";
-                    diseaseRegistration.recordMan = AppAccount.name;
-                    diseaseRegistration.recordDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                    diseaseRegistration.patrolMan = AppAccount.name;
+                    diseaseRegistration.patrolTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
                     data.add(0, diseaseRegistration);
                     EventBus.getDefault().post(new DiseaseRegistrationListActivity.MessageEvent(diseaseRegistration, 0, true));
                 } else {
@@ -366,13 +467,106 @@ public class DiseaseRegistrationActivity extends BaseActivity {
                 }
                 int resultCode = ObjectSaveUtils.saveObject(DiseaseRegistrationActivity.this, DISEASE_REGISTRATION_LIST, data);
                 if (resultCode == -1) {
-                    handler.sendEmptyMessageDelayed(SAVE_SUCCESS, 2000);
+                    handler.sendEmptyMessage(SAVE_SUCCESS);
                 } else {
                     handler.sendEmptyMessage(SAVE_FAILED);
                 }
             }
         }).run();
     }
+
+    public void getLocationInfo() {
+        LocationManager manger = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean providerEnabled = manger.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (providerEnabled) {
+            sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+            sweetAlertDialog.setTitleText("正在获取地理信息...").show();
+            //使用高德定位
+            AMapLocationClientOption option = new AMapLocationClientOption();
+            option.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+            option.setOnceLocation(true);
+            option.setOnceLocationLatest(true);
+            option.setHttpTimeOut(15000);
+            final AMapLocationClient client = new AMapLocationClient(this);
+            client.setLocationOption(option);
+            client.setLocationListener(new AMapLocationListener() {
+                @Override
+                public void onLocationChanged(final AMapLocation aMapLocation) {
+                    if (aMapLocation.getErrorCode() == 0) {
+                        myAMapLocation = aMapLocation;
+                        handler.sendEmptyMessage(GET_LOCAL_INFO_SUCCESS);
+                    }
+                    client.onDestroy();
+                }
+            });
+            client.startLocation();
+
+        } else {
+            sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
+            sweetAlertDialog.setTitleText("GPS定位服务未打开")
+                    .setContentText("是否前往设置中打开GPS？")
+                    .setConfirmText("确定,前往。")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                            Intent intent2 = new Intent(
+                                    Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivityForResult(intent2, 0);
+                            sweetAlertDialog.dismiss();
+                        }
+                    })
+                    .setCanceledOnTouchOutside(true);
+            sweetAlertDialog.show();
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+            //先判断右侧菜单是否展开,若展开先合上
+            if (!isSaveLocal) {
+                if (sweetAlertDialog != null) {
+                    sweetAlertDialog.setTitleText("是否保存当前信息。").setConfirmText("保存").setCancelText("取消").changeAlertType(SweetAlertDialog.WARNING_TYPE);
+                    sweetAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                            saveInLoacal();
+                            sweetAlertDialog.dismiss();
+                        }
+                    });
+                    sweetAlertDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                            finish();
+                        }
+                    });
+                    sweetAlertDialog.show();
+                } else {
+                    sweetAlertDialog = new SweetAlertDialog(DiseaseRegistrationActivity.this, SweetAlertDialog.WARNING_TYPE);
+                    sweetAlertDialog.setTitleText("是否保存当前信息。").setConfirmText("保存").setCancelText("取消");
+                    sweetAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                            saveInLoacal();
+                            sweetAlertDialog.dismiss();
+                        }
+                    });
+                    sweetAlertDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                            finish();
+                        }
+                    });
+                    sweetAlertDialog.show();
+                }
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
 }
 
 

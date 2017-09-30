@@ -99,17 +99,22 @@ public class UpdateManger {
         asyncHttpClient = HttpclientUtil.getInstance(mContext);
         AsyncHttpResponseHandler responseHandler = new AsyncHttpResponseHandler() {
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
                 try {
-                    String data = new String(arg2, "utf-8");
+                    String data = new String(bytes, "utf-8");
                     Message message = handler.obtainMessage();
                     message.what = 0;
                     message.obj = data;
                     handler.sendMessage(message);
                 } catch (Exception e) {
                 }
-                super.onSuccess(arg0, arg1, arg2);
             }
+
+            @Override
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
+
+            }
+
 
         };
         asyncHttpClient.get(checkVersionUrl,

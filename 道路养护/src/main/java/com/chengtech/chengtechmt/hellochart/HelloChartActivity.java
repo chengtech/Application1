@@ -149,10 +149,9 @@ public class HelloChartActivity extends BaseActivity {
             }
 
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
                 try {
-                    String data = new String(arg2, "utf-8");
+                    String data = new String(bytes, "utf-8");
                     Message msg = new Message();
                     msg.obj = data;
                     handler.sendMessage(msg);
@@ -160,14 +159,13 @@ public class HelloChartActivity extends BaseActivity {
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
-                super.onSuccess(arg0, arg1, arg2);
             }
 
             @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
-                super.onFailure(arg0, arg1, arg2, arg3);
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
+
             }
+
         };
         client.get(url,
                 responseHandler);

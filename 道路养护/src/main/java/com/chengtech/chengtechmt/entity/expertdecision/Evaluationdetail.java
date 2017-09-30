@@ -24,7 +24,7 @@ import java.util.List;
 
 public class Evaluationdetail extends BaseModel {
     public String sectionId;    // 路段id
-    public String laneType ;    // 车道类型
+    public String laneType;    // 车道类型
 
     public String routeId;      // 路线id
     public String routeName;    // 路线名称
@@ -50,7 +50,7 @@ public class Evaluationdetail extends BaseModel {
 
 
     private Presenter presenter;
-    private String default_url = MyConstants.PRE_URL+"mt/expertdecision/roadtechevaluation/evaluationdetail/listEvaluationDetailJson.action";
+    private String default_url = MyConstants.PRE_URL + "mt/expertdecision/roadtechevaluation/evaluationdetail/listEvaluationDetailJson.action";
 
     public Evaluationdetail(Presenter presenter) {
         this.presenter = presenter;
@@ -59,15 +59,15 @@ public class Evaluationdetail extends BaseModel {
     @Override
     public List<String> getContent() {
         List<String> values = new ArrayList<>();
-        values.add(routeCode==null?"":routeCode);
-        values.add(pileNumber==null?"":pileNumber);
-        values.add(investigateDirection==null?"":investigateDirection);
-        values.add(laneType==null?"":laneType);
-        values.add(roadType==null?"":roadType);
-        values.add(pqi==null?"":String.valueOf(pqi));
-        values.add(pci==null?"":String.valueOf(pci));
-        values.add(rqi==null?"":String.valueOf(rqi));
-        values.add(checkDate==null?"":checkDate);
+        values.add(routeCode == null ? "" : routeCode);
+        values.add(pileNumber == null ? "" : pileNumber);
+        values.add(investigateDirection == null ? "" : investigateDirection);
+        values.add(laneType == null ? "" : laneType);
+        values.add(roadType == null ? "" : roadType);
+        values.add(pqi == null ? "" : String.valueOf(pqi));
+        values.add(pci == null ? "" : String.valueOf(pci));
+        values.add(rqi == null ? "" : String.valueOf(rqi));
+        values.add(checkDate == null ? "" : checkDate);
         return values;
     }
 
@@ -101,35 +101,31 @@ public class Evaluationdetail extends BaseModel {
             }
 
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
                 try {
-                    String data = new String(arg2, "utf-8");
-                    Gson gson  = new Gson();
+                    String data = new String(bytes, "utf-8");
+                    Gson gson = new Gson();
                     JSONObject jsonObject = new JSONObject(data);
                     JSONArray jsonArray = jsonObject.getJSONArray("rows");
                     List<Evaluationdetail> evaluationdetails = new ArrayList<>();
-                    for (int i=0;i<jsonArray.length();i++) {
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                    for (int j = 0; j < jsonArray.length(); j++) {
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(j);
                         Evaluationdetail evaluationdetail = gson.fromJson(jsonObject1.toString(), Evaluationdetail.class);
                         evaluationdetails.add(evaluationdetail);
                     }
-                    presenter.loadDataSuccess(evaluationdetails,"Evaluationdetail");
+                    presenter.loadDataSuccess(evaluationdetails, "Evaluationdetail");
                 } catch (Exception e) {
                     presenter.hasError();
                 }
-                super.onSuccess(arg0, arg1, arg2);
             }
-
 
             @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
                 presenter.loadDataFailed();
-                super.onFailure(arg0, arg1, arg2, arg3);
             }
+
         };
-        client.get(default_url+urlParams,
+        client.get(default_url + urlParams,
                 responseHandler);
 
     }

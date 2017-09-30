@@ -37,23 +37,23 @@ public class ScheduleActivity extends Activity {
     private Dialog loadDialog;
     private ACache aCache;
     private int refreshCount = 0;
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
 
         public void handleMessage(android.os.Message msg) {
             String json = (String) msg.obj;
             Gson gson = new Gson();
             if (!TextUtils.isEmpty(json)) {
                 try {
-                    FlowUserHandlerG handlerG = gson.fromJson(json,FlowUserHandlerG.class);
+                    FlowUserHandlerG handlerG = gson.fromJson(json, FlowUserHandlerG.class);
                     List<FlowUserHandleInfo> flowUserHandleInfo = handlerG.data;
-                    if (flowUserHandleInfo!=null && flowUserHandleInfo.size()>0) {
+                    if (flowUserHandleInfo != null && flowUserHandleInfo.size() > 0) {
                         for (FlowUserHandleInfo f : flowUserHandleInfo) {
                             String title = MyConstants.flowUserHandlerDict.get(f.className.toLowerCase());
                             BasicItem basicItem = null;
-                            if (title==null) {
-                                basicItem = new BasicItem("[未配置]",f.name);
-                            }else {
-                                basicItem = new BasicItem("["+title+"]",f.name,Color.parseColor("#00BFFF"));
+                            if (title == null) {
+                                basicItem = new BasicItem("[未配置]", f.name);
+                            } else {
+                                basicItem = new BasicItem("[" + title + "]", f.name, Color.parseColor("#00BFFF"));
                             }
                             uiListView.addBasicItem(basicItem);
                         }
@@ -65,12 +65,14 @@ public class ScheduleActivity extends Activity {
                     }
 
                 } catch (Exception e) {
-                    UserUtils.reLogin(ScheduleActivity.this,loadDialog);
+                    UserUtils.reLogin(ScheduleActivity.this, loadDialog);
                 }
-            }else {
+            } else {
                 loadDialog.dismiss();
             }
-        };
+        }
+
+        ;
     };
 
     @Override
@@ -95,7 +97,7 @@ public class ScheduleActivity extends Activity {
 
     private void getData() {
         AsyncHttpClient client = HttpclientUtil.getInstance(this);
-        AsyncHttpResponseHandler responseHandler = new AsyncHttpResponseHandler(){
+        AsyncHttpResponseHandler responseHandler = new AsyncHttpResponseHandler() {
             @Override
             public void onStart() {
                 loadDialog.show();
@@ -103,10 +105,9 @@ public class ScheduleActivity extends Activity {
             }
 
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
                 try {
-                    String data = new String(arg2,"utf-8");
+                    String data = new String(bytes, "utf-8");
                     Message message = new Message();
                     message.obj = data;
 //					message.arg1 = SAVE_DATA;
@@ -114,17 +115,16 @@ public class ScheduleActivity extends Activity {
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
-                super.onSuccess(arg0, arg1, arg2);
             }
+
             @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
                 loadDialog.dismiss();
-                Toast.makeText(ScheduleActivity.this, "服务器断开连接",Toast.LENGTH_SHORT).show();
-                super.onFailure(arg0, arg1, arg2, arg3);
+                Toast.makeText(ScheduleActivity.this, "服务器断开连接", Toast.LENGTH_SHORT).show();
             }
+
         };
-        client.get(MyConstants.FLOW_HANDLER_URL+AppAccount.userId, responseHandler);
+        client.get(MyConstants.FLOW_HANDLER_URL + AppAccount.userId, responseHandler);
     }
 
     private void initView() {

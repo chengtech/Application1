@@ -67,13 +67,13 @@ public class NoticeDetailActivity extends Activity {
                     List<AccessRecord> records = accessRecordG.data;
                     if (records != null && records.size() > 0) {
                         for (AccessRecord a : records) {
-                            Map<String,Object> map = new HashMap<String, Object>();
+                            Map<String, Object> map = new HashMap<String, Object>();
                             map.put("name", a.userName);
                             map.put("time", a.accessTime);
                             data.add(map);
                         }
                         adapter = new SimpleAdapter(NoticeDetailActivity.this,
-                                data, R.layout.item_noticedetail_listview, new String[]{"name","time"}, new int[]{R.id.noticedetail_username,R.id.noticedetail_time});
+                                data, R.layout.item_noticedetail_listview, new String[]{"name", "time"}, new int[]{R.id.noticedetail_username, R.id.noticedetail_time});
                         setListViewHeight(listView, adapter, records.size());
                         //srcollview滑动到顶端，必须使用post方法，放到消息队列。
                         handler.post(new Runnable() {
@@ -88,12 +88,14 @@ public class NoticeDetailActivity extends Activity {
                     }
                     loadDialog.dismiss();
                 } catch (Exception e) {
-                    UserUtils.reLogin(NoticeDetailActivity.this,loadDialog);
+                    UserUtils.reLogin(NoticeDetailActivity.this, loadDialog);
                 }
             } else {
                 loadDialog.dismiss();
             }
-        };
+        }
+
+        ;
     };
 
     @Override
@@ -129,29 +131,26 @@ public class NoticeDetailActivity extends Activity {
             }
 
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
                 try {
-                    String data = new String(arg2, "utf-8");
+                    String data = new String(bytes, "utf-8");
                     Message message = new Message();
                     message.obj = data;
                     handler.sendMessage(message);
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
-                super.onSuccess(arg0, arg1, arg2);
             }
 
             @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
                 loadDialog.dismiss();
                 Toast.makeText(NoticeDetailActivity.this, "服务器断开连接",
                         Toast.LENGTH_SHORT).show();
-                super.onFailure(arg0, arg1, arg2, arg3);
             }
+
         };
-        client.get(MyConstants.SYSBULLETIN_DETAIL_URL+sysBulletin.id, responseHandler);
+        client.get(MyConstants.SYSBULLETIN_DETAIL_URL + sysBulletin.id, responseHandler);
 
     }
 
@@ -177,9 +176,9 @@ public class NoticeDetailActivity extends Activity {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_UP || event.getAction()==MotionEvent.ACTION_MOVE){
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_MOVE) {
                     sv.requestDisallowInterceptTouchEvent(false);
-                }else{
+                } else {
                     sv.requestDisallowInterceptTouchEvent(true);
                 }
                 return false;

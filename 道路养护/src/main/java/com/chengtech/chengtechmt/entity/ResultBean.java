@@ -38,10 +38,9 @@ public class ResultBean {
             }
 
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
                 try {
-                    String data = new String(arg2, "utf-8");
+                    String data = new String(bytes, "utf-8");
                     Gson gson  = new Gson();
                     ResultBean bean = gson.fromJson(data,ResultBean.class);
                     presenter.loadDataSuccess(bean);
@@ -49,15 +48,13 @@ public class ResultBean {
                 } catch (Exception e) {
                     presenter.hasError();
                 }
-                super.onSuccess(arg0, arg1, arg2);
             }
 
             @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
                 presenter.loadDataFailed();
-                super.onFailure(arg0, arg1, arg2, arg3);
             }
+
         };
         RequestParams params = new RequestParams();
         params.add("jsonData",json);

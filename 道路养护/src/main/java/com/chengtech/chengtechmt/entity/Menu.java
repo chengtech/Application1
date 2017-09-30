@@ -64,28 +64,23 @@ public class Menu {
             }
 
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
                 try {
-                    Log.i("tag",arg2.length+"");
-                    String data = new String(arg2, "utf-8");
-                    Log.i("tag",data);
+                    String data = new String(bytes, "utf-8");
                     Gson gson  = new Gson();
                     data = "{\"data\" : " + data + "}";
                     Menu m = gson.fromJson(data,Menu.class);
                     presenter.loadDataSuccess(m.data);
                 } catch (Exception e) {
                     presenter.hasError();
-                    e.printStackTrace();
                 }
-                super.onSuccess(arg0, arg1, arg2);
             }
 
             @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
                 presenter.loadDataFailed();
-                super.onFailure(arg0, arg1, arg2, arg3);
             }
+
         };
         Log.i("tag",url+"?onClickMenuId="+id+"&mobile=phone");
         client.get(url+"?onClickMenuId="+id+"&mobile=phone",

@@ -225,10 +225,9 @@ public class Observatory extends BaseModel {
             }
 
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
                 try {
-                    String data = new String(arg2, "utf-8");
+                    String data = new String(bytes, "utf-8");
                     Gson gson = new Gson();
                     data = data.replace("pager.", "");
                     ObservatoryG observatoryG = gson.fromJson(data, ObservatoryG.class);
@@ -236,17 +235,14 @@ public class Observatory extends BaseModel {
                     presenter.loadDataSuccess(observatoryG.rows, type);
                 } catch (Exception e) {
                     presenter.loadDataFailed();
-                    e.printStackTrace();
                 }
-                super.onSuccess(arg0, arg1, arg2);
             }
 
             @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
                 presenter.loadDataFailed();
-                super.onFailure(arg0, arg1, arg2, arg3);
             }
+
         };
         client.get(url + "?pager.pageNo=" + pageNo + "&pager.pageSize=" + pageSize + "&sort=" + sort +
                         "&direction=asc" + "&deptIds=" + arg,

@@ -49,12 +49,11 @@ public class BitumenRoadDamage extends BaseModel {
 
 
     private Presenter presenter;
-    
+
 
     public BitumenRoadDamage(Presenter presenter) {
         this.presenter = presenter;
     }
-    
 
 
     @Override
@@ -72,7 +71,7 @@ public class BitumenRoadDamage extends BaseModel {
         return null;
     }
 
-    public void getData(Context context, String urlParams){
+    public void getData(Context context, String urlParams) {
         AsyncHttpClient client = HttpclientUtil.getInstance(context);
 
         AsyncHttpResponseHandler responseHandler = new AsyncHttpResponseHandler() {
@@ -82,35 +81,31 @@ public class BitumenRoadDamage extends BaseModel {
             }
 
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
                 try {
-                    String data = new String(arg2, "utf-8");
-                    Gson gson  = new Gson();
+                    String data = new String(bytes, "utf-8");
+                    Gson gson = new Gson();
                     JSONObject jsonObject = new JSONObject(data);
                     JSONArray jsonArray = jsonObject.getJSONArray("rows");
                     List<BitumenRoadDamage> bitumenRoadDamages = new ArrayList<>();
-                    for (int i=0;i<jsonArray.length();i++) {
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                    for (int j = 0; j < jsonArray.length(); j++) {
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(j);
                         BitumenRoadDamage bitumenRoadDamage = gson.fromJson(jsonObject1.toString(), BitumenRoadDamage.class);
                         bitumenRoadDamages.add(bitumenRoadDamage);
                     }
-                    presenter.loadDataSuccess(bitumenRoadDamages,"BitumenRoadDamage");
+                    presenter.loadDataSuccess(bitumenRoadDamages, "BitumenRoadDamage");
                 } catch (Exception e) {
                     presenter.hasError();
                 }
-                super.onSuccess(arg0, arg1, arg2);
             }
-
 
             @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
                 presenter.loadDataFailed();
-                super.onFailure(arg0, arg1, arg2, arg3);
             }
+
         };
-        client.get(default_url+urlParams,
+        client.get(default_url + urlParams,
                 responseHandler);
     }
 }

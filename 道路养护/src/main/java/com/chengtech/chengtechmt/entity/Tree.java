@@ -22,64 +22,61 @@ import java.io.UnsupportedEncodingException;
 
 public class Tree implements Serializable {
 
-	private Presenter presenter;
-	@TreeNodeId
-	public String id;
-	@TreeNodeName
-	public String text;
-	public String type;
-	@TreeNodePid
-	public String parentId;
-	public String name;
-	public String secondId;
-	public String code;
-	public String secondDeptId;
-	public String url;
-	public String deptType;
+    private Presenter presenter;
+    @TreeNodeId
+    public String id;
+    @TreeNodeName
+    public String text;
+    public String type;
+    @TreeNodePid
+    public String parentId;
+    public String name;
+    public String secondId;
+    public String code;
+    public String secondDeptId;
+    public String url;
+    public String deptType;
 
 
-	public void getData(Context context,String url) {
-		AsyncHttpClient client = HttpclientUtil.getInstance(context);
+    public void getData(Context context, String url) {
+        AsyncHttpClient client = HttpclientUtil.getInstance(context);
 
-		AsyncHttpResponseHandler responseHandler = new AsyncHttpResponseHandler() {
-			@Override
-			public void onStart() {
-				super.onStart();
-			}
+        AsyncHttpResponseHandler responseHandler = new AsyncHttpResponseHandler() {
+            @Override
+            public void onStart() {
+                super.onStart();
+            }
 
-			@Override
-			public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+            @Override
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
+                try {
+                    String json = new String(bytes, "utf-8");
+                    Gson gson = new Gson();
+                    json = "{\"success\":true,\"data\" : " + json + "}";
+                    TreeG treeG = gson.fromJson(json, TreeG.class);
+                    presenter.loadDataSuccess(treeG.data, 0);
+                    presenter.loadDataSuccess(treeG.data, "Dept");
+                } catch (Exception e) {
+                    presenter.hasError();
+                }
+            }
 
-				try {
-					String json = new String(arg2, "utf-8");
-					Gson gson  = new Gson();
-					json = "{\"success\":true,\"data\" : " + json + "}";
-					TreeG treeG = gson.fromJson(json, TreeG.class);
-					presenter.loadDataSuccess(treeG.data,0);
-					presenter.loadDataSuccess(treeG.data,"Dept");
-				} catch (Exception e) {
-					presenter.hasError();
-				}
-				super.onSuccess(arg0, arg1, arg2);
-			}
+            @Override
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
+                presenter.loadDataFailed();
+            }
 
-			@Override
-			public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-								  Throwable arg3) {
-				presenter.loadDataFailed();
-				super.onFailure(arg0, arg1, arg2, arg3);
-			}
-		};
-		client.get(url, responseHandler);
-	}
+        };
+        client.get(url, responseHandler);
+    }
 
-	public Tree(Presenter presenter) {
-		this.presenter = presenter;
-	}
+    public Tree(Presenter presenter) {
+        this.presenter = presenter;
+    }
 
-	public Tree(String id,String pId,String text){
-		this.id = id;
-		this.parentId = pId;
-		this.text = text;
-	}
+    public Tree(String id, String pId, String text) {
+        this.id = id;
+        this.parentId = pId;
+        this.text = text;
+    }
 }

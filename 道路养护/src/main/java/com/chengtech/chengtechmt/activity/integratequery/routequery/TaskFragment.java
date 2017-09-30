@@ -173,10 +173,10 @@ public class TaskFragment extends Fragment {
             }
 
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
                 loadDialog.dismiss();
                 try {
-                    String data = new String(arg2, "utf-8");
+                    String data = new String(bytes, "utf-8");
                     data = data.replace("pager.", "");
                     Message message = Message.obtain();
                     message.obj = data;
@@ -185,15 +185,13 @@ public class TaskFragment extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                super.onSuccess(arg0, arg1, arg2);
             }
 
             @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
                 loadDialog.dismiss();
-                super.onFailure(arg0, arg1, arg2, arg3);
             }
+
         };
         client.get(url,
                 responseHandler);

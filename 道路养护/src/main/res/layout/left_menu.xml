@@ -88,7 +88,7 @@
                 android:textSize="16sp"/>
         </RelativeLayout>
 
-        <RelativeLayout
+        <!--<RelativeLayout
             android:id="@+id/speech"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
@@ -111,7 +111,7 @@
                 android:text="语音听写"
                 android:textColor="#ffffff"
                 android:textSize="20sp"/>
-        </RelativeLayout>
+        </RelativeLayout>-->
 
         <!--
         <RelativeLayout

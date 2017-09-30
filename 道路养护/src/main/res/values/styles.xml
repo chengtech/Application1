@@ -119,6 +119,7 @@
         <item name="android:background">@drawable/fab_label_background</item>
         <item name="android:textColor">@color/white</item>
     </style>
+
     <style name="DirPopupWindowAnimation">
         <item name="android:windowEnterAnimation">@anim/popup_up</item>
         <item name="android:windowExitAnimation">@anim/popup_out</item>

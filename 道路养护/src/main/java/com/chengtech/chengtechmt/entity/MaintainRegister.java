@@ -9,7 +9,6 @@ import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-import org.apache.http.Header;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -68,10 +67,9 @@ public class MaintainRegister extends BaseModel {
             }
 
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
                 try {
-                    String data = new String(arg2, "utf-8");
+                    String data = new String(bytes, "utf-8");
                     Gson gson = new Gson();
                     MaintainRegisterG m = gson.fromJson(data, MaintainRegisterG.class);
                     presenter.loadDataSuccess(m.rows, type);
@@ -79,15 +77,13 @@ public class MaintainRegister extends BaseModel {
                     presenter.loadDataFailed();
                     e.printStackTrace();
                 }
-                super.onSuccess(arg0, arg1, arg2);
             }
 
             @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
                 presenter.loadDataFailed();
-                super.onFailure(arg0, arg1, arg2, arg3);
             }
+
         };
         client.get(url + "&pager.pageNo=" + pageNo + "&taskMark=0" + "&direction=desc&sort=examineDate",
                 responseHandler);

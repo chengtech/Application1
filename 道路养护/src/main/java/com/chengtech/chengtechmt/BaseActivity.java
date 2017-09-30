@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chengtech.chengtechmt.behavior.ScrollAwareFABBehavior;
 import com.chengtech.chengtechmt.util.ActivityCollector;
@@ -39,7 +40,8 @@ public class BaseActivity extends AppCompatActivity {
     public int pageNo = 1;
     public int pageSize = 100;
     public int maxPage = 1; //默认最大页为1，然后进行加减
-    public Map<String,String> deptTree = new HashMap<>();
+    public Map<String, String> deptTree = new HashMap<>();
+    protected Toast mToast;
 
 
     @Override
@@ -71,6 +73,7 @@ public class BaseActivity extends AppCompatActivity {
         loadDialog = MyDialogUtil.createDialog(this, "正在加载..");
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         hidePagerNavigation(false);
+        mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
     }
 
     public void addContentView(int layoutId) {
@@ -141,5 +144,10 @@ public class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         ActivityCollector.removeActivity(this);
+    }
+
+    protected void showTip(final String str) {
+        mToast.setText(str);
+        mToast.show();
     }
 }

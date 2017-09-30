@@ -142,12 +142,14 @@ public class SlopeMonitorActivity extends BaseActivity {
 //        }
 //        sweetAlertDialog.show();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                HttpclientUtil.getData(SlopeMonitorActivity.this, getSlopeIdUrl, handler, RESULT_CODE_1, false);
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        }).start();
+
+        HttpclientUtil.getData(SlopeMonitorActivity.this, getSlopeIdUrl, handler, RESULT_CODE_1, false);
 
 
     }

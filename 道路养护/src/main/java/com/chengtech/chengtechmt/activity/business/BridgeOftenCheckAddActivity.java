@@ -173,7 +173,7 @@ public class BridgeOftenCheckAddActivity extends BaseActivity {
                     for (int i = 0; i < picPaths.size(); i++) {
                         File file = new File(picPaths.get(i));
                         if (file.exists()) {
-                            params.put("attachment" + (i + 1), file);
+                            params.put("attachment" + (i + 1), file, RequestParams.APPLICATION_OCTET_STREAM);
                         }
                     }
                 } catch (Exception e) {
@@ -182,10 +182,12 @@ public class BridgeOftenCheckAddActivity extends BaseActivity {
                 params.put("modelDir", "BridgeOftenCheck");
                 params.put("sessionId", briOftenCheck.sessionId == null ? "" : briOftenCheck.sessionId);
                 params.put("filename", "");
+                params.setHttpEntityIsRepeatable(true);
+                params.setUseJsonStreamer(false);
                 HttpclientUtil.postObject(this, updatePicture, handler, HttpclientUtil.UPDATE_SUCCESS, params);
-            }else{
+            } else {
                 Gson gson = new Gson();
-                String data = gson.toJson(briOftenCheck,BriOftenCheck.class);
+                String data = gson.toJson(briOftenCheck, BriOftenCheck.class);
                 params.put("data", data);
                 params.put("sessionId", briOftenCheck.sessionId);
                 HttpclientUtil.postObject(BridgeOftenCheckAddActivity.this, updateUrl, handler, HttpclientUtil.SAVE_SUCCESS, params);

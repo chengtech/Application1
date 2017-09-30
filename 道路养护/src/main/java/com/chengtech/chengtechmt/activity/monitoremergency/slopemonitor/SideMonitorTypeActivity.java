@@ -40,9 +40,7 @@ import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 
-import org.apache.http.client.CookieStore;
 import org.apache.http.client.protocol.ClientContext;
-import org.apache.http.cookie.Cookie;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,6 +52,8 @@ import java.util.Date;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import cz.msebera.android.httpclient.client.CookieStore;
+import cz.msebera.android.httpclient.cookie.Cookie;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.view.LineChartView;
 

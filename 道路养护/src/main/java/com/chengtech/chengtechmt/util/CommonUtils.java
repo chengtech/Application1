@@ -354,7 +354,7 @@ public class CommonUtils {
                 public void onLocationChanged(final AMapLocation aMapLocation) {
                     if (aMapLocation.getErrorCode() == 0) {
                         dialog.setTitleText("获取成功");
-                        dialog.setContentText("精度：" + aMapLocation.getLongitude()
+                        dialog.setContentText("经度：" + aMapLocation.getLongitude()
                                 + "\n纬度：" + aMapLocation.getLatitude()
                                 + "\n城市信息：" + aMapLocation.getCity()
                                 + "\n城区信息：" + aMapLocation.getDistrict()

@@ -138,10 +138,9 @@ public class PavementConfigActivity extends Activity implements OnClickListener{
             }
 
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
                 try {
-                    String data = new String(arg2, "utf-8");
+                    String data = new String(bytes, "utf-8");
                     Message message = new Message();
                     message.what = type;
                     message.obj = data;
@@ -149,19 +148,16 @@ public class PavementConfigActivity extends Activity implements OnClickListener{
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
-                super.onSuccess(arg0, arg1, arg2);
             }
 
             @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
-
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
                 loadDialog.dismiss();
 
                 Toast.makeText(PavementConfigActivity.this, "服务器断开连接",
                         Toast.LENGTH_SHORT).show();
-                super.onFailure(arg0, arg1, arg2, arg3);
             }
+
         };
         client.get(url, responseHandler);
 

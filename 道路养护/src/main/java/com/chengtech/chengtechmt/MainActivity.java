@@ -27,8 +27,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chengtech.chengtechmt.activity.AboutMeActivity;
+import com.chengtech.chengtechmt.activity.ChartWebViewActivity;
 import com.chengtech.chengtechmt.activity.MapQueryActivity;
+import com.chengtech.chengtechmt.activity.WebViewActivity;
 import com.chengtech.chengtechmt.activity.business.BusinessActivity;
+import com.chengtech.chengtechmt.activity.business.DiseaseRegistrationListActivity;
 import com.chengtech.chengtechmt.activity.dbm.DbmActivity;
 import com.chengtech.chengtechmt.activity.expertdecision.ExpertDecisionActivity;
 import com.chengtech.chengtechmt.activity.integratequery.IntegrateQueryActivity;
@@ -51,7 +54,6 @@ import com.chengtech.chengtechmt.view.SlidingMenu;
 import com.pgyersdk.crash.PgyCrashManager;
 import com.pgyersdk.update.PgyUpdateManager;
 
-import org.apache.http.client.CookieStore;
 import org.apache.http.client.protocol.ClientContext;
 
 import java.util.ArrayList;
@@ -59,6 +61,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cz.msebera.android.httpclient.client.CookieStore;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -79,13 +82,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     private Map<String, Class> activityName = new HashMap<String, Class>();
     private SlidingMenu leftmenu;
     private long lastTime;
-   /* private int[] imageIds = {
-            R.mipmap.main_img2_b, R.mipmap.main_img3_b,
-            R.mipmap.main_img4_b, R.mipmap.main_img5_b,
-            R.mipmap.main_img6_b };*/
 
     private Toolbar toolbar;
-    private LinearLayout map;
+    private LinearLayout map, chart_layout, diseaseReg_layout;
 
     public RelativeLayout bottom1, bottom2, bottom3;
 
@@ -150,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 //            if (right.itemName.equals("监测及应急保障")) {
 //                MyConstants.userRights.put(right.itemName, false);
 //            } else {
-                MyConstants.userRights.put(right.itemName, right.hasRight);
+            MyConstants.userRights.put(right.itemName, right.hasRight);
 //            }
         }
 
@@ -165,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             public void setOnItemClickListener(View view, int position) {
                 String itemName = MyConstants.MAIN_CONTENT[position];
                 Class clazz = activityName.get(itemName);
-                if (MyConstants.userRights.get(itemName)!=null && MyConstants.userRights.get(itemName)) {
+                if (MyConstants.userRights.get(itemName) != null && MyConstants.userRights.get(itemName)) {
                     Intent intent = new Intent(MainActivity.this, clazz);
                     Bundle bundle = new Bundle();
                     bundle.putString("title", itemName);
@@ -300,7 +299,21 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             public void onClick(View v) {
                 // TODO: 2016/11/28
                 Intent intent = new Intent(MainActivity.this, MapQueryActivity.class);
-                intent.putExtra("isFirstLoad",true);
+                intent.putExtra("isFirstLoad", true);
+                startActivity(intent);
+            }
+        });
+        chart_layout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "ms/sys/homechart/maintenanceBusinessEchart.action";
+                ChartWebViewActivity.startAction(MainActivity.this, MyConstants.PRE_URL + url, "设施量统计");
+            }
+        });
+        diseaseReg_layout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, DiseaseRegistrationListActivity.class);
                 startActivity(intent);
             }
         });
@@ -314,6 +327,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         viewPager = (ViewPager) findViewById(R.id.id_viewPager);
         pointGroup = (LinearLayout) findViewById(R.id.id_pointGroup);
         map = (LinearLayout) findViewById(R.id.map);
+        chart_layout = (LinearLayout) findViewById(R.id.chart);
+        diseaseReg_layout = (LinearLayout) findViewById(R.id.diseaseReg);
 
 //        schedule_iv = (ImageView) findViewById(R.id.main_schedule);
 //        schedule_iv.setOnClickListener(this);
@@ -336,7 +351,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         attachment_rl.setOnClickListener(this);
 
         //讯飞语音听写
-        findViewById(R.id.speech).setOnClickListener(this);
+//        findViewById(R.id.speech).setOnClickListener(this);
 
         username_tv = (TextView) findViewById(R.id.main_username);
         username_tv.setText(AppAccount.name);
@@ -392,10 +407,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 break;
 
             //讯飞语音听写
-            case R.id.speech:
-                Intent intent4  = new Intent(this,SpeechActivity.class);
-                startActivity(intent4);
-                break;
+//            case R.id.speech:
+//                Intent intent4  = new Intent(this,SpeechActivity.class);
+//                startActivity(intent4);
+//                break;
             case R.id.bottom2:
                 leftmenu.toggle();
                 break;

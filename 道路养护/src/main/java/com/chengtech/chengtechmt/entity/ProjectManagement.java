@@ -199,27 +199,24 @@ public class ProjectManagement implements Serializable{
             public void onStart() {
                 super.onStart();
             }
-            @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 
+            @Override
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
                 try {
-                    String data = new String(arg2, "utf-8");
+                    String data = new String(bytes, "utf-8");
                     Gson gson  = new Gson();
                     ProjectManagementG m = gson.fromJson(data,ProjectManagementG.class);
                     presenter.loadDataSuccess(m.rows,type);
                 } catch (Exception e) {
                     presenter.loadDataFailed();
-                    e.printStackTrace();
                 }
-                super.onSuccess(arg0, arg1, arg2);
             }
 
             @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
                 presenter.loadDataFailed();
-                super.onFailure(arg0, arg1, arg2, arg3);
             }
+
         };
 
         client.get(url+"&sort=fillDate&direction=desc&pager.pageNo="+pageNo,

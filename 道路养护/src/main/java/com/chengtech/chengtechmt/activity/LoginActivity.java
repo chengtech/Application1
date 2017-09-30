@@ -49,11 +49,12 @@ import com.pgyersdk.crash.PgyCrashManager;
 import com.pgyersdk.update.PgyUpdateManager;
 
 import org.apache.http.Header;
-import org.apache.http.client.CookieStore;
 import org.apache.http.client.protocol.ClientContext;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.client.CookieStore;
 
 public class LoginActivity extends Activity implements OnClickListener {
     protected static final String SEED = "chengtech";
@@ -436,24 +437,24 @@ public class LoginActivity extends Activity implements OnClickListener {
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                loadDialog.dismiss();
-                Toast.makeText(LoginActivity.this, "服务器出错，连接失败", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
                 loadDialog.dismiss();
                 try {
-                    String data = new String(responseBody, "utf-8");
+                    String data = new String(bytes, "utf-8");
                     Message msg = new Message();
                     msg.what = TWO;
                     msg.obj = data;
                     handler.sendMessage(msg);
                 } catch (UnsupportedEncodingException e) {
                 }
-
             }
+
+            @Override
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
+                loadDialog.dismiss();
+                Toast.makeText(LoginActivity.this, "服务器出错，连接失败", Toast.LENGTH_SHORT).show();
+            }
+
         };
         RequestParams params = new RequestParams();
         params.put("userAccount", account);

@@ -83,7 +83,7 @@ public class MaintainTaskItem extends BaseModel {
         typeMap.put("4081a8e558c270740158c3de59050a85", "涵洞");
         typeMap.put("4028835f58d333760158d3487f08010e", "其他");
 
-        list.add(registOrAcceptanceStatus==null ? "" : (registOrAcceptanceStatus.equals("0")?"已核定":"未核定"));
+        list.add(registOrAcceptanceStatus == null ? "" : (registOrAcceptanceStatus.equals("0") ? "已核定" : "未核定"));
         list.add(workTeam == null ? "" : workTeam);
         list.add(mobileRouteNames == null ? "" : mobileRouteNames);
         list.add(routePeg == null ? "" : routePeg);
@@ -131,10 +131,9 @@ public class MaintainTaskItem extends BaseModel {
             }
 
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
                 try {
-                    String data = new String(arg2, "utf-8");
+                    String data = new String(bytes, "utf-8");
                     Gson gson = new Gson();
                     MaintainTaskItem.MaintainTaskItemG m = gson.fromJson(data, MaintainTaskItem.MaintainTaskItemG.class);
                     presenter.loadDataSuccess(m.rows, type);
@@ -142,15 +141,14 @@ public class MaintainTaskItem extends BaseModel {
                     presenter.loadDataFailed();
                     e.printStackTrace();
                 }
-                super.onSuccess(arg0, arg1, arg2);
             }
 
             @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
                 presenter.loadDataFailed();
-                super.onFailure(arg0, arg1, arg2, arg3);
             }
+
+
         };
         client.get(url + "&pager.pageNo=" + pageNo,
                 responseHandler);

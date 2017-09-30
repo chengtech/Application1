@@ -29,21 +29,22 @@ Attachment {
     public String fileName;
     public String size;
     private Presenter presenter;
-    public String url = MyConstants.PRE_URL+"ms/sys/attachment/listAttachmentJsonBySessionId.action?sessionId=";
+    public String url = MyConstants.PRE_URL + "ms/sys/attachment/listAttachmentJsonBySessionId.action?sessionId=";
 
-    public Attachment(String fileName,String filePath,String id) {
+    public Attachment(String fileName, String filePath, String id) {
         this.filePath = filePath;
         this.fileName = fileName;
         this.id = id;
     }
 
-    public Attachment (){}
+    public Attachment() {
+    }
 
     public Attachment(Presenter presenter) {
         this.presenter = presenter;
     }
 
-    public void getData(Context context,String sessionId) {
+    public void getData(Context context, String sessionId) {
         AsyncHttpClient client = HttpclientUtil.getInstance(context);
 
         AsyncHttpResponseHandler responseHandler = new AsyncHttpResponseHandler() {
@@ -51,40 +52,38 @@ Attachment {
             public void onStart() {
                 super.onStart();
             }
-            @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 
+            @Override
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
                 try {
-                    String data = new String(arg2, "utf-8");
-                    if (TextUtils.isEmpty(data)){
-                        presenter.loadDataSuccess(new ArrayList<Attachment>(),"Attachment");
+                    String data = new String(bytes, "utf-8");
+                    if (TextUtils.isEmpty(data)) {
+                        presenter.loadDataSuccess(new ArrayList<Attachment>(), "Attachment");
                         return;
                     }
                     JSONArray array = new JSONArray(data);
                     List<Attachment> attachmentList = new ArrayList<>();
-                    for (int i=0;i<array.length();i++) {
-                        JSONObject object = array.getJSONObject(i);
+                    for (int j = 0; j < array.length(); j++) {
+                        JSONObject object = array.getJSONObject(j);
                         attachmentList.add(new Attachment(object.getString("fileName"),
                                 object.getString("filePath"),
                                 object.getString("id")));
                     }
-                    presenter.loadDataSuccess(attachmentList,"Attachment");
+                    presenter.loadDataSuccess(attachmentList, "Attachment");
 
                 } catch (Exception e) {
                     presenter.loadDataFailed();
                     e.printStackTrace();
                 }
-                super.onSuccess(arg0, arg1, arg2);
             }
 
             @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
                 presenter.loadDataFailed();
-                super.onFailure(arg0, arg1, arg2, arg3);
             }
+
         };
-        client.get(url+sessionId,
+        client.get(url + sessionId,
                 responseHandler);
     }
 

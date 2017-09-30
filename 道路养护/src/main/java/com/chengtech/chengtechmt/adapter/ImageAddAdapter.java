@@ -81,9 +81,6 @@ public class ImageAddAdapter extends RecyclerView.Adapter {
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    Intent intent = new Intent(mContext, PictureSelectorActivity.class);
-//                    Activity activity = (Activity) mContext;
-//                    activity.startActivityForResult(intent, 0x00);
                     BottomSheetDialog bottomSheetDialog = showSelectDialog(mContext);
                     bottomSheetDialog.show();
                 }
@@ -102,7 +99,6 @@ public class ImageAddAdapter extends RecyclerView.Adapter {
             if (width < 0) {
                 width = metrics.widthPixels;
             }
-            Log.i("tag", width + "-------");
             if (width != 0)
                 targetWidth = width;
             String picPath = picturePaths.get(position);

@@ -53,7 +53,7 @@ import java.util.List;
  * 沿线设施(包含井盖管理，井盖等一系列子模块)
  */
 
-public class RoadSideFacilitiesActivity extends BaseActivity implements OnClickListener,SubMenuDialogFragment.ExchangeDataListener {
+public class RoadSideFacilitiesActivity extends BaseActivity implements OnClickListener, SubMenuDialogFragment.ExchangeDataListener {
     private static final int TYPE1 = 1;
     private static final int TYPE2 = 2;
     private static final int TYPE3 = 3;
@@ -191,7 +191,7 @@ public class RoadSideFacilitiesActivity extends BaseActivity implements OnClickL
                         if (!TextUtils.isEmpty(json)) {
                             JSONObject jsonObject = new JSONObject(json);
                             JSONArray rows = jsonObject.getJSONArray("rows");
-                            if(rows.length()==pageSize)
+                            if (rows.length() == pageSize)
                                 maxPage++;
                             coverManages.clear();
                             for (int i = 0; i < rows.length(); i++) {
@@ -199,10 +199,10 @@ public class RoadSideFacilitiesActivity extends BaseActivity implements OnClickL
                                 CoverManage coverManage = gson.fromJson(objectString, CoverManage.class);
                                 coverManages.add(coverManage);
                             }
-                            if (coverManages.size() >0){
+                            if (coverManages.size() > 0) {
                                 scrollView2.setVisibility(View.VISIBLE);
                                 showRecyclerView();
-                            }else {
+                            } else {
                                 Toast.makeText(RoadSideFacilitiesActivity.this, "无数据", Toast.LENGTH_SHORT).show();
                                 scrollView2.setVisibility(View.GONE);
                             }
@@ -251,7 +251,7 @@ public class RoadSideFacilitiesActivity extends BaseActivity implements OnClickL
         Bundle bundle = new Bundle();
         bundle.putSerializable("data", (Serializable) menuList);
         menuDialogFragment.setArguments(bundle);
-        getFragmentManager().beginTransaction().add(menuDialogFragment,null).commit();
+        getFragmentManager().beginTransaction().add(menuDialogFragment, null).commit();
 
 //        getData(url, TYPE1);
 
@@ -354,11 +354,21 @@ public class RoadSideFacilitiesActivity extends BaseActivity implements OnClickL
                 super.onStart();
             }
 
+
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
+                if (type == 1) {
+                    loadDialog.dismiss();
+                }
+                Toast.makeText(RoadSideFacilitiesActivity.this, "服务器断开连接",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
 
                 try {
-                    String data = new String(arg2, "utf-8");
+                    String data = new String(bytes, "utf-8");
                     Message message = new Message();
                     message.what = type;
                     message.obj = data;
@@ -366,19 +376,8 @@ public class RoadSideFacilitiesActivity extends BaseActivity implements OnClickL
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                super.onSuccess(arg0, arg1, arg2);
             }
 
-            @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
-                if (type == 1) {
-                    loadDialog.dismiss();
-                }
-                Toast.makeText(RoadSideFacilitiesActivity.this, "服务器断开连接",
-                        Toast.LENGTH_SHORT).show();
-                super.onFailure(arg0, arg1, arg2, arg3);
-            }
         };
         client.get(url, responseHandler);
 
@@ -395,7 +394,7 @@ public class RoadSideFacilitiesActivity extends BaseActivity implements OnClickL
         int id = item.getItemId();
 
         if (id == R.id.filter) {
-            if (trees!=null && trees.size() > 0) {
+            if (trees != null && trees.size() > 0) {
                 if (deptSpinnerDialog == null) {
                     deptSpinnerDialog = DeptSpinnerUtil.createDeptSpinner(this, trees, listUrl, handler, TYPE4);
                 }
@@ -464,9 +463,9 @@ public class RoadSideFacilitiesActivity extends BaseActivity implements OnClickL
                 if (pageNo != 1) {
                     pageNo--;
                     pageNo_tv.setText(pageNo + "");
-                    HttpclientUtil.getData(this,listUrl+deptId+"&pager.pageNo="+pageNo+"&pager.pageSize="+pageSize
-                                    +"&sort=sortOrder&direction=asc",
-                            handler,TYPE4);
+                    HttpclientUtil.getData(this, listUrl + deptId + "&pager.pageNo=" + pageNo + "&pager.pageSize=" + pageSize
+                                    + "&sort=sortOrder&direction=asc",
+                            handler, TYPE4);
                 } else {
                     Toast.makeText(this, "当前是最新页", Toast.LENGTH_SHORT).show();
                 }
@@ -477,9 +476,9 @@ public class RoadSideFacilitiesActivity extends BaseActivity implements OnClickL
                     pageNo_tv.setText(pageNo + "");
 //                    getData(appendUrl + pageSize + "&pager.pageNo=" +
 //                            pageNo, TYPE2);
-                    HttpclientUtil.getData(this,listUrl+deptId+"&pager.pageNo="+pageNo+"&pager.pageSize="+pageSize
-                            +"&sort=sortOrder&direction=asc",
-                            handler,TYPE4);
+                    HttpclientUtil.getData(this, listUrl + deptId + "&pager.pageNo=" + pageNo + "&pager.pageSize=" + pageSize
+                                    + "&sort=sortOrder&direction=asc",
+                            handler, TYPE4);
                 } else {
                     Toast.makeText(this, "当前已经是最后一页", Toast.LENGTH_SHORT).show();
                 }
