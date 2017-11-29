@@ -42,6 +42,16 @@ public class Section extends BaseModel {
     public String roadType;          //路面类型
     public Route route;
 
+    public String ahighSpeed;            // 是否一幅高速
+    public Double designSpeed = 0.0;    // 设计时速
+    public String constructYear;            // 修建年度
+    public String reconstructYear;        // 改建年度
+    public String lastMajorRepairYear;   // 最近一次大中修年度
+    public String landformType;        // 地貌类型
+    public String subgradeLength;      // 路基宽度
+    public String isHandOver = "0";          //是否移交 ,1表示移交，0表示否
+
+
     @Override
     public List<String> getContent() {
         if (propetryValues == null) {
@@ -60,6 +70,15 @@ public class Section extends BaseModel {
             propetryValues.add(TextUtils.isEmpty(roadWide) ? "" : roadWide);
             propetryValues.add(TextUtils.isEmpty(regionCode) ? "" : regionCode);
             propetryValues.add(TextUtils.isEmpty(roadType) ? "" : roadType);
+
+            propetryValues.add(TextUtils.isEmpty(ahighSpeed) ? "" : ahighSpeed);
+            propetryValues.add(String.valueOf(designSpeed));
+            propetryValues.add(TextUtils.isEmpty(constructYear) ? "" : constructYear);
+            propetryValues.add(TextUtils.isEmpty(reconstructYear) ? "" : reconstructYear);
+            propetryValues.add(TextUtils.isEmpty(lastMajorRepairYear) ? "" : lastMajorRepairYear);
+            propetryValues.add(TextUtils.isEmpty(landformType) ? "" : landformType);
+            propetryValues.add(TextUtils.isEmpty(subgradeLength) ? "" : subgradeLength);
+            propetryValues.add(isHandOver.equals("0") ? "否" : "是");
         }
         return propetryValues;
     }
@@ -82,6 +101,15 @@ public class Section extends BaseModel {
         titles.add("路面均宽");
         titles.add("政区编码");
         titles.add("路面类型");
+
+        titles.add("是否一幅高速");
+        titles.add("设计时速");
+        titles.add("修建年度");
+        titles.add("改建年度");
+        titles.add("最近一次大中修年度");
+        titles.add("地貌类型");
+        titles.add("路基宽度");
+        titles.add("是否移交");
         return titles;
     }
 

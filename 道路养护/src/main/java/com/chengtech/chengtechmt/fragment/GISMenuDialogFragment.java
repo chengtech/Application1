@@ -50,57 +50,57 @@ import java.util.List;
  */
 public class GISMenuDialogFragment extends DialogFragment implements View.OnClickListener {
 
-    public  final int LIST_ROUTE = 0;
-    public  final int EVALUATE = 1;
+    public final int LIST_ROUTE = 0;
+    public final int EVALUATE = 1;
     private ExchangeDataListener listener;
-    public HashMap<String,Boolean> selectedPosMap = new HashMap<>();
-    TextView routeGrade,routeName,evaluate_tv,year_tv;
+    public HashMap<String, Boolean> selectedPosMap = new HashMap<>();
+    TextView routeGrade, routeName, evaluate_tv, year_tv;
     DisplayMetrics displayMetrics;
     public Context mContext;
-    public String [] routeGradeItems = new String[]{
-            "G-国道","S-省道","X-县道","Y-乡道","Z-专用公路","C-村道"
+    public String[] routeGradeItems = new String[]{
+            "G-国道", "S-省道", "X-县道", "Y-乡道", "Z-专用公路", "C-村道"
     };
-    public boolean [] routeGradeCheckeds = new boolean[6];
-    public String [] poiItems = new String[]{
-            "PQI","PCI","RQI","RDI","MQI"
+    public boolean[] routeGradeCheckeds = new boolean[6];
+    public String[] poiItems = new String[]{
+            "PQI", "PCI", "RQI", "RDI", "MQI"
     };
-    public int poiCheckeds =0;
+    public int poiCheckeds = 0;
     public String[] yearItems = new String[]{
-            "请选择","2014","2015","2016","2017","2018","2019","2020"
+            "请选择", "2014", "2015", "2016", "2017", "2018", "2019", "2020"
     };
     public int yearChecked = 0;
 
 
-    public Handler handler = new Handler(){
+    public Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             String json = (String) msg.obj;
             Gson gson = new Gson();
             switch (msg.what) {
                 case LIST_ROUTE:
-                    try{
+                    try {
 //                        loadDialog.dismiss();
                         RouteG routeG = gson.fromJson(json, RouteG.class);
                         List<Route> routes = routeG.rows;
-                        if (routes!=null && routes.size()>0) {
+                        if (routes != null && routes.size() > 0) {
                             createMultiDialog(routes);
-                        }else {
+                        } else {
                             Toast.makeText(mContext, "无数据。", Toast.LENGTH_SHORT).show();
                         }
-                    }catch (Exception e) {
+                    } catch (Exception e) {
 
                     }
                     break;
 
                 case EVALUATE:
-                    try{
+                    try {
 //                        loadDialog.dismiss();
-                        if (json!=null && json.length()>10) {
-                            if (listener!=null) {
+                        if (json != null && json.length() > 10) {
+                            if (listener != null) {
                                 listener.onExchangData(json);
                                 GISMenuDialogFragment.this.dismiss();
                             }
-                        }else {
+                        } else {
                             Toast.makeText(mContext, "暂无评定数据", Toast.LENGTH_SHORT).show();
                         }
 //                        Intent intent = new Intent(mContext, MapQueryActivity.class);
@@ -108,7 +108,7 @@ public class GISMenuDialogFragment extends DialogFragment implements View.OnClic
 //                        intent.putExtra("map",mapEntity);
 //                        startActivity(intent);
 
-                    }catch (Exception e) {
+                    } catch (Exception e) {
 
                     }
                     break;
@@ -206,7 +206,7 @@ public class GISMenuDialogFragment extends DialogFragment implements View.OnClic
     public void onClick(final View view) {
         switch (view.getId()) {
             case R.id.routeGrade:
-                AlertDialog.Builder builder  = new AlertDialog.Builder(mContext);
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 builder.setMultiChoiceItems(routeGradeItems, routeGradeCheckeds, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -217,14 +217,14 @@ public class GISMenuDialogFragment extends DialogFragment implements View.OnClic
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         StringBuffer sb = new StringBuffer();
-                        for (int i=0;i<routeGradeCheckeds.length;i++) {
+                        for (int i = 0; i < routeGradeCheckeds.length; i++) {
                             if (routeGradeCheckeds[i])
-                                sb.append(routeGradeItems[i]+",");
+                                sb.append(routeGradeItems[i] + ",");
                         }
-                        if (!TextUtils.isEmpty(sb)){
-                            ((TextView)view).setText(sb.toString().substring(0,sb.length()-1));
-                        }else {
-                            ((TextView)view).setText("");
+                        if (!TextUtils.isEmpty(sb)) {
+                            ((TextView) view).setText(sb.toString().substring(0, sb.length() - 1));
+                        } else {
+                            ((TextView) view).setText("");
                         }
 
 
@@ -234,20 +234,20 @@ public class GISMenuDialogFragment extends DialogFragment implements View.OnClic
                 break;
 
             case R.id.routeNames:
-                String listRouteUrl = MyConstants.PRE_URL+"mt/integratequery/gisvisualization/listRouteInGisJson.action?routeGrade=";
+                String listRouteUrl = MyConstants.PRE_URL + "mt/integratequery/gisvisualization/listRouteInGisJson.action?routeGrade=";
                 String routeGrade = this.routeGrade.getText().toString().trim();
-                if(!TextUtils.isEmpty(routeGrade)){
+                if (!TextUtils.isEmpty(routeGrade)) {
                     String[] split = routeGrade.split(",");
-                    for (int i=0;i<split.length;i++) {
-                        listRouteUrl = listRouteUrl+split[i].substring(0,1)+",";
+                    for (int i = 0; i < split.length; i++) {
+                        listRouteUrl = listRouteUrl + split[i].substring(0, 1) + ",";
                     }
                 }
-                HttpclientUtil.getData(mContext,listRouteUrl,handler,LIST_ROUTE);
+                HttpclientUtil.getData(mContext, listRouteUrl, handler, LIST_ROUTE);
 //                loadDialog.show();;
                 break;
 
             case R.id.evaluate:
-                AlertDialog.Builder builder2  = new AlertDialog.Builder(mContext);
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(mContext);
                 builder2.setSingleChoiceItems(poiItems, poiCheckeds, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -264,7 +264,7 @@ public class GISMenuDialogFragment extends DialogFragment implements View.OnClic
                 break;
 
             case R.id.year:
-                AlertDialog.Builder builder3  = new AlertDialog.Builder(mContext);
+                AlertDialog.Builder builder3 = new AlertDialog.Builder(mContext);
                 builder3.setSingleChoiceItems(yearItems, yearChecked, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -281,7 +281,8 @@ public class GISMenuDialogFragment extends DialogFragment implements View.OnClic
                 break;
 
             case R.id.search:
-                String evaluateMsgUrl = MyConstants.PRE_URL+"mt/integratequery/gisvisualization/getEvaluateMsg.action?routeGrade=";
+//                String evaluateMsgUrl = MyConstants.PRE_URL+"mt/integratequery/gisvisualization/getEvaluateMsg.action?routeGrade=";
+                String evaluateMsgUrl = MyConstants.PRE_URL + "mt/integratequery/gisevaluation/getGisEvaluationMsg.action?routeGrade=";
                 String routeGrade2 = this.routeGrade.getText().toString().trim();
                 String evaluateIndex = evaluate_tv.getText().toString().trim();
                 String year = year_tv.getText().toString().trim();
@@ -289,39 +290,39 @@ public class GISMenuDialogFragment extends DialogFragment implements View.OnClic
                     year = "";
                 String routeNames = routeName.getText().toString().trim();
                 StringBuffer routeNamesCache = new StringBuffer();
-                if (!TextUtils.isEmpty(routeNames)){
+                if (!TextUtils.isEmpty(routeNames)) {
                     String[] split = routeNames.split(",");
-                    for (int i=0;i<split.length;i++) {
-                        split[i] = split[i].substring(split[i].indexOf("(")+1,split[i].length()-1);
-                        routeNamesCache.append(split[i]+"\',\'");
+                    for (int i = 0; i < split.length; i++) {
+                        split[i] = split[i].substring(split[i].indexOf("(") + 1, split[i].length() - 1);
+                        routeNamesCache.append(split[i] + "\',\'");
                     }
                 }
-                evaluateMsgUrl = evaluateMsgUrl+routeGrade2+"&routeCode="+routeNamesCache.toString()+"&evaluateIndex="+evaluateIndex
-                        +"&year="+year;
-                HttpclientUtil.getData(mContext,evaluateMsgUrl,handler,EVALUATE);
+                evaluateMsgUrl = evaluateMsgUrl + routeGrade2 + "&routeCode=" + routeNamesCache.toString() + "&evaluateIndex=" + evaluateIndex
+                        + "&year=" + year;
+                HttpclientUtil.getData(mContext, evaluateMsgUrl, handler, EVALUATE);
 //                loadDialog.show();;
                 break;
         }
     }
 
     private void createMultiDialog(List<Route> routes) {
-        final GisListRouteAdapter adapter = new GisListRouteAdapter(routes,selectedPosMap);
+        final GisListRouteAdapter adapter = new GisListRouteAdapter(routes, selectedPosMap);
         final RecyclerView recyclerView = new RecyclerView(mContext);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        AlertDialog.Builder builder  = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
                 StringBuffer sb = new StringBuffer();
                 List<Route> checkedItems = adapter.getCheckedItems();
-                for (int i=0;i<checkedItems.size();i++) {
-                    sb.append(checkedItems.get(i).name+"("+checkedItems.get(i).code+"),");
+                for (int i = 0; i < checkedItems.size(); i++) {
+                    sb.append(checkedItems.get(i).name + "(" + checkedItems.get(i).code + "),");
                 }
-                if (!TextUtils.isEmpty(sb)){
+                if (!TextUtils.isEmpty(sb)) {
                     routeName.setText(sb.toString());
-                }else {
+                } else {
                     routeName.setText("");
                 }
             }

@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="路线等级:"
+        android:text="路线名称:"
         android:textSize="16sp"
         />
 

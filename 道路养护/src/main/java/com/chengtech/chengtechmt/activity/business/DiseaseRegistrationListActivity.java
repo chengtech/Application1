@@ -1,7 +1,12 @@
 package com.chengtech.chengtechmt.activity.business;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,7 +17,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckedTextView;
@@ -22,6 +26,7 @@ import android.widget.Toast;
 import com.chengtech.chengtechmt.R;
 import com.chengtech.chengtechmt.adapter.business.DiseaseRegAdapter;
 import com.chengtech.chengtechmt.entity.business.DiseaseRegistration;
+import com.chengtech.chengtechmt.fragment.FellowMenDialogFragment;
 import com.chengtech.chengtechmt.util.HttpclientUtil;
 import com.chengtech.chengtechmt.util.MyConstants;
 import com.chengtech.chengtechmt.util.ObjectSaveUtils;
@@ -40,7 +45,7 @@ import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class DiseaseRegistrationListActivity extends AppCompatActivity {
+public class DiseaseRegistrationListActivity extends AppCompatActivity implements FellowMenDialogFragment.OnDismissListener {
     public static final String DISEASE_REGISTRATION_LIST = "disease_registration_list";
     private Toolbar toolbar;
     private FloatingActionButton floatingActionButton;
@@ -50,7 +55,6 @@ public class DiseaseRegistrationListActivity extends AppCompatActivity {
     private RelativeLayout edit_layout;
     private String updateUrl = MyConstants.PRE_URL + "mt/business/tinkermaintainpatrol/diseaserecord/saveOrUpdateDiseaseRecordMobile.action";
     private String updatePicture = MyConstants.PRE_URL + "mobileUploader";
-    //    private String updatePicture` = MyConstants.PRE_URL + "swfUploaderList";
     private SweetAlertDialog dialog;
     private DiseaseRegistration currentDisReg;
     private int currentUploadPosition;
@@ -91,7 +95,9 @@ public class DiseaseRegistrationListActivity extends AppCompatActivity {
                         }
 
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        if (dialog != null && dialog.isShowing()) {
+                            dialog.setTitleText("json解析失败").setContentText(e.toString()).changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                        }
                     }
                     break;
                 case HttpclientUtil.SAVE_SUCCESS:
@@ -119,12 +125,14 @@ public class DiseaseRegistrationListActivity extends AppCompatActivity {
                             }
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        if (dialog != null && dialog.isShowing()) {
+                            dialog.setTitleText("json解析失败").setContentText(e.toString()).changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                        }
                     }
                     break;
                 case HttpclientUtil.SAVE_FAILED:
                     if (dialog != null && dialog.isShowing()) {
-                        dialog.setTitleText("保存失败！").changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                        dialog.setTitleText("保存失败！").setContentText("").changeAlertType(SweetAlertDialog.ERROR_TYPE);
                     }
                     break;
             }
@@ -141,7 +149,7 @@ public class DiseaseRegistrationListActivity extends AppCompatActivity {
                     public void run() {
                         ObjectSaveUtils.saveObject(DiseaseRegistrationListActivity.this, DISEASE_REGISTRATION_LIST, data);
                     }
-                }).run();
+                }).start();
             }
             finish();
         }
@@ -164,11 +172,36 @@ public class DiseaseRegistrationListActivity extends AppCompatActivity {
                         public void run() {
                             ObjectSaveUtils.saveObject(DiseaseRegistrationListActivity.this, DISEASE_REGISTRATION_LIST, data);
                         }
-                    }).run();
+                    }).start();
                 }
                 finish();
             }
         });
+        openGpsService();
+    }
+
+    private void openGpsService() {
+        LocationManager manger = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean providerEnabled = manger.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!providerEnabled) {
+            if (dialog == null)
+                dialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
+            dialog.setTitleText("GPS定位服务未打开")
+                    .setContentText("是否前往设置中打开GPS？")
+                    .setConfirmText("确定,前往。")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                            Intent intent2 = new Intent(
+                                    Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivityForResult(intent2, 0);
+                            sweetAlertDialog.dismiss();
+                        }
+                    })
+                    .setCanceledOnTouchOutside(true);
+            dialog.show();
+
+        }
     }
 
 
@@ -222,20 +255,31 @@ public class DiseaseRegistrationListActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        diseaseRegAdapter.setEditMode(!diseaseRegAdapter.getEditMode());
-        if (diseaseRegAdapter.getEditMode()) {
-            edit_layout.setVisibility(View.VISIBLE);
-            floatingActionButton.setVisibility(View.GONE);
-        } else {
-            edit_layout.setVisibility(View.GONE);
-            floatingActionButton.setVisibility(View.VISIBLE);
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case 0x11:
+                diseaseRegAdapter.setEditMode(!diseaseRegAdapter.getEditMode());
+                if (diseaseRegAdapter.getEditMode()) {
+                    edit_layout.setVisibility(View.VISIBLE);
+                    floatingActionButton.setVisibility(View.GONE);
+                } else {
+                    edit_layout.setVisibility(View.GONE);
+                    floatingActionButton.setVisibility(View.VISIBLE);
+                }
+                break;
+            case 0x12:
+                FellowMenDialogFragment fragment = new FellowMenDialogFragment();
+                fragment.show(getFragmentManager(), "FellowMen");
+                break;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add("编辑").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        menu.add(0, 0x11, 20, "编辑").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        menu.add(0, 0x12, 21, "陪同人员").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -329,6 +373,12 @@ public class DiseaseRegistrationListActivity extends AppCompatActivity {
             Toast.makeText(this, "请选择需要上传的记录！", Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public void onDismiss(Object data) {
+
+    }
+
 
     public static class MessageEvent {
         public int position;

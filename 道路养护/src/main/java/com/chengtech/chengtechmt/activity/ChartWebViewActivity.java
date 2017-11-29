@@ -45,10 +45,19 @@ public class ChartWebViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart_web_view);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
 
         Intent intent = getIntent();
         toolbar.setTitle(intent.getStringExtra("title"));
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.arrow_back2);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         initView();
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);

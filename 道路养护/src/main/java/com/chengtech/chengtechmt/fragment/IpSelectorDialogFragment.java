@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,10 +63,17 @@ public class IpSelectorDialogFragment extends DialogFragment {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                showDeleteDialog(position);
+                showEditDialog(position);
                 return true;
             }
         });
+
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                showEditDialog(position);
+//            }
+//        });
 
         builder.setView(view);
         builder.setTitle("IP配置列表");
@@ -92,6 +100,29 @@ public class IpSelectorDialogFragment extends DialogFragment {
         return dialog;
     }
 
+    private void showEditDialog(final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("编辑当前IP地址");
+        final EditText et = new EditText(getActivity());
+        et.setText(itemList.get(position));
+        et.setSelection(itemList.get(position).length());
+        builder.setView(et).setPositiveButton("保存", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String editMsg = et.getText().toString();
+                if (TextUtils.isEmpty(editMsg)) {
+                    itemList.remove(position);
+                } else {
+                    itemList.set(position, editMsg);
+                }
+                adapter.notifyDataSetChanged();
+
+            }
+        })
+                .setNegativeButton("取消", null)
+                .show();
+    }
+
     private void showDeleteDialog(final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("删除当前IP地址？");
@@ -101,7 +132,7 @@ public class IpSelectorDialogFragment extends DialogFragment {
                 itemList.remove(position);
                 adapter.notifyDataSetChanged();
             }
-        }).setNegativeButton("取消",null).show();
+        }).setNegativeButton("取消", null).show();
 
     }
 

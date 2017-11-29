@@ -7,12 +7,14 @@ import android.graphics.ColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,11 +35,13 @@ import com.chengtech.chengtechmt.divider.RecycleViewDivider;
 import com.chengtech.chengtechmt.entity.bridge.Bridge;
 import com.chengtech.chengtechmt.entity.patrol.BriOftenCheck;
 import com.chengtech.chengtechmt.entity.patrol.BridgeRecord;
+import com.chengtech.chengtechmt.util.DateUtils;
 import com.chengtech.chengtechmt.util.ViewHolder;
 
 import java.io.File;
 import java.math.MathContext;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,10 +66,10 @@ public class BridgeOftenCheckAddAdapter extends RecyclerView.Adapter {
         picturePaths = new ArrayList<>();
     }
 
-    public BridgeOftenCheckAddAdapter(Context context, BriOftenCheck briOftenCheck,ArrayList<String> picturePaths) {
+    public BridgeOftenCheckAddAdapter(Context context, BriOftenCheck briOftenCheck, ArrayList<String> picturePaths) {
         this.briOftenCheck = briOftenCheck;
         this.mContext = context;
-        this.picturePaths =picturePaths;
+        this.picturePaths = picturePaths;
     }
 
     @Override
@@ -127,24 +131,46 @@ public class BridgeOftenCheckAddAdapter extends RecyclerView.Adapter {
                     briOftenCheck.record = s.toString();
                 }
             });
-            viewHolder1.checkDate.setText(briOftenCheck.checkDate.substring(0, 10));
-            final int year = Integer.parseInt(briOftenCheck.checkDate.substring(0, 4));
-            final int month = Integer.parseInt(briOftenCheck.checkDate.substring(5, 7));
-            final int day = Integer.parseInt(briOftenCheck.checkDate.substring(8, 10));
-            viewHolder1.checkDate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DatePickerDialog dialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                            String monthStr = String.format("%02d", monthOfYear + 1);
-                            viewHolder1.checkDate.setText(year + "-" + monthStr + "-" + dayOfMonth);
-                            briOftenCheck.checkDate = year + "-" + monthStr + "-" + dayOfMonth;
-                        }
-                    }, year, month - 1, day);
-                    dialog.show();
-                }
-            });
+            if (!TextUtils.isEmpty(briOftenCheck.checkDate)) {
+                viewHolder1.checkDate.setText(briOftenCheck.checkDate.substring(0, 10));
+                final int year = Integer.parseInt(briOftenCheck.checkDate.substring(0, 4));
+                final int month = Integer.parseInt(briOftenCheck.checkDate.substring(5, 7));
+                final int day = Integer.parseInt(briOftenCheck.checkDate.substring(8, 10));
+                viewHolder1.checkDate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DatePickerDialog dialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                String monthStr = String.format("%02d", monthOfYear + 1);
+                                viewHolder1.checkDate.setText(year + "-" + monthStr + "-" + dayOfMonth);
+                                briOftenCheck.checkDate = year + "-" + monthStr + "-" + dayOfMonth;
+                            }
+                        }, year, month - 1, day);
+                        dialog.show();
+                    }
+                });
+            } else {
+                Date date = new Date();
+                viewHolder1.checkDate.setText(DateUtils.convertDate2(date));
+                final int year = date.getYear();
+                final int month = date.getMonth();
+                final int day = date.getDay();
+                viewHolder1.checkDate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DatePickerDialog dialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                String monthStr = String.format("%02d", monthOfYear + 1);
+                                viewHolder1.checkDate.setText(year + "-" + monthStr + "-" + dayOfMonth);
+                                briOftenCheck.checkDate = year + "-" + monthStr + "-" + dayOfMonth;
+                            }
+                        }, year, month - 1, day);
+                        dialog.show();
+                    }
+                });
+            }
             final List<String> data = new ArrayList<>();
             data.add("");
             for (int i = 0; i < briOftenCheck.listBridge.size(); i++) {
@@ -154,8 +180,8 @@ public class BridgeOftenCheckAddAdapter extends RecyclerView.Adapter {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(holder.itemView.getContext(), android.R.layout.simple_spinner_item, data);
             viewHolder1.spinner.setAdapter(adapter);
             Integer briNo = briOftenCheck.savePosition.get("桥梁编码");
-            if (briNo!=null)
-                viewHolder1.spinner.setSelection(briNo,true);
+            if (briNo != null)
+                viewHolder1.spinner.setSelection(briNo, true);
             viewHolder1.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -168,7 +194,7 @@ public class BridgeOftenCheckAddAdapter extends RecyclerView.Adapter {
                         briOftenCheck.brino = split[0];
                         briOftenCheck.bripeg = split[2];
                     }
-                    briOftenCheck.savePosition.put("桥梁编码",position);
+                    briOftenCheck.savePosition.put("桥梁编码", position);
 
                 }
 
@@ -180,30 +206,30 @@ public class BridgeOftenCheckAddAdapter extends RecyclerView.Adapter {
         } else if (holder instanceof ViewHolder2) {
             final ViewHolder2 viewHolder2 = (ViewHolder2) holder;
             //这里要position减一，因为有表头占了一位
-            if (briOftenCheck!=null && briOftenCheck.listBridgeCheckRecord!=null && briOftenCheck.listBridgeCheckRecord.size()>0){
+            if (briOftenCheck != null && briOftenCheck.listBridgeCheckRecord != null && briOftenCheck.listBridgeCheckRecord.size() > 0) {
                 List<BridgeRecord> bridgeRecords = briOftenCheck.listBridgeCheckRecord;
                 final BridgeRecord bridgeRecord = bridgeRecords.get(position - 1);
-                viewHolder2.partNo.setText("部件编号："+bridgeRecord.partNo);
-                viewHolder2.partName.setText("部件名称："+bridgeRecord.partName);
+                viewHolder2.partNo.setText("部件编号：" + bridgeRecord.partNo);
+                viewHolder2.partName.setText("部件名称：" + bridgeRecord.partName);
                 if (viewHolder2.defectArea.getTag() instanceof TextWatcher) {
                     viewHolder2.defectArea.removeTextChangedListener((TextWatcher) viewHolder2.defectArea.getTag());
                 }
-               TextWatcher textWatcher = new TextWatcher() {
-                   @Override
-                   public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                TextWatcher textWatcher = new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                   }
+                    }
 
-                   @Override
-                   public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                   }
+                    }
 
-                   @Override
-                   public void afterTextChanged(Editable s) {
-                       bridgeRecord.defectArea = s.toString();
-                   }
-               };
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        bridgeRecord.defectArea = s.toString();
+                    }
+                };
                 viewHolder2.defectArea.setText(bridgeRecord.defectArea);
                 viewHolder2.defectArea.addTextChangedListener(textWatcher);
                 viewHolder2.defectArea.setTag(textWatcher);
@@ -232,16 +258,16 @@ public class BridgeOftenCheckAddAdapter extends RecyclerView.Adapter {
                 viewHolder2.repairView.setTag(textWatcher2);
 
 
-                String []listDefectTypeByConstantDD = bridgeRecord.listDefectTypeByConstantDD;
+                String[] listDefectTypeByConstantDD = bridgeRecord.listDefectTypeByConstantDD;
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, listDefectTypeByConstantDD);
                 viewHolder2.defectType.setAdapter(adapter);
-                if (briOftenCheck.savePosition.get("部件编号："+bridgeRecord.partNo)!=null)
-                    viewHolder2.defectType.setSelection(briOftenCheck.savePosition.get("部件编号："+bridgeRecord.partNo));
+                if (briOftenCheck.savePosition.get("部件编号：" + bridgeRecord.partNo) != null)
+                    viewHolder2.defectType.setSelection(briOftenCheck.savePosition.get("部件编号：" + bridgeRecord.partNo));
                 viewHolder2.defectType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         bridgeRecord.defectType = bridgeRecord.listDefectTypeByConstantDD[position];
-                        briOftenCheck.savePosition.put("部件编号："+bridgeRecord.partNo,position);
+                        briOftenCheck.savePosition.put("部件编号：" + bridgeRecord.partNo, position);
                     }
 
                     @Override
@@ -250,11 +276,11 @@ public class BridgeOftenCheckAddAdapter extends RecyclerView.Adapter {
                     }
                 });
             }
-        }else if (holder instanceof ViewHolder3) {
+        } else if (holder instanceof ViewHolder3) {
             final ViewHolder3 viewHolder3 = (ViewHolder3) holder;
-            RecyclerView recyclerView =  viewHolder3.recyclerView;
-            recyclerView.setLayoutManager(new GridLayoutManager(mContext,4));
-            imageAdapter = new ImageAddAdapter(mContext,picturePaths);
+            RecyclerView recyclerView = viewHolder3.recyclerView;
+            recyclerView.setLayoutManager(new GridLayoutManager(mContext, 4));
+            imageAdapter = new ImageAddAdapter(mContext, picturePaths);
 //            recyclerView.setAdapter(imageAdapter);
 //            recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
 //                @Override
@@ -281,7 +307,7 @@ public class BridgeOftenCheckAddAdapter extends RecyclerView.Adapter {
     public int getItemViewType(int position) {
         if (position == 0)
             return HEAD_TYPE;
-        if (position==getItemCount()-1) {
+        if (position == getItemCount() - 1) {
             return FOOT_TYPE;
         }
         return NORMAL_TYPE;
@@ -330,6 +356,7 @@ public class BridgeOftenCheckAddAdapter extends RecyclerView.Adapter {
 
     private class ViewHolder3 extends RecyclerView.ViewHolder {
         public RecyclerView recyclerView;
+
         public ViewHolder3(View itemView) {
             super(itemView);
             recyclerView = (RecyclerView) itemView.findViewById(R.id.recyclerView);

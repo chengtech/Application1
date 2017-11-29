@@ -143,7 +143,7 @@ public class RouteActivity extends BaseActivity implements IView<List<Route>>, V
                 titleArray[1] = "路线编号:" + route.code;
                 titleArray[2] = "<br/>管养单位:  " + route.dept.name;
                 titleArray[3] = "<br/>长度(km):  " + route.length;
-                titleArray[4] = "<br/>路线走向:  " + (route.routeDirections=="null"?"":route.routeDirections);
+                titleArray[4] = "<br/>路线走向:  " + (route.routeDirections==null?"":route.routeDirections);
                 titleArrayList.add(titleArray);
             }
         } else {

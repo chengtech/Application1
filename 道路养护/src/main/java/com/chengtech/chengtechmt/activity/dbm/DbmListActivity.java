@@ -418,7 +418,8 @@ public class DbmListActivity extends BaseActivity implements OnClickListener, IV
                         temp.add(t2.text);
                     }
                 }
-                temp.add("全选");
+                if (temp.size()>1)
+                    temp.add("全选");
                 secondDept.put(t.text, temp);
             }
         }

@@ -126,7 +126,7 @@ public class WorkSectionPresenter implements Presenter<IView,Object> {
             case "Observatory":
                 observatory.getData(context,pageNo,pageSize,type,arg);
                 break;
-            case "Slpoe":
+            case "Slope":
                 slope.getData(context,pageNo,pageSize,type,arg);
                 break;
             case "Bridge":

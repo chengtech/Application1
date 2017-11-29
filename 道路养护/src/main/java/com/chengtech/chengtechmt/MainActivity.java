@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.chengtech.chengtechmt.activity.AboutMeActivity;
 import com.chengtech.chengtechmt.activity.ChartWebViewActivity;
 import com.chengtech.chengtechmt.activity.MapQueryActivity;
+import com.chengtech.chengtechmt.activity.MultiChartWebViewActivity;
 import com.chengtech.chengtechmt.activity.WebViewActivity;
 import com.chengtech.chengtechmt.activity.business.BusinessActivity;
 import com.chengtech.chengtechmt.activity.business.DiseaseRegistrationListActivity;
@@ -306,8 +307,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         chart_layout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "ms/sys/homechart/maintenanceBusinessEchart.action";
-                ChartWebViewActivity.startAction(MainActivity.this, MyConstants.PRE_URL + url, "设施量统计");
+                Intent intent = new Intent(MainActivity.this, MultiChartWebViewActivity.class);
+                startActivity(intent);
+//                String url = "ms/sys/homechart/maintenanceBusinessEchart.action";
+//                ChartWebViewActivity.startAction(MainActivity.this, MyConstants.PRE_URL + url, "设施量统计");
             }
         });
         diseaseReg_layout.setOnClickListener(new OnClickListener() {
@@ -425,6 +428,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         BottomSheetDialog sheetdialog = new BottomSheetDialog(this);
 
         //查询数据库
+        realm = RealmUtil.getInstance(this);
         RealmResults<AttachmentInfo> downLoads = realm.where(AttachmentInfo.class).equalTo("type", AttachmentInfo.ATTACHMENT_TYPE_DOWNLOADED)
                 .findAllSorted("time", Sort.DESCENDING);
 

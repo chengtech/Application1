@@ -57,6 +57,7 @@ public class MyApplication extends Application {
         MyConstants.imageDict.put("评定病害位置", R.mipmap.disease);
         MyConstants.imageDict.put("大中修、改造（善）及省部补助项目", R.mipmap.folder);
         MyConstants.imageDict.put("小额专项维修", R.mipmap.increase);
+        MyConstants.imageDict.put("边坡在线监测", R.mipmap.increase);
         MyConstants.imageDict.put("月度检查", R.mipmap.check);
         MyConstants.imageDict.put("保养作业", R.mipmap.books_three);
         MyConstants.imageDict.put("小修作业", R.mipmap.busines_info);
@@ -73,10 +74,12 @@ public class MyApplication extends Application {
         MyConstants.imageDict.put("水泥路面状况", R.mipmap.file3);
         MyConstants.imageDict.put("评定明细", R.mipmap.file4);
         MyConstants.imageDict.put("评定汇总", R.mipmap.order_history);
+        MyConstants.imageDict.put("桥隧涵养护", R.mipmap.order_history);
+        MyConstants.imageDict.put("病害登记", R.mipmap.file4);
     }
 
     private void initSpeech() {
-        SpeechUtility.createUtility(this, SpeechConstant.APPID+"= 595dd926");
+        SpeechUtility.createUtility(this, SpeechConstant.APPID + "= 595dd926");
     }
 
     private void initReceiver() {

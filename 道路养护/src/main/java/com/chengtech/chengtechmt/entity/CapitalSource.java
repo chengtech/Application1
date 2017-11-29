@@ -31,7 +31,8 @@ public class CapitalSource implements Serializable {
     public String projectId;//项目ID
     public String surplusMoney;  //剩余金额资金
     public String memo;
-    public String sessionName;
+//    public String sessionName;
+    public String sessionId;
 
     public CapitalSource (Presenter presenter) {
         this.presenter = presenter;
@@ -44,7 +45,7 @@ public class CapitalSource implements Serializable {
             propertyValue.add(moneyCounts==null?"":moneyCounts);
             propertyValue.add(capitalSoureDate==null?"": DateUtils.convertDate(capitalSoureDate));
             propertyValue.add(memo==null?"":memo);
-            propertyValue.add(sessionName==null?"":sessionName);
+            propertyValue.add(sessionId==null?"":sessionId);
         }
 
         return propertyValue;

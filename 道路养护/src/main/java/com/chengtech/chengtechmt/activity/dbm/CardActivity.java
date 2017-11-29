@@ -99,17 +99,17 @@ public class CardActivity extends Activity implements MyExpandableAdapter.OnChil
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case 0:
                     isFirstLoadPicture = false;
-                    if (!TextUtils.isEmpty(bridge.verticalView)){
-                        String url1 = bridge.verticalView.replace("imageUpload","zoomImageUpload");
+                    if (!TextUtils.isEmpty(bridge.verticalView)) {
+                        String url1 = bridge.verticalView.replace("imageUpload", "zoomImageUpload");
                         CommonUtils.loadNetWorkPicture(CardActivity.this, MyConstants.PRE_URL + url1, img1);
 
                     }
-                    if (!TextUtils.isEmpty(bridge.frontalView)){
-                        String url2 = bridge.frontalView.replace("imageUpload","zoomImageUpload");
-                            CommonUtils.loadNetWorkPicture(CardActivity.this, MyConstants.PRE_URL + url2, img2);
+                    if (!TextUtils.isEmpty(bridge.frontalView)) {
+                        String url2 = bridge.frontalView.replace("imageUpload", "zoomImageUpload");
+                        CommonUtils.loadNetWorkPicture(CardActivity.this, MyConstants.PRE_URL + url2, img2);
                     }
                     break;
             }
@@ -499,9 +499,11 @@ public class CardActivity extends Activity implements MyExpandableAdapter.OnChil
     @Override
     protected void onResume() {
         super.onResume();
-        if (isFirstLoadPicture){
-            HttpclientUtil.getData(CardActivity.this,MyConstants.PRE_URL+"mt/common/zoomImage.action?imagePath="+
-            bridge.verticalView+",,,"+bridge.frontalView,handler,0);
+        if (isFirstLoadPicture) {
+            if (bridge != null) {
+                HttpclientUtil.getData(CardActivity.this, MyConstants.PRE_URL + "mt/common/zoomImage.action?imagePath=" +
+                        (bridge.verticalView == null ? "" : (bridge.verticalView + ",,,")) + (bridge.frontalView == null ? "" : bridge.frontalView), handler, 0);
+            }
         }
     }
 }

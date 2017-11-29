@@ -42,6 +42,7 @@ import com.chengtech.chengtechmt.entity.Tree;
 import com.chengtech.chengtechmt.entity.gson.DeptG;
 import com.chengtech.chengtechmt.impl.OnItemClickListener;
 import com.chengtech.chengtechmt.presenter.ListPagePre;
+import com.chengtech.chengtechmt.util.CommonUtils;
 import com.chengtech.chengtechmt.util.MyConstants;
 import com.chengtech.chengtechmt.util.MyDialogUtil;
 import com.chengtech.chengtechmt.util.UserUtils;
@@ -49,6 +50,7 @@ import com.chengtech.chengtechmt.view.TitleLayout;
 import com.chengtech.nicespinner.NiceSpinner;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -133,7 +135,7 @@ public class ListPageActivity extends BaseActivity implements IView<Object>, Vie
     }
 
     private void inflateSpnnier() {
-        if (deptDialog!=null) {
+        if (deptDialog != null) {
             deptDialog.show();
             return;
         }
@@ -199,6 +201,8 @@ public class ListPageActivity extends BaseActivity implements IView<Object>, Vie
         });
         firstS.attachDataSource(firstDept);
         yearSpinner.attachDataSource(Arrays.asList(years));
+        yearSpinner.setTextIsSelectable(true);
+        yearSpinner.setText("2017年");
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -251,7 +255,7 @@ public class ListPageActivity extends BaseActivity implements IView<Object>, Vie
     private void initData() {
         firstDept = new ArrayList<String>();
         secondDept = new HashMap<String, List<String>>();
-        years = new String[]{"请选择", "2014年", "2015年", "2016年", "2017年", "2018年", "2019年", "2020年"
+        years = new String[]{"请选择", "2020年", "2019年", "2018年", "2017年", "2016年", "2015年", "2014年","2013年","2012年","2011年"
         };
 //        yearSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, years));
     }
@@ -309,7 +313,7 @@ public class ListPageActivity extends BaseActivity implements IView<Object>, Vie
                 if (mediumPlanprogressList != null && mediumPlanprogressList.size() > 0) {
                     for (MediumPlanprogress m : mediumPlanprogressList) {
                         String[] titleArray = new String[6];
-                        titleArray[0] = (m.deptName==null?"":m.deptName)+"\n填报年份:" + m.fillYear;
+                        titleArray[0] = (m.deptName == null ? "" : m.deptName) + "\n填报年份:" + m.fillYear;
 //                        titleArray[1] = "总实施里程（公里）:  " + df.format(m.maintainLengths);
 //                        titleArray[2] = "<br/>总预算资金（万元）:  " + df.format(m.budgetFunds);
 //                        titleArray[3] = "<br/>总批复预算金额（万元）:  " + df.format(m.replyFunds);
@@ -326,7 +330,7 @@ public class ListPageActivity extends BaseActivity implements IView<Object>, Vie
 
                 } else {
                     Toast.makeText(ListPageActivity.this, "没有数据", Toast.LENGTH_SHORT).show();
-                    if (pageNo!=1) {
+                    if (pageNo != 1) {
                         pageNo--;
                     }
                     pageNo_tv.setText(pageNo + "");
@@ -349,7 +353,8 @@ public class ListPageActivity extends BaseActivity implements IView<Object>, Vie
                     for (ProjectManagement p : projectManagementList) {
                         String[] titleArray = new String[5];
                         titleArray[0] = p.projectName;
-                        titleArray[1] = "总投资（万元）：<font size=\"5\" color=\"red\">" + String.valueOf(p.totalInvestment) + "</font>";
+                        titleArray[1] = "总投资（元）：<font size=\"5\" color=\"red\">" + CommonUtils.getFormat(",###.00",
+                                new BigDecimal(p.totalInvestment)) + "</font>";
                         titleArray[2] = "<br/>建设规模（公里）：" + p.subtotal;
                         titleArray[3] = "<br/>填报年份:" + (p.fillDate == null ? "" : p.fillDate);
                         titleArray[4] = "<br/>是否使用省部补助资金：" + (p.isProvincialCapital == null ? "" : p.isProvincialCapital);
@@ -388,12 +393,14 @@ public class ListPageActivity extends BaseActivity implements IView<Object>, Vie
         for (Dept d : firstDeptList) {
             firstDept.add(d.name);
             List<String> temp = new ArrayList<String>();
-            temp.add("请选择");
+
             for (Dept d2 : secondDeptList) {
                 if (d2.parentId.equals(d.id)) {
                     temp.add(d2.name);
                 }
             }
+            if (temp.size()>1)
+                temp.add("请选择");
             secondDept.put(d.name, temp);
         }
 //        inflateSpnnier();

@@ -247,6 +247,8 @@
         <item>路线走向</item>;
         <item>建工日期</item>;
         <item>通车日期</item>;
+        <item>路面类型</item>;
+        <item>技术等级</item>;
         <item>备注</item>;
     </string-array>
 
@@ -269,7 +271,7 @@
         <item>维修桥梁:</item>
         <item>起点桩号: </item>
         <item>终点桩号:</item>
-        <item>总投资(万元):</item>
+        <item>总投资(元):</item>
         <item>建设单位:</item>
         <item>附件:</item>
     </string-array>
@@ -287,14 +289,14 @@
         <item>方案审批(文号):</item>
         <item>审批时间: </item>
         <item>审批单位:</item>
-        <item>审批估算(万元): </item>
+        <item>审批估算(元): </item>
         <item>附件: </item>
     </string-array>
     <string-array name="projectmanagement_four">
         <item>施工图审批(文号): </item>
         <item>审批时间:</item>
         <item>审批单位:</item>
-        <item>审批估算(万元): </item>
+        <item>审批估算(元): </item>
         <item>附件: </item>
     </string-array>
 
@@ -310,12 +312,21 @@
 
 
     <string-array name="projectmanagement_six">
-        <item>合同价(万元)</item>
-        <item>预算评审审定额(万元)</item>
-        <item>结算评审审定额(万元)</item>
+        <item>总合同价(元):</item>
+        <item>设计合同金额(元):</item>
+        <item>监理合同金额(元):</item>
+        <item>施工合同金额(元):</item>
+        <item>检测合同金额(元):</item>
+        <item>代理合同金额(元):</item>
+        <item>咨询合同金额(元):</item>
+        <item>其他合同金额(元):</item>
+        <item>预算评审审定额(元):</item>
+        <item>结算评审审定额(元):</item>
+        <item>决算评审审定额(元):</item>
         <item>是否使用省部补助资金</item>
-        <item>省部资金(万元)</item>
-        <item>地方资金(万元)</item>
+        <item>省部补助资金(元):</item>
+        <item>地方配套资金(元):</item>
+        <item>省部/地方配套资金小计(元):</item>
         <item>附件</item>
     </string-array>
 

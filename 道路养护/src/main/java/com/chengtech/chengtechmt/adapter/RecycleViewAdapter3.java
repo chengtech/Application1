@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.chengtech.chengtechmt.R;
 import com.chengtech.chengtechmt.impl.OnItemClickListener;
+import com.chengtech.chengtechmt.util.CommonUtils;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class RecycleViewAdapter3 extends RecyclerView.Adapter<RecycleViewAdapter
     private List<String> content;
     private LayoutInflater inflater;
     public OnItemClickListener onItemClickListener;
+    private Context mContext;
     public int item_res;
 
 
@@ -29,6 +31,7 @@ public class RecycleViewAdapter3 extends RecyclerView.Adapter<RecycleViewAdapter
         this.subTitle = subtitle;
         this.item_res = item_res;
         this.content = content;
+        this.mContext = context;
         inflater = LayoutInflater.from(context);
 
     }
@@ -59,8 +62,9 @@ public class RecycleViewAdapter3 extends RecyclerView.Adapter<RecycleViewAdapter
             holder.et.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (onItemClickListener != null)
-                        onItemClickListener.onItemClick(v, position);
+//                    if (onItemClickListener != null)
+//                        onItemClickListener.onItemClick(v, position);
+                    CommonUtils.getAttachmentsFromSessionId(mContext,content.get(position));
                 }
             });
         } else {

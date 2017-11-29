@@ -9,10 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chengtech.chengtechmt.R;
 import com.chengtech.chengtechmt.entity.business.DiseaseVoiceRecord;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -48,18 +50,23 @@ public class RecordAdapter extends RecyclerView.Adapter {
             myViewHolder.video.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final MediaPlayer mediaPlayer = new MediaPlayer();
                     try {
-                        mediaPlayer.setDataSource("file://" + audio.recordPath);
-                        mediaPlayer.prepare();
-                        mediaPlayer.start();
-                        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                            @Override
-                            public void onCompletion(MediaPlayer mp) {
-                                mediaPlayer.release();
-                            }
-                        });
-                    } catch (IOException e) {
+                        if (new File("file://" + audio.recordPath).exists()) {
+                            final MediaPlayer mediaPlayer = new MediaPlayer();
+                            mediaPlayer.setDataSource("file://" + audio.recordPath);
+                            mediaPlayer.prepare();
+                            mediaPlayer.start();
+                            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                @Override
+                                public void onCompletion(MediaPlayer mp) {
+                                    mediaPlayer.release();
+                                }
+                            });
+                        } else {
+                            Toast.makeText(mContext, "文件已经被删除。", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -95,4 +102,5 @@ public class RecordAdapter extends RecyclerView.Adapter {
             delete = (ImageButton) itemView.findViewById(R.id.deleteRecord);
         }
     }
+
 }

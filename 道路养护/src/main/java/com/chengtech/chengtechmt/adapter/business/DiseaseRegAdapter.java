@@ -100,7 +100,7 @@ public class DiseaseRegAdapter extends RecyclerView.Adapter {
                             public void run() {
                                 ObjectSaveUtils.saveObject(mContext, DISEASE_REGISTRATION_LIST, data);
                             }
-                        }).run();
+                        }).start();
                         sweetAlertDialog.dismiss();
                     }
                 });
@@ -185,7 +185,6 @@ public class DiseaseRegAdapter extends RecyclerView.Adapter {
 
     public List getCheckedIndex() {
         List<Integer> checkedIndexs = new ArrayList<>();
-        int count = checkState.size();
         for (int i = 0; i < checkState.size(); i++) {
             if (checkState.valueAt(i)) {
                 checkedIndexs.add(checkState.keyAt(i));

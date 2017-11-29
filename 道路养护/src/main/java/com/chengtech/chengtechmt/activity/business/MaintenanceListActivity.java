@@ -34,6 +34,7 @@ import com.chengtech.chengtechmt.entity.gson.DeptG;
 import com.chengtech.chengtechmt.entity.MaintainTask;
 import com.chengtech.chengtechmt.impl.OnItemClickListener;
 import com.chengtech.chengtechmt.presenter.ListPagePre;
+import com.chengtech.chengtechmt.util.CommonUtils;
 import com.chengtech.chengtechmt.util.DateUtils;
 import com.chengtech.chengtechmt.util.MyConstants;
 import com.chengtech.chengtechmt.view.MyHorizontalScrollView2;
@@ -141,7 +142,7 @@ public class MaintenanceListActivity extends BaseActivity
     }
 
     private void inflateSpnnier() {
-        if (deptDialog!=null){
+        if (deptDialog != null) {
             deptDialog.show();
             return;
         }
@@ -166,8 +167,8 @@ public class MaintenanceListActivity extends BaseActivity
         firstS.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                secondS.attachDataSource(secondDept.get(firstDept.get(position)));
                 firstPosition = position;
+                secondS.attachDataSource(secondDept.get(firstDept.get(position)));
             }
 
             @Override
@@ -181,14 +182,25 @@ public class MaintenanceListActivity extends BaseActivity
                 firstDeptId = deptG.listFirstDept.get(firstPosition).id;
 
                 String selectedDeptName = secondDept.get(firstDept.get(firstPosition)).get(position);
-                for (Dept d : deptG.listSecondDept) {
-                    if (d.name.equals(selectedDeptName)) {
-                        secondDeptId = d.id;
-                        break;
+                if (selectedDeptName.equals("请选择")) {
+                    secondDeptId = "";
+                } else {
+                    for (Dept d : deptG.listSecondDept) {
+                        if (d.name.equals(selectedDeptName)) {
+                            secondDeptId = d.id;
+                            break;
+                        }
                     }
                 }
-                thirdSpinner.attachDataSource(thirdDept.get(selectedDeptName));
                 secondPosition = position;
+                if (thirdDept.get(selectedDeptName)==null) {
+                    List<String> list = new ArrayList<String>();
+                    list.add("请选择");
+                    thirdSpinner.attachDataSource(list);
+                }else {
+                    thirdSpinner.attachDataSource(thirdDept.get(selectedDeptName));
+                }
+
                 //重新置为第一页
                 pageNo = 1;
                 maxPage = 1;
@@ -205,7 +217,7 @@ public class MaintenanceListActivity extends BaseActivity
                 String selectedDeptName =
                         thirdDept.get(secondDept.get(firstDept.get(firstPosition)).get(secondPosition))
                                 .get(position);
-                if (selectedDeptName.equals("请选择")) {
+                if (selectedDeptName==null || selectedDeptName.equals("请选择")) {
                     thirdDeptId = "";
                 } else {
                     for (Dept d : deptG.listThirdDept) {
@@ -248,9 +260,13 @@ public class MaintenanceListActivity extends BaseActivity
             }
         });
         firstS.attachDataSource(firstDept);
+        int[] ints = DateUtils.calculateDate();
         yearSpinner.attachDataSource(Arrays.asList(years));
         monthSpinner.attachDataSource(Arrays.asList(months));
-
+        yearSpinner.setText(ints[0] + "");
+        monthSpinner.setText(ints[1] + "月");
+        yearString = ints[0]+"";
+        monthString = ints[1]+"";
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(contentView);
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -353,7 +369,7 @@ public class MaintenanceListActivity extends BaseActivity
     private void initData() {
         firstDept = new ArrayList<String>();
         years = new String[]{
-                "请选择", "2014年", "2015年", "2016年", "2017年", "2018年", "2019年", "2020年"
+                "请选择", "2018", "2017", "2016", "2015", "2014", "2013", "2012"
         };
         months = new String[]{
                 "请选择", "01月", "02月", "03月", "04月", "05月", "06月", "07月", "08月", "09月", "10月", "11月", "12月"
@@ -467,7 +483,9 @@ public class MaintenanceListActivity extends BaseActivity
             case "MaintainTaskItem":
                 maintainTaskItemList = (List<MaintainTaskItem>) object;
                 if (maintainTaskItemList != null && maintainTaskItemList.size() > 0) {
-                    showBottomSheetDialog();
+                    String title = toolbar.getTitle().toString() + "-" + maintainTaskList.get(0).secondDeptName + "-" + maintainTaskList.get(0).thirdDeptName;
+                    MaintainTaskItemActivity.startAction(this, maintainTaskItemList, title);
+//                    showBottomSheetDialog();
                 } else {
                     Toast.makeText(this, "无数据", Toast.LENGTH_SHORT).show();
                 }
@@ -627,14 +645,23 @@ public class MaintenanceListActivity extends BaseActivity
                     temp.add(d2.name);
                 }
                 List<String> temp2 = new ArrayList<String>();
-                temp2.add("请选择");
+
                 for (Dept d3 : thirdDeptList) {
                     if (d3.parentId.equals(d2.id)) {
                         temp2.add(d3.name);
                     }
                 }
+                if (temp2.size()>1)
+                    temp2.add("请选择");
+
                 thirdDept.put(d2.name, temp2);
+
             }
+            List<String> list  = new ArrayList<>();
+            list.add("请选择");
+            thirdDept.put("请选择",list );
+            if (temp.size()>1)
+                temp.add("请选择");
             secondDept.put(d.name, temp);
         }
 //        inflateSpnnier();
@@ -775,8 +802,8 @@ public class MaintenanceListActivity extends BaseActivity
                 intent.putExtra("title", toolbar.getTitle().toString());
                 ArrayList<String> content =
                         (ArrayList<String>) maintainRegisterList.get(position).getContent();
-                content.add(0,secondDept.get(firstDept.get(firstPosition)).get(secondPosition));
-                content.add(1,DateUtils.convertDate2(maintainRegisterList.get(position).examineDate));
+                content.add(0, secondDept.get(firstDept.get(firstPosition)).get(secondPosition));
+                content.add(1, DateUtils.convertDate2(maintainRegisterList.get(position).examineDate));
                 intent.putExtra("content", content);
                 intent.putExtra("sessionId", maintainRegisterList.get(position).sessionId);
                 intent.putExtra("subtitle", (Serializable) Arrays.asList(new String[]{"检查单位", "检查时间"}));

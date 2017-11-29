@@ -74,6 +74,7 @@ public class ImageAddAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         SquareRelativeLayout parentView = (SquareRelativeLayout) holder.itemView;
         ImageView imageView = (ImageView) parentView.findViewById(R.id.image);
+        ImageView delete_iv = (ImageView) parentView.findViewById(R.id.delete);
         if (picturePaths.size() == 0) {
 
             imageView.setImageURI(null);
@@ -85,6 +86,7 @@ public class ImageAddAdapter extends RecyclerView.Adapter {
                     bottomSheetDialog.show();
                 }
             });
+            delete_iv.setVisibility(View.GONE);
         } else if (position < getItemCount() - 1) {
             ViewGroup.LayoutParams lp = imageView.getLayoutParams();
             DisplayMetrics metrics = imageView.getContext().getResources().getDisplayMetrics();
@@ -103,7 +105,7 @@ public class ImageAddAdapter extends RecyclerView.Adapter {
                 targetWidth = width;
             String picPath = picturePaths.get(position);
             imageView.setTag(picPath);
-            Picasso.with(mContext).load(new File(picPath)).transform(new CompressTransFormation(targetWidth)).into(imageView);
+            Picasso.with(mContext).load(new File(picPath)).error(R.mipmap.placeholder2).transform(new CompressTransFormation(targetWidth)).into(imageView);
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -112,6 +114,15 @@ public class ImageAddAdapter extends RecyclerView.Adapter {
                     intent.putExtra("url", picPath2);
                     Activity activity = (Activity) mContext;
                     activity.startActivity(intent);
+                }
+            });
+            delete_iv.setVisibility(View.VISIBLE);
+            delete_iv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    picturePaths.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, picturePaths.size());
                 }
             });
         } else {
@@ -125,6 +136,7 @@ public class ImageAddAdapter extends RecyclerView.Adapter {
 
                 }
             });
+            delete_iv.setVisibility(View.GONE);
         }
     }
 

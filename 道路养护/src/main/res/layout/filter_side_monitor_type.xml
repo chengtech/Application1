@@ -10,24 +10,35 @@
         android:orientation="horizontal"
         android:padding="3dp">
 
-        <TextView
+        <!--<TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="设备位置:"/>
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="设备位置:"/>-->
 
         <Spinner
             android:id="@+id/sideMonitorType"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
+            android:spinnerMode="dialog"
             ></Spinner>
 
         <Spinner
             android:id="@+id/date"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
+            android:spinnerMode="dialog"
             ></Spinner>
+
+        <Button
+            android:id="@+id/search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:onClick="onSearch"
+            android:text="查询"/>
 
     </LinearLayout>
 
@@ -74,11 +85,5 @@
 
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:onClick="onSearch"
-        android:text="查询"/>
+
 </LinearLayout>

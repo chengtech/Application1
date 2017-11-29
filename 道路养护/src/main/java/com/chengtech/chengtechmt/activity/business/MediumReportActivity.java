@@ -208,8 +208,13 @@ public class MediumReportActivity extends Activity implements MyHorizontalScroll
                 tv9.setText(item.replyFund);
                 tv10.setText(item.paidFund);
                 tv11.setText(item.notPaidFund);
-                tv12.setText(item.beginDate==null?"": DateUtils.convertDate2(item.beginDate));
-                tv13.setText(item.finishDate==null?"": DateUtils.convertDate2(item.finishDate));
+                if (item.beginDate!=null && item.beginDate.contains("00:00:00")) {
+                    tv12.setText(item.beginDate==null?"": item.beginDate.substring(0,10));
+                    tv13.setText(item.finishDate==null?"": item.finishDate.substring(0,10));
+                }else {
+                    tv12.setText(item.beginDate==null?"": DateUtils.convertDate2(item.beginDate));
+                    tv13.setText(item.finishDate==null?"": DateUtils.convertDate2(item.finishDate));
+                }
                 tv14.setText(item.progressSituation);
                 tv15.setText(item.checkSituation);
                 tv16.setText(item.memo);

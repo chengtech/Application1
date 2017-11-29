@@ -33,6 +33,7 @@ import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -164,22 +165,28 @@ public class SlopeMonitorActivity extends BaseActivity {
                     if (sideMonitorTypes != null) {
                         if (selectedItem.contains("温湿度")) {
                             String jspUrl = MyConstants.PRE_URL + "mt/monitoremergency/sidemonitor/temphumidata/listTempHumiDataPhone.jsp";
-                            SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, selectedItem, sideMonitorTypes, jspUrl);
+                            String listUrl = MyConstants.PRE_URL + "mt/monitoremergency/sidemonitor/temphumidata/listTempHumiDataJson.action";
+                            SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, selectedItem, sideMonitorTypes, jspUrl, listUrl);
                         } else if (selectedItem.contains("地下水")) {
                             String jspUrl = MyConstants.PRE_URL + "mt/monitoremergency/sidemonitor/vibratingwiredata/listVibratingWireDataPhone.jsp";
-                            SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, selectedItem, sideMonitorTypes, jspUrl);
+                            String listUrl = MyConstants.PRE_URL + "mt/monitoremergency/sidemonitor/vibratingwiredata/listVibratingWireDataJson.action";
+                            SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, selectedItem, sideMonitorTypes, jspUrl, listUrl);
                         } else if (selectedItem.contains("拉线式")) {
                             String jspUrl = MyConstants.PRE_URL + "mt/monitoremergency/sidemonitor/lvdtdata/listLVDTDataPhone.jsp";
-                            SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, selectedItem, sideMonitorTypes, jspUrl);
+                            String listUrl = MyConstants.PRE_URL + "mt/monitoremergency/sidemonitor/lvdtdata/listLvdtDataJson.action";
+                            SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, selectedItem, sideMonitorTypes, jspUrl, listUrl);
                         } else if (selectedItem.contains("内部位移")) {
                             String jspUrl = MyConstants.PRE_URL + "mt/monitoremergency/sidemonitor/inclinationdata/listInclinationDataPhone.jsp";
-                            SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, selectedItem, sideMonitorTypes, jspUrl);
+                            String listUrl = MyConstants.PRE_URL + "mt/monitoremergency/sidemonitor/inclinationdata/listInclinationDataJson.action";
+                            SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, selectedItem, sideMonitorTypes, jspUrl, listUrl);
                         } else if (selectedItem.contains("降雨量")) {
                             String jspUrl = MyConstants.PRE_URL + "mt/monitoremergency/sidemonitor/rainfalldata/listRainFallDataPhone.jsp";
-                            SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, selectedItem, sideMonitorTypes, jspUrl);
+                            String listUrl = MyConstants.PRE_URL + "mt/monitoremergency/sidemonitor/rainfalldata/listRainFallDataJson.action";
+                            SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, selectedItem, sideMonitorTypes, jspUrl, listUrl);
                         } else if (selectedItem.contains("GPS")) {
                             String jspUrl = MyConstants.PRE_URL + "mt/monitoremergency/sidemonitor/cdmonitorsession/listCdMonitorSessionPhone.jsp";
-                            SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, selectedItem, sideMonitorTypes, jspUrl);
+                            String listUrl = MyConstants.PRE_URL + "mt/monitoremergency/sidemonitor/cdmonitorsession/listCdMonitorSessionJson.action";
+                            SideMonitorTypeActivity.startAction(SlopeMonitorActivity.this, selectedItem, sideMonitorTypes, jspUrl, listUrl);
                         }
                     }
                 }

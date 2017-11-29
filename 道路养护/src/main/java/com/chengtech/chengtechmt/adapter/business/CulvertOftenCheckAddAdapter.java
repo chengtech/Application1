@@ -27,8 +27,11 @@ import com.chengtech.chengtechmt.entity.patrol.BriOftenCheck;
 import com.chengtech.chengtechmt.entity.patrol.BridgeRecord;
 import com.chengtech.chengtechmt.entity.patrol.CulvertOftenCheck;
 import com.chengtech.chengtechmt.entity.patrol.CulvertOftenRecord;
+import com.chengtech.chengtechmt.util.CommonUtils;
+import com.chengtech.chengtechmt.util.DateUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -116,24 +119,46 @@ public class CulvertOftenCheckAddAdapter extends RecyclerView.Adapter {
                     culvertOftenCheck.checkMan = s.toString();
                 }
             });
-            viewHolder1.checkDate.setText(culvertOftenCheck.checkDate.substring(0, 10));
-            final int year = Integer.parseInt(culvertOftenCheck.checkDate.substring(0, 4));
-            final int month = Integer.parseInt(culvertOftenCheck.checkDate.substring(5, 7));
-            final int day = Integer.parseInt(culvertOftenCheck.checkDate.substring(8, 10));
-            viewHolder1.checkDate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DatePickerDialog dialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                            String monthStr = String.format("%02d", monthOfYear + 1);
-                            viewHolder1.checkDate.setText(year + "-" + monthStr + "-" + dayOfMonth);
-                            culvertOftenCheck.checkDate = year + "-" + monthStr + "-" + dayOfMonth;
-                        }
-                    }, year, month - 1, day);
-                    dialog.show();
-                }
-            });
+            if (!TextUtils.isEmpty(culvertOftenCheck.checkDate)) {
+                viewHolder1.checkDate.setText(culvertOftenCheck.checkDate.substring(0, 10));
+                final int year = Integer.parseInt(culvertOftenCheck.checkDate.substring(0, 4));
+                final int month = Integer.parseInt(culvertOftenCheck.checkDate.substring(5, 7));
+                final int day = Integer.parseInt(culvertOftenCheck.checkDate.substring(8, 10));
+                viewHolder1.checkDate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DatePickerDialog dialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                String monthStr = String.format("%02d", monthOfYear + 1);
+                                viewHolder1.checkDate.setText(year + "-" + monthStr + "-" + dayOfMonth);
+                                culvertOftenCheck.checkDate = year + "-" + monthStr + "-" + dayOfMonth;
+                            }
+                        }, year, month - 1, day);
+                        dialog.show();
+                    }
+                });
+            }else {
+                Date date = new Date();
+                viewHolder1.checkDate.setText(DateUtils.convertDate2(date));
+                final int year = date.getYear();
+                final int month = date.getMonth();
+                final int day = date.getDay();
+                viewHolder1.checkDate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DatePickerDialog dialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                String monthStr = String.format("%02d", monthOfYear + 1);
+                                viewHolder1.checkDate.setText(year + "-" + monthStr + "-" + dayOfMonth);
+                                culvertOftenCheck.checkDate = year + "-" + monthStr + "-" + dayOfMonth;
+                            }
+                        }, year, month - 1, day);
+                        dialog.show();
+                    }
+                });
+            }
             final List<String> data = new ArrayList<>();
             data.add("");
             for (int i = 0; i < culvertOftenCheck.listCulvert.size(); i++) {

@@ -18,13 +18,14 @@ public class DiseaseRegistration extends BaseModel implements Serializable {
     public String diseaseDescription; //语音描述内容
     public List<DiseaseVoiceRecord> listDiseaseVoiceRecord; //多条语音集合
     public ArrayList<String> picPaths = new ArrayList<>(); //图片保存的路径集合
-    public boolean isUpload;  //是否已经上存服务器
+    public boolean isUpload = false;  //是否已经上存服务器
     public String recordState = "0"; //记录状态，"0"表示是新增(默认)，"1"表示是已保存在本地，是编辑状态；
     public String site;//位置信息
     public String weather;//天气
-    public String longitude; //经度
-    public String latitude;  //纬度
+    public String longitude = "0.0"; //经度
+    public String latitude = "0.0";  //纬度
     public String path;
+    public String fellowMen;
 
     @Override
     public List<String> getContent() {

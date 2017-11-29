@@ -108,7 +108,7 @@ MyHorizontalScrollView2 scrollView2;
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //        File file = new File("file:///storage/emulated/0/Download/%E5%85%BB%E6%8A%A4ip.txt");
 //        String name = file.getName();
-//        if (!file.exists()) {
+//        if (!file .exists()) {
 //            Uri uri = Uri.parse("file:///storage/emulated/0/Download/%E5%85%BB%E6%8A%A4ip.txt");
 //            String type = CommonUtils.getMIMEType(name);
 //            String type2 = CommonUtils.getMIMEType("4545.jpg");

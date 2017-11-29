@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +54,8 @@ public class TunnelOftenCheckAddAdapter extends RecyclerView.Adapter {
         this.tunnelOftenCheck = tunnelOftenCheck;
         this.mContext = context;
     }
-    public TunnelOftenCheckAddAdapter(Context context, TunnelOftenCheck tunnelOftenCheck,List<String> filePaths) {
+
+    public TunnelOftenCheckAddAdapter(Context context, TunnelOftenCheck tunnelOftenCheck, List<String> filePaths) {
         this.tunnelOftenCheck = tunnelOftenCheck;
         this.mContext = context;
         this.picturePaths = (ArrayList<String>) filePaths;
@@ -151,27 +153,48 @@ public class TunnelOftenCheckAddAdapter extends RecyclerView.Adapter {
                     tunnelOftenCheck.overallEvaluation = s.toString();
                 }
             });
-            viewHolder1.checkDate.setText(tunnelOftenCheck.patrolDate.substring(0, 10));
+            if (!TextUtils.isEmpty(tunnelOftenCheck.patrolDate)) {
+                viewHolder1.checkDate.setText(tunnelOftenCheck.patrolDate.substring(0, 10));
 //            final int year = Integer.parseInt(tunnelOftenCheck.patrolDate.substring(0, 4));
 //            final int month = Integer.parseInt(tunnelOftenCheck.patrolDate.substring(5, 7));
 //            final int day = Integer.parseInt(tunnelOftenCheck.patrolDate.substring(8, 10));
-            viewHolder1.checkDate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DatePickerDialog dialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                            String monthStr = String.format("%02d", monthOfYear + 1);
-                            viewHolder1.checkDate.setText(year + "-" + monthStr + "-" + dayOfMonth);
-                            tunnelOftenCheck.patrolDate = year + "-" + monthStr + "-" + dayOfMonth;
-                        }
-                    }, Integer.parseInt(tunnelOftenCheck.patrolDate.substring(0, 4)),
-                            (Integer.parseInt(tunnelOftenCheck.patrolDate.substring(5, 7)) - 1),
-                            Integer.parseInt(tunnelOftenCheck.patrolDate.substring(8, 10)));
-                    dialog.show();
-                }
-            });
-
+                viewHolder1.checkDate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DatePickerDialog dialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                String monthStr = String.format("%02d", monthOfYear + 1);
+                                viewHolder1.checkDate.setText(year + "-" + monthStr + "-" + dayOfMonth);
+                                tunnelOftenCheck.patrolDate = year + "-" + monthStr + "-" + dayOfMonth;
+                            }
+                        }, Integer.parseInt(tunnelOftenCheck.patrolDate.substring(0, 4)),
+                                (Integer.parseInt(tunnelOftenCheck.patrolDate.substring(5, 7)) - 1),
+                                Integer.parseInt(tunnelOftenCheck.patrolDate.substring(8, 10)));
+                        dialog.show();
+                    }
+                });
+            } else {
+                Date date = new Date();
+                viewHolder1.checkDate.setText(DateUtils.convertDate2(date));
+                final int year = date.getYear();
+                final int month = date.getMonth();
+                final int day = date.getDay();
+                viewHolder1.checkDate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DatePickerDialog dialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                String monthStr = String.format("%02d", monthOfYear + 1);
+                                viewHolder1.checkDate.setText(year + "-" + monthStr + "-" + dayOfMonth);
+                                tunnelOftenCheck.patrolDate = year + "-" + monthStr + "-" + dayOfMonth;
+                            }
+                        }, year, month - 1, day);
+                        dialog.show();
+                    }
+                });
+            }
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, tunnelOftenCheck.listWeather);
             viewHolder1.weather.setAdapter(adapter);
             Integer weatherPos = tunnelOftenCheck.savePosition.get("天气");
@@ -248,7 +271,7 @@ public class TunnelOftenCheckAddAdapter extends RecyclerView.Adapter {
                         tunnelRecord.mileageMark = s.toString();
                     }
                 };
-                addTextWatcher(viewHolder2.mileageMark,textWatcher,tunnelRecord.mileageMark);
+                addTextWatcher(viewHolder2.mileageMark, textWatcher, tunnelRecord.mileageMark);
 
                 TextWatcher checkContent = new TextWatcher() {
                     @Override
@@ -266,7 +289,7 @@ public class TunnelOftenCheckAddAdapter extends RecyclerView.Adapter {
                         tunnelRecord.checkContents = s.toString();
                     }
                 };
-                addTextWatcher(viewHolder2.checkContents,checkContent,tunnelRecord.checkContents);
+                addTextWatcher(viewHolder2.checkContents, checkContent, tunnelRecord.checkContents);
 
                 TextWatcher stateDiscription = new TextWatcher() {
                     @Override
@@ -284,7 +307,7 @@ public class TunnelOftenCheckAddAdapter extends RecyclerView.Adapter {
                         tunnelRecord.stateDiscription = s.toString();
                     }
                 };
-                addTextWatcher(viewHolder2.stateDiscription,stateDiscription,tunnelRecord.stateDiscription);
+                addTextWatcher(viewHolder2.stateDiscription, stateDiscription, tunnelRecord.stateDiscription);
 
                 TextWatcher judgeResult = new TextWatcher() {
                     @Override
@@ -302,20 +325,20 @@ public class TunnelOftenCheckAddAdapter extends RecyclerView.Adapter {
                         tunnelRecord.judgeResult = s.toString();
                     }
                 };
-                addTextWatcher(viewHolder2.judgeResult,judgeResult,tunnelRecord.judgeResult);
+                addTextWatcher(viewHolder2.judgeResult, judgeResult, tunnelRecord.judgeResult);
 
                 final List<String> data = new ArrayList<>();
                 data.add("");
                 data.addAll(tunnelOftenCheck.listProjectName);
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, data);
                 viewHolder2.projectName.setAdapter(adapter);
-                if (tunnelOftenCheck.savePosition.get("项目名称"+tunnelRecord.projectName ) != null)
-                    viewHolder2.projectName.setSelection(tunnelOftenCheck.savePosition.get("项目名称"+tunnelRecord.projectName  ));
+                if (tunnelOftenCheck.savePosition.get("项目名称" + tunnelRecord.projectName) != null)
+                    viewHolder2.projectName.setSelection(tunnelOftenCheck.savePosition.get("项目名称" + tunnelRecord.projectName));
                 viewHolder2.projectName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         tunnelRecord.projectName = data.get(position);
-                        tunnelOftenCheck.savePosition.put("项目名称"+tunnelRecord.projectName  , position);
+                        tunnelOftenCheck.savePosition.put("项目名称" + tunnelRecord.projectName, position);
                     }
 
                     @Override
@@ -327,23 +350,23 @@ public class TunnelOftenCheckAddAdapter extends RecyclerView.Adapter {
 
         } else if (holder instanceof ViewHolder3) {
             ViewHolder3 viewHolder3 = (ViewHolder3) holder;
-            RecyclerView recyclerView =  viewHolder3.recyclerView;
-            recyclerView.setLayoutManager(new GridLayoutManager(mContext,4));
-            imageAdapter = new ImageAddAdapter(mContext,picturePaths);
+            RecyclerView recyclerView = viewHolder3.recyclerView;
+            recyclerView.setLayoutManager(new GridLayoutManager(mContext, 4));
+            imageAdapter = new ImageAddAdapter(mContext, picturePaths);
             recyclerView.setAdapter(imageAdapter);
         }
     }
 
     @Override
     public int getItemCount() {
-        return 2+(tunnelOftenCheck.listTunnelRecords==null?0:tunnelOftenCheck.listTunnelRecords.size());
+        return 2 + (tunnelOftenCheck.listTunnelRecords == null ? 0 : tunnelOftenCheck.listTunnelRecords.size());
     }
 
     @Override
     public int getItemViewType(int position) {
         if (position == 0)
             return HEAD_TYPE;
-        if (position==getItemCount()-1) {
+        if (position == getItemCount() - 1) {
             return FOOT_TYPE;
         }
         return NORMAL_TYPE;
@@ -398,6 +421,7 @@ public class TunnelOftenCheckAddAdapter extends RecyclerView.Adapter {
 
         }
     }
+
     public ImageAddAdapter getImageAdapter() {
         return imageAdapter;
     }

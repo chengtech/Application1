@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import com.chengtech.chengtechmt.BaseActivity;
 import com.chengtech.chengtechmt.R;
 import com.chengtech.chengtechmt.activity.business.BusinessActivity;
+import com.chengtech.chengtechmt.activity.monitoremergency.slopemonitor.SlopeMonitor2Activity;
 import com.chengtech.chengtechmt.activity.monitoremergency.slopemonitor.SlopeMonitorActivity;
 import com.chengtech.chengtechmt.adapter.RecycleViewAdapter;
 import com.chengtech.chengtechmt.divider.RecycleViewDivider;
@@ -50,7 +51,7 @@ public class MonitorEmergencyActivity extends BaseActivity {
                 Intent intent = null;
                 try {
 
-                    intent = new Intent(MonitorEmergencyActivity.this, SlopeMonitorActivity.class);
+                    intent = new Intent(MonitorEmergencyActivity.this, SlopeMonitor2Activity.class);
 //                    intent.putExtra("type",typeArray[position]);
 //                    intent.putExtra("title",title[position]);
 //                    intent.putExtra("urlList",urlList[position]);

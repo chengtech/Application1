@@ -34,6 +34,7 @@ public class Route  implements Serializable {
 	public List<String> propetryValues;
 	public String code; 					//路线编号
 	public String routeGrade;				//路线等级
+	public String routeGradeName;				//路线等级名称
 	public String	startStake;			    //里程起点
 	public String endStake;			    //里程终点
 	public Dept   dept; 					//管理单位
@@ -44,6 +45,8 @@ public class Route  implements Serializable {
 	public String 	memo;			//备注
 	public String sessionName;		   // 附件名称
 	public String sessionId;
+	public String	roadType;          //路面类型
+	public String  techGrade;         //技术等级
 
 	private String sort="routeGrade,code";
 
@@ -65,7 +68,7 @@ public class Route  implements Serializable {
 		if (propetryValues==null ) {
 			propetryValues = new ArrayList<>();
 			propetryValues.add(TextUtils.isEmpty(code)?"":code);
-			propetryValues.add(TextUtils.isEmpty(routeGrade)?"":routeGrade);
+			propetryValues.add(TextUtils.isEmpty(routeGradeName)?"":routeGradeName);
 			propetryValues.add(TextUtils.isEmpty(name)?"":name);
 			propetryValues.add(TextUtils.isEmpty(startStake)?"":startStake);
 			propetryValues.add(TextUtils.isEmpty(endStake)?"":endStake);
@@ -74,6 +77,8 @@ public class Route  implements Serializable {
 			propetryValues.add(TextUtils.isEmpty(routeDirections)?"":routeDirections);
 			propetryValues.add(constructionDate==null?"": constructionDate);
 			propetryValues.add(openingDate==null?"":openingDate);
+			propetryValues.add(roadType==null?"":roadType);
+			propetryValues.add(techGrade==null?"":techGrade);
 			propetryValues.add(TextUtils.isEmpty(memo)?"":memo);
 		}
 

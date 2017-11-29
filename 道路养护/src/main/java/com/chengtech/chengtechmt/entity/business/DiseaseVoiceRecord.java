@@ -11,5 +11,5 @@ public class DiseaseVoiceRecord implements Serializable{
     public String id;
     public String recordPath; //语音保存路径
     public String recordLength; //语音长度
-    public String recordContent;  //语音翻译的文字
+    public String recordContent = "";  //语音翻译的文字
 }

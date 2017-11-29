@@ -1,7 +1,7 @@
 package com.chengtech.chengtechmt.activity.business;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Handler;
@@ -11,7 +11,7 @@ import android.provider.Settings;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +19,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -31,6 +33,8 @@ import com.chengtech.chengtechmt.adapter.ImageAddAdapter;
 import com.chengtech.chengtechmt.adapter.RecordAdapter;
 import com.chengtech.chengtechmt.entity.business.DiseaseRegistration;
 import com.chengtech.chengtechmt.entity.business.DiseaseVoiceRecord;
+import com.chengtech.chengtechmt.entity.business.FellowMen;
+import com.chengtech.chengtechmt.fragment.FellowMenDialogFragment;
 import com.chengtech.chengtechmt.runnable.WarterMarkRunnable;
 import com.chengtech.chengtechmt.util.AppAccount;
 import com.chengtech.chengtechmt.util.CommonUtils;
@@ -68,31 +72,37 @@ import static com.chengtech.chengtechmt.util.HttpclientUtil.SAVE_SUCCESS;
 /**
  * 病害登记表
  */
-public class DiseaseRegistrationActivity extends BaseActivity {
+public class DiseaseRegistrationActivity extends BaseActivity implements AMapLocationListener, FellowMenDialogFragment.OnDismissListener {
 
     private static final int GET_LOCAL_INFO_SUCCESS = 0x13;
+    private static final int GET_LOCAL_INFO_FAILED = 0x14;
     private ArrayList<String> picPaths;
     private String describeMsg;
     private String site;
     private String weather;
+    private String fellowMen;
     private List<DiseaseVoiceRecord> myRecordList;
-
+    AMapLocationClient client;
     private RecyclerView recyclerView;
     private RecyclerView recordRecyclerView;
     private ImageAddAdapter imageAddAdapter;
     private EditText resultShow_et;
     private TextView site_tv;
+    private TextView fellowMen_et;
+    private ImageView fellowMen_add;
     private NiceSpinner weatherSpinner;
     private Button startSpeech;
     private long recognizeStartTime;
     private long recognizeEndTime;
+    private FellowMenDialogFragment fellowMenDialogFragment;
 
     private DiseaseRegistration diseaseRegistration;
     private int diseaseRegPosition;
     private SweetAlertDialog sweetAlertDialog;
-    private AMapLocation myAMapLocation;
+    //    private AMapLocation myAMapLocation;
     private String longitude, latitude;
     private boolean isSaveLocal;
+    private RecyclerView.AdapterDataObserver adapterDataObserver;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -105,12 +115,15 @@ public class DiseaseRegistrationActivity extends BaseActivity {
                     isSaveLocal = true;
                     break;
                 case GET_LOCAL_INFO_SUCCESS:
-                    site_tv.setText(myAMapLocation.getAddress());
-                    site = myAMapLocation.getAddress();
-                    longitude = String.valueOf(myAMapLocation.getLongitude());
-                    latitude = String.valueOf(myAMapLocation.getLatitude());
-                    sweetAlertDialog.dismiss();
+                    AMapLocation location = (AMapLocation) msg.obj;
+                    site_tv.setText(location.getAddress());
+                    site = location.getAddress();
+                    longitude = String.valueOf(location.getLongitude());
+                    latitude = String.valueOf(location.getLatitude());
                     break;
+                case GET_LOCAL_INFO_FAILED:
+                    site_tv.setText("未知位置");
+                    site = "未能识别地址";
             }
         }
     };
@@ -206,52 +219,60 @@ public class DiseaseRegistrationActivity extends BaseActivity {
         setNavigationIcon(true);
         hidePagerNavigation(true);
         toolbar.setTitle("病害详细信息登记");
-
         Intent intent = getIntent();
         diseaseRegistration = (DiseaseRegistration) intent.getSerializableExtra("data");
         diseaseRegPosition = intent.getIntExtra("position", 0);
         initView();
         showSavedInstanceState();
+        initData();
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isSaveLocal) {
-                    if (sweetAlertDialog != null) {
-                        sweetAlertDialog.setTitleText("是否保存当前信息。").setConfirmText("保存").setCancelText("取消").changeAlertType(SweetAlertDialog.WARNING_TYPE);
-                        sweetAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                saveInLoacal();
+                if (!diseaseRegistration.isUpload) {
+                    if (!isSaveLocal) {
+                        if (sweetAlertDialog != null) {
+                            if (sweetAlertDialog.isShowing())
                                 sweetAlertDialog.dismiss();
+                            sweetAlertDialog.setTitleText("是否保存当前信息。").setContentText("").setConfirmText("保存").setCancelText("取消").changeAlertType(SweetAlertDialog.WARNING_TYPE);
+                            sweetAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    saveInLoacal();
+                                    sweetAlertDialog.dismiss();
 
-                            }
-                        });
-                        sweetAlertDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                finish();
-                            }
-                        });
-                        sweetAlertDialog.show();
+                                }
+                            });
+                            sweetAlertDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    sweetAlertDialog.dismiss();
+                                    finish();
+                                }
+                            });
+                            sweetAlertDialog.show();
+                        } else {
+                            sweetAlertDialog = new SweetAlertDialog(DiseaseRegistrationActivity.this, SweetAlertDialog.WARNING_TYPE);
+
+                            sweetAlertDialog.setTitleText("是否保存当前信息。").setConfirmText("保存").setCancelText("取消");
+                            sweetAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    saveInLoacal();
+                                    sweetAlertDialog.dismiss();
+                                }
+                            });
+                            sweetAlertDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    sweetAlertDialog.dismiss();
+                                    finish();
+                                }
+                            });
+                            sweetAlertDialog.show();
+                        }
                     } else {
-                        sweetAlertDialog = new SweetAlertDialog(DiseaseRegistrationActivity.this, SweetAlertDialog.WARNING_TYPE);
-
-                        sweetAlertDialog.setTitleText("是否保存当前信息。").setConfirmText("保存").setCancelText("取消");
-                        sweetAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                saveInLoacal();
-                                sweetAlertDialog.dismiss();
-                            }
-                        });
-                        sweetAlertDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                finish();
-                            }
-                        });
-                        sweetAlertDialog.show();
+                        finish();
                     }
                 } else {
                     finish();
@@ -260,9 +281,29 @@ public class DiseaseRegistrationActivity extends BaseActivity {
         });
     }
 
+    private void initData() {
+        adapterDataObserver = new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+                StringBuffer sb = new StringBuffer();
+                for (int i = 0; i < myRecordList.size(); i++) {
+                    sb.append(myRecordList.get(i).recordContent);
+                }
+                resultShow_et.setText(sb.toString());
+            }
+        };
+        recordAdapter.registerAdapterDataObserver(adapterDataObserver);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add("保存").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        if (diseaseRegistration != null) {
+            if (!diseaseRegistration.isUpload)
+                menu.add("保存").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        } else {
+            menu.add("保存").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -273,6 +314,7 @@ public class DiseaseRegistrationActivity extends BaseActivity {
     }
 
     private void showSavedInstanceState() {
+        List<FellowMen> fellowMens = (List<FellowMen>) ObjectSaveUtils.getObject(this, FellowMenDialogFragment.FELLOW_MEN_LIST_1);
         if (diseaseRegistration != null) {
             picPaths = diseaseRegistration.picPaths;
             describeMsg = diseaseRegistration.diseaseDescription;
@@ -281,13 +323,23 @@ public class DiseaseRegistrationActivity extends BaseActivity {
             weather = diseaseRegistration.weather;
             longitude = diseaseRegistration.longitude;
             latitude = diseaseRegistration.latitude;
+            fellowMen = diseaseRegistration.fellowMen;
         } else {
+            diseaseRegistration = new DiseaseRegistration();
             picPaths = new ArrayList<>();
             describeMsg = "";
             site = "";
-            longitude = "";
-            latitude = "";
+            longitude = "0.0";
+            latitude = "0.0";
             weather = "晴";//默认为晴
+            fellowMen = "";
+            if (fellowMens != null && fellowMens.size() > 0) {
+                for (int i = 0; i < fellowMens.size(); i++) {
+                    FellowMen f = fellowMens.get(i);
+                    if (f.isChecked)
+                        fellowMen = fellowMen + f.name + ",";
+                }
+            }
             myRecordList = new ArrayList<>();
             getLocationInfo();
         }
@@ -299,6 +351,7 @@ public class DiseaseRegistrationActivity extends BaseActivity {
         recordRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         resultShow_et.setText(describeMsg);
         site_tv.setText(site);
+        fellowMen_et.setText(fellowMen);
         weatherSpinner.setText(weather);
 
     }
@@ -307,6 +360,18 @@ public class DiseaseRegistrationActivity extends BaseActivity {
         recordRecyclerView = (RecyclerView) findViewById(R.id.recordRecyclerView);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         resultShow_et = (EditText) findViewById(R.id.showMsg);
+        fellowMen_et = (TextView) findViewById(R.id.fellowMen);
+        fellowMen_add = (ImageView) findViewById(R.id.fellowMenAdd);
+        fellowMen_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (fellowMenDialogFragment == null) {
+                    fellowMenDialogFragment = new FellowMenDialogFragment();
+                }
+                fellowMenDialogFragment.show(getFragmentManager(), "FellowMen");
+
+            }
+        });
         site_tv = (TextView) findViewById(R.id.site);
         weatherSpinner = (NiceSpinner) findViewById(R.id.weatherSpinner);
         weatherSpinner.attachDataSource(Arrays.asList(new String[]{"", "晴", "阴", "小雨", "大雨"}));
@@ -387,17 +452,17 @@ public class DiseaseRegistrationActivity extends BaseActivity {
                 String picName = "DiseaseRecord-" + format.format(date) + ".jpg";
                 StringBuffer sb = new StringBuffer();
                 sb.append("巡查人:" + AppAccount.name + ";拍照时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date) + ";");
-                if (!TextUtils.isEmpty(site)) {
-                    sb.append("经度:" + longitude + ";");
-                    sb.append("纬度:" + latitude + ";");
-                    sb.append("位置信息：" + site);
-                }
+//                if (!TextUtils.isEmpty(site)) {
+                sb.append("经度:" + longitude + "\u3000\u3000");
+                sb.append("纬度:" + latitude + ";");
+                sb.append("位置信息：" + site);
+//                }
                 waterMarkParam.put("picName", picName);
                 waterMarkParam.put("waterMarkMsg", sb.toString());
                 waterMarkParam.put("imgPath", picPath);
                 waterMarkParam.put("imgPaths", picPaths);
                 waterMarkParam.put("handler", handler);
-                new Thread(new WarterMarkRunnable(this, waterMarkParam)).run();
+                new Thread(new WarterMarkRunnable(this, waterMarkParam)).start();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -411,17 +476,17 @@ public class DiseaseRegistrationActivity extends BaseActivity {
                 String picName = "DiseaseRecord-" + format.format(date) + ".jpg";
                 StringBuffer sb = new StringBuffer();
                 sb.append("登记人:超级管理员;拍照时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date) + ";");
-                if (!TextUtils.isEmpty(site)) {
-                    sb.append("经度:" + longitude + ";");
-                    sb.append("纬度:" + latitude + ";");
-                    sb.append("位置信息：" + site);
-                }
+//                if (!TextUtils.isEmpty(site)) {
+                sb.append("经度:" + longitude + "\u3000\u3000");
+                sb.append("纬度:" + latitude + ";");
+                sb.append("位置信息：" + site);
+//                }
                 waterMarkParam.put("picName", picName);
                 waterMarkParam.put("waterMarkMsg", sb.toString());
                 waterMarkParam.put("imgPath", picturePath.get(i));
                 waterMarkParam.put("imgPaths", picPaths);
                 waterMarkParam.put("handler", handler);
-                new Thread(new WarterMarkRunnable(this, waterMarkParam)).run();
+                new Thread(new WarterMarkRunnable(this, waterMarkParam)).start();
             }
         }
     }
@@ -444,6 +509,7 @@ public class DiseaseRegistrationActivity extends BaseActivity {
         diseaseRegistration.weather = weatherSpinner.getText().toString();
         diseaseRegistration.longitude = longitude;
         diseaseRegistration.latitude = latitude;
+        diseaseRegistration.fellowMen = fellowMen_et.getText().toString().trim();
 
         sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         sweetAlertDialog.setTitleText("");
@@ -472,35 +538,22 @@ public class DiseaseRegistrationActivity extends BaseActivity {
                     handler.sendEmptyMessage(SAVE_FAILED);
                 }
             }
-        }).run();
+        }).start();
     }
 
     public void getLocationInfo() {
         LocationManager manger = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean providerEnabled = manger.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (providerEnabled) {
-            sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-            sweetAlertDialog.setTitleText("正在获取地理信息...").show();
             //使用高德定位
             AMapLocationClientOption option = new AMapLocationClientOption();
             option.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-            option.setOnceLocation(true);
-            option.setOnceLocationLatest(true);
-            option.setHttpTimeOut(15000);
-            final AMapLocationClient client = new AMapLocationClient(this);
+            option.setHttpTimeOut(2000);
+            option.setInterval(10000);
+            client = new AMapLocationClient(DiseaseRegistrationActivity.this);
             client.setLocationOption(option);
-            client.setLocationListener(new AMapLocationListener() {
-                @Override
-                public void onLocationChanged(final AMapLocation aMapLocation) {
-                    if (aMapLocation.getErrorCode() == 0) {
-                        myAMapLocation = aMapLocation;
-                        handler.sendEmptyMessage(GET_LOCAL_INFO_SUCCESS);
-                    }
-                    client.onDestroy();
-                }
-            });
+            client.setLocationListener(this);
             client.startLocation();
-
         } else {
             sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
             sweetAlertDialog.setTitleText("GPS定位服务未打开")
@@ -524,25 +577,28 @@ public class DiseaseRegistrationActivity extends BaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
-            //先判断右侧菜单是否展开,若展开先合上
-            if (!isSaveLocal) {
-                if (sweetAlertDialog != null) {
-                    sweetAlertDialog.setTitleText("是否保存当前信息。").setConfirmText("保存").setCancelText("取消").changeAlertType(SweetAlertDialog.WARNING_TYPE);
-                    sweetAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                        @Override
-                        public void onClick(SweetAlertDialog sweetAlertDialog) {
-                            saveInLoacal();
-                            sweetAlertDialog.dismiss();
-                        }
-                    });
-                    sweetAlertDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                        @Override
-                        public void onClick(SweetAlertDialog sweetAlertDialog) {
-                            finish();
-                        }
-                    });
-                    sweetAlertDialog.show();
-                } else {
+
+            if (!diseaseRegistration.isUpload) {
+                if (!isSaveLocal) {
+//                    if (sweetAlertDialog != null) {
+//                        sweetAlertDialog.setTitleText("是否保存当前信息。").setConfirmText("保存").setCancelText("取消").changeAlertType(SweetAlertDialog.WARNING_TYPE);
+//                        sweetAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+//                            @Override
+//                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+//                                saveInLoacal();
+//                                sweetAlertDialog.dismiss();
+//                            }
+//                        });
+//                        sweetAlertDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+//                            @Override
+//                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+//                                sweetAlertDialog.dismiss();
+//                                finish();
+//                            }
+//                        });
+//                        sweetAlertDialog.setCanceledOnTouchOutside(true);
+////                        sweetAlertDialog.show();
+//                    } else {
                     sweetAlertDialog = new SweetAlertDialog(DiseaseRegistrationActivity.this, SweetAlertDialog.WARNING_TYPE);
                     sweetAlertDialog.setTitleText("是否保存当前信息。").setConfirmText("保存").setCancelText("取消");
                     sweetAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -555,18 +611,68 @@ public class DiseaseRegistrationActivity extends BaseActivity {
                     sweetAlertDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
                         @Override
                         public void onClick(SweetAlertDialog sweetAlertDialog) {
+                            sweetAlertDialog.dismiss();
                             finish();
                         }
                     });
                     sweetAlertDialog.show();
+//                    }
+                } else {
+                    finish();
                 }
+            } else {
+                finish();
             }
-            return true;
+            return super.onKeyDown(keyCode, event);
         }
         return super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (client != null)
+            client.onDestroy();
 
+        if (recordAdapter != null)
+            recordAdapter.unregisterAdapterDataObserver(adapterDataObserver);
+    }
+
+    @Override
+    public void onLocationChanged(AMapLocation aMapLocation) {
+        Log.i("tag", aMapLocation.getErrorCode() + "");
+        if (aMapLocation.getErrorCode() == 0) {
+//            myAMapLocation = aMapLocation;
+            Message message = handler.obtainMessage();
+            message.obj = aMapLocation;
+            message.what = GET_LOCAL_INFO_SUCCESS;
+            handler.sendMessage(message);
+//            site_tv.setText(aMapLocation.getAddress());
+//            site = aMapLocation.getAddress();
+//            longitude = String.valueOf(aMapLocation.getLongitude());
+//            latitude = String.valueOf(aMapLocation.getLatitude());
+        } else {
+            Toast.makeText(this, "错误码:" + aMapLocation.getErrorCode(), Toast.LENGTH_SHORT).show();
+            handler.sendEmptyMessage(GET_LOCAL_INFO_FAILED);
+//            site_tv.setText("未知位置");
+        }
+
+    }
+
+
+    @Override
+    public void onDismiss(Object data) {
+        fellowMen = "";
+        List<FellowMen> fellowMenList = (List<FellowMen>) data;
+        if (fellowMenList != null && fellowMenList.size() > 0) {
+            for (int i = 0; i < fellowMenList.size(); i++) {
+                FellowMen f = fellowMenList.get(i);
+                if (f.isChecked)
+                    fellowMen = fellowMen + f.name + ",";
+            }
+        }
+        fellowMen_et.setText(fellowMen);
+    }
 }
 
 

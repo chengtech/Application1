@@ -12,6 +12,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import org.apache.http.Header;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,33 +23,33 @@ import java.util.Map;
  * 作者: LiuFuYingWang on 2016/10/19 10:35.
  */
 
-public class MaintainTaskItem extends BaseModel {
+public class MaintainTaskItem extends BaseModel implements Serializable{
 
     public Presenter presenter;
 
-    private String routeName;                     //实施路线名称
+    public String routeName;                     //实施路线名称
 
-    private String routePeg;                      //实施范围（路线桩号段）
+    public String routePeg;                      //实施范围（路线桩号段）
 
-    private String workContent;                   //主要作业内容
+    public String workContent;                   //主要作业内容
 
-    private Date planStartDate;                      //计划作业开始日期
-    private Date planEndDate;                      //计划作业结束日期
-    private String workDay;                       //计划作业工期
-    private Date startDate;                          //实际开始日期
-    private Date finishDate;                      //实际完工日期
+    public Date planStartDate;                      //计划作业开始日期
+    public Date planEndDate;                      //计划作业结束日期
+    public String workDay;                       //计划作业工期
+    public Date startDate;                          //实际开始日期
+    public Date finishDate;                      //实际完工日期
 
-    private String inOutPlanType;                 //计划内or计划外；0计划内，1计划外
+    public String inOutPlanType;                 //计划内or计划外；0计划内，1计划外
 
-    private String registOrAcceptanceStatus;      //状态 0/""：表示未实施，1：未验收，2：已完成
+    public String registOrAcceptanceStatus;      //状态 0/""：表示未实施，1：未验收，2：已完成
 
     //工程项目类型  只用来显示
-    private String projectType;                   //工程项目类型
+    public String projectType;                   //工程项目类型
 
-    private String workTeam;                      //作业班组
+    public String workTeam;                      //作业班组
 
     //2016.11.15
-    private String floatRoutePeg;                  //实施范围(带小数点),比如k0013+020,浮点数为13.020
+    public String floatRoutePeg;                  //实施范围(带小数点),比如k0013+020,浮点数为13.020
 
 
     //20161202
@@ -88,7 +89,6 @@ public class MaintainTaskItem extends BaseModel {
         list.add(mobileRouteNames == null ? "" : mobileRouteNames);
         list.add(routePeg == null ? "" : routePeg);
         list.add(typeMap.get(taskType) == null ? "" : typeMap.get(taskType));
-//        list.add(taskType == null ? "" : taskType);
         list.add(workContent == null ? "" : workContent);
         list.add(plannedTaskQuantity == null ? "" : FormatUtil.double2String(plannedTaskQuantity));
         list.add(plannedUnit == null ? "" : plannedUnit);

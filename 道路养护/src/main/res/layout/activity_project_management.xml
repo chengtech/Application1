@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <android.support.v4.widget.NestedScrollView
-        android:background="@android:color/holo_blue_light"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/holo_blue_light">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -22,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:minHeight="40dp"
-                android:textAlignment="center" />
+                android:textAlignment="center"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycleView"
@@ -32,15 +33,115 @@
 
             </android.support.v7.widget.RecyclerView>
 
+            <LinearLayout
+                android:id="@+id/layout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/shape_rect_blue"
+                    android:drawablePadding="5dp"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="3dp"
+                    android:text="资金来源"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="#82847d7d"
+                    ></View>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/shape_rect_blue"
+                    android:drawablePadding="5dp"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="3dp"
+                    android:text="资金支出"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="#82847d7d"
+                    ></View>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="5dp"
+                        android:text="资金支出类型"
+                        android:textSize="10sp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:gravity="center_horizontal"
+                        android:padding="5dp"
+                        android:text="支出资金(元)"
+                        android:textSize="10sp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:padding="5dp"
+                        android:text="累计支出完成率"
+                        android:textSize="10sp"/>
+
+
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+            </LinearLayout>
+
             <ExpandableListView
                 android:id="@+id/expandlist"
                 android:layout_width="match_parent"
-                android:scrollbars="none"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:dividerHeight="10dp"
+                android:groupIndicator="@null"
                 android:minHeight="200dp"
-                android:groupIndicator="@null">
+                android:scrollbars="none"
+                android:visibility="gone">
 
             </ExpandableListView>
 
@@ -65,13 +166,13 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
                         android:layout_marginTop="3dp"
-                        android:background="#82847d7d" />
+                        android:background="#82847d7d"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="填表年份：" />
+                        android:text="实施年份："/>
 
 
                     <TextView
@@ -79,7 +180,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignBaseline="@+id/tv2"
                         android:layout_toRightOf="@+id/tv2"
-                        android:text="其他：" />
+                        android:text="其他："/>
 
 
                     <TextView
@@ -87,7 +188,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/tv2"
                         android:layout_marginTop="5dp"
-                        android:text="备注：" />
+                        android:text="备注："/>
 
                     <View
                         android:layout_width="match_parent"
@@ -95,7 +196,7 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
                         android:layout_marginTop="3dp"
-                        android:background="#82847d7d" />
+                        android:background="#82847d7d"/>
 
                 </LinearLayout>
 

@@ -52,7 +52,7 @@ public class GisListRouteAdapter extends RecyclerView.Adapter<GisListRouteAdapte
         holder.number.setText(String.valueOf(position+1));
         holder.routeName.setText(data.get(position).name);
         holder.routeCode.setText(data.get(position).code);
-        holder.routeGrade.setText(data.get(position).routeGrade);
+        holder.routeGrade.setText(data.get(position).routeGradeName);
         holder.checkBox.setChecked(isItemChecked(data.get(position).id));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

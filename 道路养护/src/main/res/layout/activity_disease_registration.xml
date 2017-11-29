@@ -122,25 +122,28 @@
                             android:layout_height="wrap_content"
                             />
                     </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="位置信息："/>
-                    <TextView
-                        android:id="@+id/site"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        />
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="位置信息："/>
+
+                        <TextView
+                            android:id="@+id/site"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            />
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -159,6 +162,32 @@
                             android:layout_height="wrap_content"
                             app:arrowTint="@android:color/holo_orange_dark"
                             app:textTint="#605a5a"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="陪同人员："
+                            />
+
+                        <TextView
+                            android:id="@+id/fellowMen"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="150dp"/>
+
+                        <ImageView
+                            android:id="@+id/fellowMenAdd"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:background="@drawable/ic_add_circle"/>
                     </LinearLayout>
 
 

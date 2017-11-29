@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 
 /**
  * 作者: LiuFuYingWang on 2017/5/16 16:21.
+ * 将实体类进行文件存储。
  */
 
 public class ObjectSaveUtils {

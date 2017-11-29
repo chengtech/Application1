@@ -1,7 +1,6 @@
 package com.chengtech.chengtechmt.util;
 
 
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,19 +12,23 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.PersistentCookieStore;
 import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.ResponseHandlerInterface;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import cz.msebera.android.httpclient.HttpResponse;
 
 
 public class HttpclientUtil {
     public static final int SAVE_SUCCESS = 0x11;
     public static final int SAVE_FAILED = 0x12;
     public static final int UPDATE_SUCCESS = 0x13;
+    public static final int ACCESS_ERROR = 0x30;
     private static AsyncHttpClient client;
 
     public static synchronized AsyncHttpClient getInstance(Context context) {
         if (client == null) {
             client = new AsyncHttpClient();
-            client.setTimeout(60 * 10 * 1000);
+            client.setTimeout(10 * 1000);
             PersistentCookieStore cookieStore = new PersistentCookieStore(
                     context);
             client.setCookieStore(cookieStore);
@@ -40,26 +43,22 @@ public class HttpclientUtil {
     }
 
     public static void getData(final Context context, String url, final Handler handler, final int resultCode) {
-        final Dialog dialog = MyDialogUtil.createDialog(context, "正在加载中...");
-        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                client.cancelRequests(context, true);
-            }
-        });
+        final SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+        sweetAlertDialog.setContentText("正在加载...").setTitleText("");
+
         AsyncHttpClient client = HttpclientUtil.getInstance(context);
 
         AsyncHttpResponseHandler responseHandler = new AsyncHttpResponseHandler() {
             @Override
             public void onStart() {
                 super.onStart();
-                if (!dialog.isShowing())
-                    dialog.show();
+                sweetAlertDialog.show();
             }
 
             @Override
             public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
-                dialog.dismiss();
+                if (sweetAlertDialog!=null && sweetAlertDialog.isShowing())
+                    sweetAlertDialog.dismiss();
                 try {
                     String data = new String(bytes, "utf-8");
                     Message message = handler.obtainMessage();
@@ -67,17 +66,14 @@ public class HttpclientUtil {
                     message.obj = data;
                     handler.sendMessage(message);
                 } catch (Exception e) {
-                    Toast.makeText(context, "数据解析出错", Toast.LENGTH_SHORT).show();
+                    sweetAlertDialog.setContentText("数据解析出错。").changeAlertType(SweetAlertDialog.ERROR_TYPE);
                 }
             }
 
 
             @Override
             public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
-
-                dialog.dismiss();
-                dialog.cancel();
-                Toast.makeText(context, "连接服务器出错", Toast.LENGTH_SHORT).show();
+                sweetAlertDialog.setContentText("连接服务器出错。").changeAlertType(SweetAlertDialog.ERROR_TYPE);
             }
 
 
@@ -141,7 +137,6 @@ public class HttpclientUtil {
                     message.what = resultCode;
                     message.obj = data;
                     handler.sendMessage(message);
-
                 } catch (Exception e) {
                     Toast.makeText(context, "数据解析出错", Toast.LENGTH_SHORT).show();
                 }
@@ -152,6 +147,11 @@ public class HttpclientUtil {
                 handler.sendEmptyMessage(SAVE_FAILED);
             }
 
+            @Override
+            public void onPostProcessResponse(ResponseHandlerInterface instance, HttpResponse response) {
+
+                super.onPostProcessResponse(instance, response);
+            }
         };
 //        RequestParams params = new RequestParams();
 //        if (filePaths != null) {

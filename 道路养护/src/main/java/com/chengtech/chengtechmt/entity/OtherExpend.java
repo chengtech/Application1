@@ -29,7 +29,11 @@ public class OtherExpend implements Serializable {
     public String money;//金额
     public String applyDate;//申请时间
     public String memo;
-    public String sessionName;
+//    public String sessionName;
+    public String sessionId;
+    public String expendType; //支出类型
+    public String expendContractRate; //支出所占比率
+
     
     public OtherExpend (Presenter presenter) {
         this.presenter = presenter;
@@ -42,7 +46,7 @@ public class OtherExpend implements Serializable {
             propertyValue.add(money==null?"":money);
             propertyValue.add(applyDate==null?"": DateUtils.convertDate(applyDate));
             propertyValue.add(memo==null?"":memo);
-            propertyValue.add(sessionName==null?"":sessionName);
+            propertyValue.add(sessionId==null?"":sessionId);
         }
 
         return propertyValue;

@@ -246,7 +246,10 @@ public class MapQueryActivity extends BaseActivity implements GISMenuDialogFragm
                 super.onPageFinished(view, url);
                 //在一开始进来就加载一条数据
                 if (isFirst) {
-                    HttpclientUtil.getData(MapQueryActivity.this, MyConstants.PRE_URL + "mt/integratequery/gisvisualization/getEvaluateMsg.action?routeGrade=&routeCode=&evaluateIndex=PQI&year=",
+//                    HttpclientUtil.getData(MapQueryActivity.this, MyConstants.PRE_URL + "mt/integratequery/gisvisualization/getEvaluateMsg.action?routeGrade=&routeCode=&evaluateIndex=PQI&year=",
+//                            handler, 1);
+
+                    HttpclientUtil.getData(MapQueryActivity.this, MyConstants.PRE_URL + "mt/integratequery/gisevaluation/getGisEvaluationMsg.action?routeGrade=&routeCode=&evaluateIndex=PQI&year=",
                             handler, 1);
                 }
             }

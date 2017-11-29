@@ -93,6 +93,7 @@ public class Bridge implements Serializable{
 	public String sessionId;   			//附件id
 	public Dept belongDept;
 	public String belongDeptId;	//所属管理单位id
+	public String belongDeptName;	//所属管理单位id
 	public String routeCode;		//路线编码
 	public String deptIds;			//用于数据查询，不用存放在数据库
 	public String routeName;		//路线名称
@@ -116,7 +117,7 @@ public class Bridge implements Serializable{
 		list.add(name==null?"":name);
 		list.add(scaleType==null?"":scaleType);
 		list.add(structureType==null?"":structureType);
-		list.add(belongDept==null?"":belongDept.name);
+		list.add(belongDeptName==null?"":belongDeptName);
 		list.add(originalStake==null?"":originalStake);
 		list.add(startStake==null?"":startStake);
 		list.add(endStake==null?"":endStake);

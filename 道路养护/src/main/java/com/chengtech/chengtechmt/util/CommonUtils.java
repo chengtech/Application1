@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -24,6 +25,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -35,9 +38,14 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.chengtech.chengtechmt.R;
+import com.chengtech.chengtechmt.activity.business.ProjectManagementActivity;
+import com.chengtech.chengtechmt.activity.dbm.OnePictureDisplayActivity;
 import com.chengtech.chengtechmt.entity.Attachment;
+import com.chengtech.chengtechmt.entity.attachment.AttachmentInfo;
 import com.chengtech.chengtechmt.receiver.ApkDownCompleteReceiver;
 import com.chengtech.chengtechmt.receiver.DownCompleteReceiver;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -49,6 +57,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -66,6 +75,7 @@ import java.util.List;
 import javax.net.ssl.HandshakeCompletedListener;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import io.realm.Realm;
 
 /**
  * 作者: LiuFuYingWang on 2016/10/27 9:49.
@@ -481,4 +491,108 @@ public class CommonUtils {
         return context.getExternalCacheDir() + "/" + CommonUtils.CAMERA_DEFAULT_NAME;
     }
 
+    /**
+     * 自定义数字格式方法
+     *
+     * @param style 如style为“,###.##” 每三位隔
+     * @param value
+     * @return
+     */
+    public static String getFormat(String style, BigDecimal value) {
+        DecimalFormat df = new DecimalFormat();
+        df.applyPattern(style);// 将格式应用于格式化器
+        return df.format(value.doubleValue());
+    }
+
+    public static String getCommalFormat(BigDecimal value) {
+        return getFormat(",###.##", value);
+    }
+
+
+    /**
+     * 通过sessionid来获取附件列表
+     *
+     * @param context
+     * @param sessionId
+     */
+    public static void getAttachmentsFromSessionId(final Context context, String sessionId) {
+        String url = MyConstants.PRE_URL + "ms/sys/attachment/listAttachmentJsonBySessionId.action?sessionId=";
+        AsyncHttpClient client = HttpclientUtil.getInstance(context);
+
+        AsyncHttpResponseHandler responseHandler = new AsyncHttpResponseHandler() {
+            @Override
+            public void onStart() {
+                super.onStart();
+            }
+
+            @Override
+            public void onSuccess(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
+                try {
+                    String data = new String(bytes, "utf-8");
+                    if (TextUtils.isEmpty(data)) {
+                        Toast.makeText(context, "没有附件", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    JSONArray array = new JSONArray(data);
+                    final List<Attachment> attachments = new ArrayList<>();
+                    for (int j = 0; j < array.length(); j++) {
+                        JSONObject object = array.getJSONObject(j);
+                        attachments.add(new Attachment(object.getString("fileName"),
+                                object.getString("filePath"),
+                                object.getString("id")));
+                    }
+                    final Realm realm = RealmUtil.getInstance(context);
+                    if (attachments.size() == 0) {
+                        Toast.makeText(context, "无附件", Toast.LENGTH_SHORT).show();
+                    }
+                    final BottomSheetDialog dialog = new BottomSheetDialog(context);
+                    ListView listView = new ListView(context);
+                    String[] fileNames = new String[attachments.size()];
+                    for (int k = 0; k < attachments.size(); k++) {
+                        fileNames[k] = attachments.get(k).fileName;
+                    }
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, fileNames);
+                    listView.setAdapter(adapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            String ids = attachments.get(position).id;
+                            String fileName = attachments.get(position).fileName;
+                            String filePath = MyConstants.PRE_URL + attachments.get(position).filePath;
+                            AttachmentInfo attachmentInfo = realm.where(AttachmentInfo.class).equalTo("id", ids).findFirst();
+//                            if (fileName.contains(".jpg") || fileName.contains(".png") || fileName.contains(".jpeg")) {
+//                                Intent intent = new Intent(context, OnePictureDisplayActivity.class);
+//                                intent.putExtra("url", filePath);
+//                                context.startActivity(intent);
+//                            } else
+                                if (attachmentInfo == null) {
+                                //使用自带的下载器下载文件
+                                CommonUtils.downFile(context, filePath, fileName, ids);
+                                dialog.dismiss();
+                            } else {
+                                CommonUtils.openFile(context, attachmentInfo.getFilePath());
+                                dialog.dismiss();
+                            }
+                            realm.close();
+
+                        }
+                    });
+                    dialog.setContentView(listView);
+                    dialog.show();
+
+                } catch (Exception e) {
+                    Toast.makeText(context, "json解析出错", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int i, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
+                Toast.makeText(context, "下载附件出错", Toast.LENGTH_SHORT).show();
+            }
+
+        };
+        client.get(url + sessionId, responseHandler);
+
+    }
 }
