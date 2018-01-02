@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.amap.api.location.CoordinateConverter;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapsInitializer;
 import com.amap.api.maps2d.SupportMapFragment;

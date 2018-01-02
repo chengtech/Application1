@@ -163,6 +163,12 @@
         </activity>
         <activity android:name=".activity.monitoremergency.slopemonitor.SlopeMonitor2Activity">
         </activity>
+        <activity android:name=".activity.monitoremergency.weathermonitor.WeatherMonitorActivity">
+        </activity>
+        <activity android:name=".activity.monitoremergency.weathermonitor.WeatherMonitorTypeActivity">
+        </activity>
+        <activity android:name=".activity.monitoremergency.weathermonitor.WeatherMonitorLocationActivity">
+        </activity>
     </application>
 
 </manifest>

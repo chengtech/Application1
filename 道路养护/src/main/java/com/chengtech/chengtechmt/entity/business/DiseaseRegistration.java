@@ -25,7 +25,8 @@ public class DiseaseRegistration extends BaseModel implements Serializable {
     public String longitude = "0.0"; //经度
     public String latitude = "0.0";  //纬度
     public String path;
-    public String fellowMen;
+    public String fellow;
+    public String routeCode; //路线名称
 
     @Override
     public List<String> getContent() {

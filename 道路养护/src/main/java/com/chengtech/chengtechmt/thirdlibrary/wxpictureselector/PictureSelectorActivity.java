@@ -33,19 +33,19 @@ import java.util.List;
 import java.util.Set;
 
 public class PictureSelectorActivity extends Activity {
-//    public static final int SELECTED_RESULT = 0x01;
+    //    public static final int SELECTED_RESULT = 0x01;
     private GridView gridView;
     private List<String> picturePaths;
     private MyPictureAdapter adapter;
 
-    private TextView dir_tv,count_tv;
+    private TextView dir_tv, count_tv;
     private RelativeLayout bottom_layout;
     private File mCurrentDir;
     private int mMaxCount;
     private List<FloderBean> floders = new ArrayList<>();
     private ProgressDialog progressDialog;
     private ListDirPopupWindow popupWindow;
-    public  Handler handler = new Handler(){
+    public Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
 //            progressDialog.dismiss();
@@ -56,7 +56,7 @@ public class PictureSelectorActivity extends Activity {
     };
 
     private void initPopupWindow() {
-        popupWindow = new ListDirPopupWindow(this,floders);
+        popupWindow = new ListDirPopupWindow(this, floders);
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -93,21 +93,21 @@ public class PictureSelectorActivity extends Activity {
     }
 
     private void data2view() {
-        if (mCurrentDir==null) {
+        if (mCurrentDir == null) {
             Toast.makeText(PictureSelectorActivity.this, "未扫描到任何图片", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        picturePaths= Arrays.asList(mCurrentDir.list(new FilenameFilter() {
+        picturePaths = Arrays.asList(mCurrentDir.list(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
-                if (filename.contains(".jpeg") ||filename.contains(".jpg")||filename.contains(".png"))
+                if (filename.contains(".jpeg") || filename.contains(".jpg") || filename.contains(".png"))
                     return true;
                 return false;
             }
         }));
 
-        adapter = new MyPictureAdapter(this,picturePaths,mCurrentDir.getAbsolutePath());
+        adapter = new MyPictureAdapter(this, picturePaths, mCurrentDir.getAbsolutePath());
 
         gridView.setAdapter(adapter);
 
@@ -140,7 +140,7 @@ public class PictureSelectorActivity extends Activity {
 
     private void initDatas() {
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            Snackbar.make(null,"没有可用的存储卡", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(null, "没有可用的存储卡", Snackbar.LENGTH_SHORT).show();
             return;
         }
 //        progressDialog = ProgressDialog.show(this,null,"正在加载....");
@@ -150,20 +150,20 @@ public class PictureSelectorActivity extends Activity {
                 Uri imgUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
                 ContentResolver cr = PictureSelectorActivity.this.getContentResolver();
                 Cursor cursor = cr.query(imgUri, null, MediaStore.Images.Media.MIME_TYPE + " = ? or " + MediaStore.Images.Media.MIME_TYPE
-                        + " = ? or "+MediaStore.Images.Media.MIME_TYPE+" = ?", new String[]{"image/jpg","image/jpeg", "image/png"}, MediaStore.Images.Media.DATE_MODIFIED);
+                        + " = ? or " + MediaStore.Images.Media.MIME_TYPE + " = ?", new String[]{"image/jpg", "image/jpeg", "image/png"}, MediaStore.Images.Media.DATE_MODIFIED);
 
                 Set<String> dirpaths = new HashSet<String>();
                 while (cursor.moveToNext()) {
                     String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
                     File parentFile = new File(path).getParentFile();
-                    if (parentFile==null) {
+                    if (parentFile == null) {
                         continue;
                     }
 
                     String dirPath = parentFile.getAbsolutePath();
                     if (dirpaths.contains(dirPath)) {
                         continue;
-                    }else {
+                    } else {
                         dirpaths.add(dirPath);
                         FloderBean floderBean = new FloderBean();
                         floderBean.setDirPath(dirPath);
@@ -181,7 +181,7 @@ public class PictureSelectorActivity extends Activity {
                         floderBean.setCount(count);
 
                         floders.add(floderBean);
-                        if (count>mMaxCount) {
+                        if (count > mMaxCount) {
                             mMaxCount = count;
                             mCurrentDir = parentFile;
                         }
@@ -216,14 +216,16 @@ public class PictureSelectorActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent();
-        ArrayList<String> picPath = new ArrayList<>();
-        Iterator<String> iterator = adapter.getCheckedState().iterator();
-        while (iterator.hasNext()) {
-            picPath.add(iterator.next());
+        if (adapter != null) {
+            Intent intent = new Intent();
+            ArrayList<String> picPath = new ArrayList<>();
+            Iterator<String> iterator = adapter.getCheckedState().iterator();
+            while (iterator.hasNext()) {
+                picPath.add(iterator.next());
+            }
+            intent.putStringArrayListExtra("PicturePath", picPath);
+            setResult(RESULT_OK, intent);
         }
-        intent.putStringArrayListExtra("PicturePath", picPath);
-        setResult(RESULT_OK,intent);
         super.onBackPressed();
     }
 }

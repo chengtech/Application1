@@ -54,7 +54,7 @@ public class TunnelOftenCheck extends BaseModel {
     public List<String> getContent() {
         List<String> values = new ArrayList<>();
         values.add(routeCode == null ? "" : routeCode);
-//        values.add(routeName == null ? "" : routeName);
+//        values.add(routeCode == null ? "" : routeCode);
         values.add(thirdDeptName == null ? "" : thirdDeptName);
         values.add(secondDeptName == null ? "" : secondDeptName);
         values.add(weather == null ? "" : weather);

@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,6 +40,7 @@ public class WarterMarkRunnable implements Runnable {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 2;
         Bitmap bitmap = BitmapFactory.decodeFile((String) warterMarkParams.get(KEY_ORIGINAL_IMG_PATH), options);
+        Log.i("tag",(String) warterMarkParams.get(KEY_ORIGINAL_IMG_PATH));
         Bitmap bitmap2 = createWaterMark(bitmap, (String) warterMarkParams.get(KEY_WARTER_MARK_MSG));
         File mfile = new File(mContext.getExternalCacheDir(), (String) warterMarkParams.get(KEY_IMG_NAME));
         if (mfile.exists()) {

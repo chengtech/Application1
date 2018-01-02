@@ -1,6 +1,7 @@
 package com.chengtech.chengtechmt.util;
 
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -43,6 +44,8 @@ public class HttpclientUtil {
     }
 
     public static void getData(final Context context, String url, final Handler handler, final int resultCode) {
+        if (((Activity)context).isFinishing())
+            return;
         final SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
         sweetAlertDialog.setContentText("正在加载...").setTitleText("");
 

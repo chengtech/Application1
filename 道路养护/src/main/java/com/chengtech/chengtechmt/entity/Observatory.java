@@ -173,7 +173,7 @@ public class Observatory extends BaseModel {
     public List<String> getPropertyName() {
         List<String> values = new ArrayList<>();
         values.add("routeCode");
-        values.add("routeName");
+        values.add("routeCode");
         values.add("sectionCode");
         values.add(" startStake");
         values.add(" endStake");

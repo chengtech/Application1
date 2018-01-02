@@ -23,6 +23,7 @@ import com.chengtech.chengtechmt.entity.expertdecision.CementRoadDamage;
 import com.chengtech.chengtechmt.entity.expertdecision.Evaluationdetail;
 import com.chengtech.chengtechmt.presenter.ExpertDecisionPresenter;
 import com.chengtech.chengtechmt.presenter.Presenter;
+import com.chengtech.chengtechmt.util.DateUtils;
 import com.chengtech.nicespinner.NiceSpinner;
 
 import java.lang.reflect.Field;
@@ -32,7 +33,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EvaluationdetailListActivity extends BaseActivity implements IView<Object>,View.OnClickListener {
+/**
+ * 评定明细
+ */
+public class EvaluationdetailListActivity extends BaseActivity implements IView<Object>, View.OnClickListener {
     private NiceSpinner firstSpinner, secondSpinner, thirdSpinner, fourthSpinner;
     private List<String> fristData, secondData, thirdData, fourthData;
     private String urlParams;
@@ -98,7 +102,7 @@ public class EvaluationdetailListActivity extends BaseActivity implements IView<
     }
 
     private void inflateSpnnier() {
-        if (deptDialog!=null) {
+        if (deptDialog != null) {
             deptDialog.show();
             return;
         }
@@ -154,6 +158,8 @@ public class EvaluationdetailListActivity extends BaseActivity implements IView<
         secondSpinner.attachDataSource(secondData);
         thirdSpinner.attachDataSource(thirdData);
         fourthSpinner.attachDataSource(fourthData);
+        int[] ints = DateUtils.calculateDate();
+        fourthSpinner.setText(String.valueOf(ints[0]));
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

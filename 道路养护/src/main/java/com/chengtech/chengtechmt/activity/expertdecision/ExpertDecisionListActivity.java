@@ -28,6 +28,7 @@ import com.chengtech.chengtechmt.entity.expertdecision.BitumenRoadDamage;
 import com.chengtech.chengtechmt.entity.expertdecision.CementRoadDamage;
 import com.chengtech.chengtechmt.impl.OnItemClickListener;
 import com.chengtech.chengtechmt.presenter.ExpertDecisionPresenter;
+import com.chengtech.chengtechmt.util.DateUtils;
 import com.chengtech.chengtechmt.util.MyConstants;
 import com.chengtech.nicespinner.NiceSpinner;
 
@@ -35,7 +36,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ExpertDecisionListActivity extends BaseActivity implements IView<Object>, View.OnClickListener,OnItemClickListener {
+/**
+ * 沥青路面状况，水泥路面状况
+ */
+public class ExpertDecisionListActivity extends BaseActivity implements IView<Object>, View.OnClickListener, OnItemClickListener {
 
     private NiceSpinner firstSpinner, secondSpinner, thirdSpinner, fourthSpinner, fifthSpinner;
     private List<String> fristData, secondData, thirdData, fourthData, fifthData;
@@ -98,7 +102,7 @@ public class ExpertDecisionListActivity extends BaseActivity implements IView<Ob
      * 创建条件筛选框
      */
     private void inflateSpnnier() {
-        if (deptDialog!=null) {
+        if (deptDialog != null) {
             deptDialog.show();
             return;
         }
@@ -147,7 +151,10 @@ public class ExpertDecisionListActivity extends BaseActivity implements IView<Ob
         secondSpinner.attachDataSource(secondData);
         thirdSpinner.attachDataSource(thirdData);
         fourthSpinner.attachDataSource(fourthData);
+        int[] ints = DateUtils.calculateDate();
+        fourthSpinner.setText(ints[0]+"");
         fifthSpinner.attachDataSource(fifthData);
+        fifthSpinner.setText(ints[1]+"");
         builder.setNegativeButton("取消", null);
         deptDialog = builder.create();
         deptDialog.show();
@@ -284,18 +291,18 @@ public class ExpertDecisionListActivity extends BaseActivity implements IView<Ob
     public void onItemClick(View view, int position) {
         switch (type) {
             case "BitumenRoadDamage":
-                if (bitumenRoadDamageList!=null) {
+                if (bitumenRoadDamageList != null) {
                     Intent intent = new Intent(this, WebViewActivity.class);
-                    intent.putExtra("url", MyConstants.PRE_URL+bitumenUrl+bitumenRoadDamageList.get(position).id);
-                    intent.putExtra("title","沥青路面损坏调查表");
+                    intent.putExtra("url", MyConstants.PRE_URL + bitumenUrl + bitumenRoadDamageList.get(position).id);
+                    intent.putExtra("title", "沥青路面损坏调查表");
                     startActivity(intent);
                 }
                 break;
             case "CementRoadDamage":
-                if (cementRoadDamageList!=null) {
+                if (cementRoadDamageList != null) {
                     Intent intent = new Intent(this, WebViewActivity.class);
-                    intent.putExtra("url", MyConstants.PRE_URL+cementUrl+cementRoadDamageList.get(position).id);
-                    intent.putExtra("title","水泥路面损坏调查表");
+                    intent.putExtra("url", MyConstants.PRE_URL + cementUrl + cementRoadDamageList.get(position).id);
+                    intent.putExtra("title", "水泥路面损坏调查表");
                     startActivity(intent);
                 }
                 break;

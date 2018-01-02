@@ -13,6 +13,7 @@ import com.chengtech.chengtechmt.R;
 import com.chengtech.chengtechmt.activity.business.BusinessActivity;
 import com.chengtech.chengtechmt.activity.monitoremergency.slopemonitor.SlopeMonitor2Activity;
 import com.chengtech.chengtechmt.activity.monitoremergency.slopemonitor.SlopeMonitorActivity;
+import com.chengtech.chengtechmt.activity.monitoremergency.weathermonitor.WeatherMonitorActivity;
 import com.chengtech.chengtechmt.adapter.RecycleViewAdapter;
 import com.chengtech.chengtechmt.divider.RecycleViewDivider;
 
@@ -37,8 +38,8 @@ public class MonitorEmergencyActivity extends BaseActivity {
 
     private void initData() {
 
-        imageIds = new int[]{R.mipmap.ic_launcher};
-        title = new String[]{"边坡在线监测"};
+        imageIds = new int[]{R.mipmap.ic_launcher, R.mipmap.ic_launcher};
+        title = new String[]{"边坡在线监测", "公路气象监测"};
 
         RecycleViewAdapter adapter = new RecycleViewAdapter(this, title, imageIds, R.layout.item_recycle2);
         recyclerView.setAdapter(adapter);
@@ -50,12 +51,16 @@ public class MonitorEmergencyActivity extends BaseActivity {
             public void setOnItemClickListener(View view, int position) {
                 Intent intent = null;
                 try {
-
-                    intent = new Intent(MonitorEmergencyActivity.this, SlopeMonitor2Activity.class);
-//                    intent.putExtra("type",typeArray[position]);
-//                    intent.putExtra("title",title[position]);
-//                    intent.putExtra("urlList",urlList[position]);
-                    startActivity(intent);
+                    switch (position) {
+                        case 0:
+                            intent = new Intent(MonitorEmergencyActivity.this, SlopeMonitor2Activity.class);
+                            startActivity(intent);
+                            break;
+                        case 1:
+                            intent = new Intent(MonitorEmergencyActivity.this, WeatherMonitorActivity.class);
+                            startActivity(intent);
+                            break;
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

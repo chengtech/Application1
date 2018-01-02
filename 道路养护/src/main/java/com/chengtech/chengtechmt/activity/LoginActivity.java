@@ -113,6 +113,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
                             //保存用户的权限信息
                             AppAccount.userRights = loginInfoG.data;
+                            AppAccount.sectionInfo = loginInfoG.sectionInfo;
                             // 跳转到下一个activity
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             intent.putExtra("data", (ArrayList) loginInfoG.data);

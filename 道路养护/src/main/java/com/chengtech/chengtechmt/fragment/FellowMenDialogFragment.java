@@ -80,15 +80,20 @@ public class FellowMenDialogFragment extends DialogFragment {
             public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
                 TextView fellow_tv = (TextView) holder.itemView.findViewById(R.id.fellowMen);
                 ImageView imageView = (ImageView) holder.itemView.findViewById(R.id.delete);
-                CheckBox checkBox = (CheckBox) holder.itemView.findViewById(R.id.checkbox);
+                final CheckBox checkBox = (CheckBox) holder.itemView.findViewById(R.id.checkbox);
                 fellow_tv.setText(data.get(position).name);
+                fellow_tv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        checkBox.setChecked(!checkBox.isChecked());
+                    }
+                });
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         data.remove(position);
                         adapter.notifyItemRemoved(position);
                         adapter.notifyDataSetChanged();
-//                        ObjectSaveUtils.saveObject(getActivity(), FELLOW_MEN_LIST_1, data);
                     }
                 });
                 checkBox.setOnCheckedChangeListener(null);

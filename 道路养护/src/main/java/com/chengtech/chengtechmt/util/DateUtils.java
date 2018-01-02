@@ -66,6 +66,10 @@ public class DateUtils {
         return dateFormat.format(date);
     }
 
+    /**
+     * 返回了一个包含年，月，日的数组，根据下标来获取。
+     * @return
+     */
     public static int[] calculateDate() {
         Calendar calendar = Calendar.getInstance();
         return new int[]{calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE)};

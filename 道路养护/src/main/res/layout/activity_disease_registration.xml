@@ -12,13 +12,15 @@
         android:background="#e0eaf4"
         android:fitsSystemWindows="true"
         android:focusableInTouchMode="true"
-        android:padding="16dp"
+
         >
 
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/startSpeech"
             android:focusable="true"
+            android:padding="10dp"
 
             >
 
@@ -151,13 +153,32 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="天气信息："
-                            />
+                            android:text="天气信息："/>
 
                         <com.chengtech.nicespinner.NiceSpinner
                             android:id="@+id/weatherSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:arrowTint="@android:color/holo_orange_dark"
+                            app:textTint="#605a5a"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="路线信息："/>
+
+                        <com.chengtech.nicespinner.NiceSpinner
+                            android:id="@+id/routeSpinner"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:arrowTint="@android:color/holo_orange_dark"
@@ -181,6 +202,7 @@
                             android:id="@+id/fellowMen"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingLeft="10dp"
                             android:minWidth="150dp"/>
 
                         <ImageView

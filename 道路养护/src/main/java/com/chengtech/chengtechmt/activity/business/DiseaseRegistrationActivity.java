@@ -1,7 +1,6 @@
 package com.chengtech.chengtechmt.activity.business;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Handler;
@@ -11,6 +10,7 @@ import android.provider.Settings;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -81,6 +81,7 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
     private String site;
     private String weather;
     private String fellowMen;
+    private String routeCode;
     private List<DiseaseVoiceRecord> myRecordList;
     AMapLocationClient client;
     private RecyclerView recyclerView;
@@ -91,6 +92,7 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
     private TextView fellowMen_et;
     private ImageView fellowMen_add;
     private NiceSpinner weatherSpinner;
+    private NiceSpinner routeSpinner;
     private Button startSpeech;
     private long recognizeStartTime;
     private long recognizeEndTime;
@@ -157,7 +159,6 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
         @Override
         public void onEndOfSpeech() {
             // 此回调表示：检测到了语音的尾端点，已经进入识别过程，不再接受语音输入
-//            recognizeEndTime = System.currentTimeMillis();
             showTip("结束说话");
         }
 
@@ -323,7 +324,8 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
             weather = diseaseRegistration.weather;
             longitude = diseaseRegistration.longitude;
             latitude = diseaseRegistration.latitude;
-            fellowMen = diseaseRegistration.fellowMen;
+            fellowMen = diseaseRegistration.fellow;
+            routeCode = diseaseRegistration.routeCode;
         } else {
             diseaseRegistration = new DiseaseRegistration();
             picPaths = new ArrayList<>();
@@ -333,6 +335,7 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
             latitude = "0.0";
             weather = "晴";//默认为晴
             fellowMen = "";
+            routeCode = "";
             if (fellowMens != null && fellowMens.size() > 0) {
                 for (int i = 0; i < fellowMens.size(); i++) {
                     FellowMen f = fellowMens.get(i);
@@ -340,6 +343,7 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
                         fellowMen = fellowMen + f.name + ",";
                 }
             }
+            routeCode = (String) ObjectSaveUtils.getObject(this, AppAccount.name + "_section_default");
             myRecordList = new ArrayList<>();
             getLocationInfo();
         }
@@ -353,6 +357,7 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
         site_tv.setText(site);
         fellowMen_et.setText(fellowMen);
         weatherSpinner.setText(weather);
+        routeSpinner.setText(routeCode);
 
     }
 
@@ -374,8 +379,15 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
         });
         site_tv = (TextView) findViewById(R.id.site);
         weatherSpinner = (NiceSpinner) findViewById(R.id.weatherSpinner);
-        weatherSpinner.attachDataSource(Arrays.asList(new String[]{"", "晴", "阴", "小雨", "大雨"}));
-
+        weatherSpinner.attachDataSource(Arrays.asList(new String[]{"", "晴", "阴", "小雨", "大雨", "雪", "台风暴雨"}));
+        routeSpinner = (NiceSpinner) findViewById(R.id.routeSpinner);
+        if (AppAccount.sectionInfo != null && AppAccount.sectionInfo.size() > 0) {
+            List<String> sectionString = new ArrayList<>();
+            for (int i = 0; i < AppAccount.sectionInfo.size(); i++) {
+                sectionString.add(AppAccount.sectionInfo.get(i).code);
+            }
+            routeSpinner.attachDataSource(sectionString);
+        }
 //        recognizerDialog = new RecognizerDialog(this, null);
         speechRecognizer = SpeechRecognizer.createRecognizer(this, null);
 //        recognizerDialog.setListener(recognizerDialogListener);
@@ -452,11 +464,9 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
                 String picName = "DiseaseRecord-" + format.format(date) + ".jpg";
                 StringBuffer sb = new StringBuffer();
                 sb.append("巡查人:" + AppAccount.name + ";拍照时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date) + ";");
-//                if (!TextUtils.isEmpty(site)) {
                 sb.append("经度:" + longitude + "\u3000\u3000");
                 sb.append("纬度:" + latitude + ";");
                 sb.append("位置信息：" + site);
-//                }
                 waterMarkParam.put("picName", picName);
                 waterMarkParam.put("waterMarkMsg", sb.toString());
                 waterMarkParam.put("imgPath", picPath);
@@ -469,8 +479,8 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
 
         } else if (requestCode == ImageAddAdapter.SELECT_IMG_RESULT && resultCode == RESULT_OK) {
             ArrayList<String> picturePath = data.getStringArrayListExtra("PicturePath");
-            Map<String, Object> waterMarkParam = new HashMap<>();
             for (int i = 0; i < picturePath.size(); i++) {
+                Map<String, Object> waterMarkParam = new HashMap<>();
                 Date date = new Date(System.currentTimeMillis() + i * 1000); //这里之所以要加上i*1000,是为了防止名称重复，造成重复加载。
                 DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
                 String picName = "DiseaseRecord-" + format.format(date) + ".jpg";
@@ -499,6 +509,17 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
     }
 
     private void saveInLoacal() {
+        if (TextUtils.isEmpty(routeSpinner.getText().toString().trim())) {
+            showTip("路线不能为空");
+            return;
+        } else {
+            ObjectSaveUtils.saveObject(this, AppAccount.name + "_section_default", routeSpinner.getText().toString().trim());
+        }
+        if (TextUtils.isEmpty(fellowMen_et.getText().toString().trim())) {
+            showTip("陪同人员不能为空");
+            return;
+        }
+
         if (diseaseRegistration == null)
             diseaseRegistration = new DiseaseRegistration();
 
@@ -507,9 +528,10 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
         diseaseRegistration.listDiseaseVoiceRecord = myRecordList;
         diseaseRegistration.site = site;
         diseaseRegistration.weather = weatherSpinner.getText().toString();
+        diseaseRegistration.routeCode = routeSpinner.getText().toString();
         diseaseRegistration.longitude = longitude;
         diseaseRegistration.latitude = latitude;
-        diseaseRegistration.fellowMen = fellowMen_et.getText().toString().trim();
+        diseaseRegistration.fellow = fellowMen_et.getText().toString().trim();
 
         sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         sweetAlertDialog.setTitleText("");
@@ -580,25 +602,6 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
 
             if (!diseaseRegistration.isUpload) {
                 if (!isSaveLocal) {
-//                    if (sweetAlertDialog != null) {
-//                        sweetAlertDialog.setTitleText("是否保存当前信息。").setConfirmText("保存").setCancelText("取消").changeAlertType(SweetAlertDialog.WARNING_TYPE);
-//                        sweetAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-//                            @Override
-//                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-//                                saveInLoacal();
-//                                sweetAlertDialog.dismiss();
-//                            }
-//                        });
-//                        sweetAlertDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-//                            @Override
-//                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-//                                sweetAlertDialog.dismiss();
-//                                finish();
-//                            }
-//                        });
-//                        sweetAlertDialog.setCanceledOnTouchOutside(true);
-////                        sweetAlertDialog.show();
-//                    } else {
                     sweetAlertDialog = new SweetAlertDialog(DiseaseRegistrationActivity.this, SweetAlertDialog.WARNING_TYPE);
                     sweetAlertDialog.setTitleText("是否保存当前信息。").setConfirmText("保存").setCancelText("取消");
                     sweetAlertDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -642,24 +645,23 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
     public void onLocationChanged(AMapLocation aMapLocation) {
         Log.i("tag", aMapLocation.getErrorCode() + "");
         if (aMapLocation.getErrorCode() == 0) {
-//            myAMapLocation = aMapLocation;
             Message message = handler.obtainMessage();
             message.obj = aMapLocation;
             message.what = GET_LOCAL_INFO_SUCCESS;
             handler.sendMessage(message);
-//            site_tv.setText(aMapLocation.getAddress());
-//            site = aMapLocation.getAddress();
-//            longitude = String.valueOf(aMapLocation.getLongitude());
-//            latitude = String.valueOf(aMapLocation.getLatitude());
         } else {
             Toast.makeText(this, "错误码:" + aMapLocation.getErrorCode(), Toast.LENGTH_SHORT).show();
             handler.sendEmptyMessage(GET_LOCAL_INFO_FAILED);
-//            site_tv.setText("未知位置");
         }
 
     }
 
 
+    /**
+     * 陪同人员窗口消失时回调该方法
+     *
+     * @param data
+     */
     @Override
     public void onDismiss(Object data) {
         fellowMen = "";

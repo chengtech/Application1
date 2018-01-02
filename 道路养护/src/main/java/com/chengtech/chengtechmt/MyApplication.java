@@ -76,6 +76,7 @@ public class MyApplication extends Application {
         MyConstants.imageDict.put("评定汇总", R.mipmap.order_history);
         MyConstants.imageDict.put("桥隧涵养护", R.mipmap.order_history);
         MyConstants.imageDict.put("病害登记", R.mipmap.file4);
+        MyConstants.imageDict.put("公路气象监测", R.mipmap.file4);
     }
 
     private void initSpeech() {

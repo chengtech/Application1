@@ -92,8 +92,6 @@ public class SlopeMonitor2Activity extends BaseActivity {
         setAppBarLayoutScroll(false);
 
         initView();
-//        groupName[0] = "首页";
-//        groupList.put(groupName[0],new ArrayList<String>());
         HttpclientUtil.getData(this, getSlopeIdUrl, handler, RESULT_CODE_1, false);
 
         initData();

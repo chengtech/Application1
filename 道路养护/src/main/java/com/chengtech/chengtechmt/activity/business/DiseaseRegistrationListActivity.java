@@ -42,6 +42,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -96,7 +97,8 @@ public class DiseaseRegistrationListActivity extends AppCompatActivity implement
 
                     } catch (JSONException e) {
                         if (dialog != null && dialog.isShowing()) {
-                            dialog.setTitleText("json解析失败").setContentText(e.toString()).changeAlertType(SweetAlertDialog.ERROR_TYPE);
+//                            dialog.setTitleText("json解析失败").setContentText(e.toString()).changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                            dialog.setTitleText("网络信号差，上传不成功。").setContentText(e.toString()).changeAlertType(SweetAlertDialog.ERROR_TYPE);
                         }
                     }
                     break;
@@ -126,7 +128,8 @@ public class DiseaseRegistrationListActivity extends AppCompatActivity implement
                         }
                     } catch (JSONException e) {
                         if (dialog != null && dialog.isShowing()) {
-                            dialog.setTitleText("json解析失败").setContentText(e.toString()).changeAlertType(SweetAlertDialog.ERROR_TYPE);
+//                            dialog.setTitleText("json解析失败").setContentText(e.toString()).changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                            dialog.setTitleText("网络信号差，上传不成功。").setContentText(e.toString()).changeAlertType(SweetAlertDialog.ERROR_TYPE);
                         }
                     }
                     break;
@@ -170,6 +173,7 @@ public class DiseaseRegistrationListActivity extends AppCompatActivity implement
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
+
                             ObjectSaveUtils.saveObject(DiseaseRegistrationListActivity.this, DISEASE_REGISTRATION_LIST, data);
                         }
                     }).start();
