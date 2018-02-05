@@ -4,11 +4,11 @@ import android.app.Application;
 import android.app.DownloadManager;
 import android.content.IntentFilter;
 
-import com.chengtech.chengtechmt.receiver.DownCompleteReceiver;
 import com.chengtech.chengtechmt.util.MyConstants;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 import com.pgyersdk.crash.PgyCrashManager;
+
 
 
 /**
@@ -23,6 +23,7 @@ public class MyApplication extends Application {
         PgyCrashManager.register(this);
         initSpeech();
         initReceiver();
+//        initGalleyFinalConfig();
         MyConstants.imageDict.put("路线信息", R.mipmap.file);
         MyConstants.imageDict.put("道路数据", R.mipmap.analysis);
         MyConstants.imageDict.put("区间路段信息", R.mipmap.file);
@@ -78,6 +79,28 @@ public class MyApplication extends Application {
         MyConstants.imageDict.put("病害登记", R.mipmap.file4);
         MyConstants.imageDict.put("公路气象监测", R.mipmap.file4);
     }
+
+//    private void initGalleyFinalConfig() {
+//        //设置主题
+//        //ThemeConfig.CYAN
+//
+//        //配置功能
+//        FunctionConfig functionConfig = new FunctionConfig.Builder()
+//                .setEnableCamera(true)
+//                .setEnableEdit(false)
+//                .setEnableCrop(false)
+//                .setEnableRotate(false)
+//                .setCropSquare(false)
+//                .setEnablePreview(true)
+//                .build();
+//
+//        //配置imageloader
+//        PicassoImageLoader imageloader = new PicassoImageLoader();
+//        CoreConfig coreConfig = new CoreConfig.Builder(this, imageloader, ThemeConfig.DEFAULT)
+//                .setFunctionConfig(functionConfig)
+//                .build();
+//        GalleryFinal.init(coreConfig);
+//    }
 
     private void initSpeech() {
         SpeechUtility.createUtility(this, SpeechConstant.APPID + "= 595dd926");

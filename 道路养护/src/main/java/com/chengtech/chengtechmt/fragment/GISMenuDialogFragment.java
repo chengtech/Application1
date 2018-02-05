@@ -127,7 +127,7 @@ public class GISMenuDialogFragment extends DialogFragment implements View.OnClic
         displayMetrics = getActivity().getResources().getDisplayMetrics();
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         View view = inflater.inflate(R.layout.gismenu_dialog_fragment, container, true);
-        mContext = inflater.getContext();
+        mContext = getActivity();
 //        loadDialog = MyDialogUtil.createDialog(mContext,"正在加载");
 //        loadDialog.setCanceledOnTouchOutside(false);
         routeGrade = (TextView) view.findViewById(R.id.routeGrade);

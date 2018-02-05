@@ -3,6 +3,7 @@ package com.chengtech.chengtechmt.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetDialog;
@@ -44,6 +45,8 @@ public class ImageAddAdapter extends RecyclerView.Adapter {
     public Context mContext;
     public int targetWidth;
     private String cameraCachePath;
+    private onAddPictureListener onAddPictureListener;
+
 
     public ImageAddAdapter(Context context, ArrayList<String> picturePaths) {
         this.mContext = context;
@@ -82,8 +85,10 @@ public class ImageAddAdapter extends RecyclerView.Adapter {
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    BottomSheetDialog bottomSheetDialog = showSelectDialog(mContext);
-                    bottomSheetDialog.show();
+//                    BottomSheetDialog bottomSheetDialog = showSelectDialog(mContext);
+//                    bottomSheetDialog.show();
+                    if (onAddPictureListener != null)
+                        onAddPictureListener.onAdd();
                 }
             });
             delete_iv.setVisibility(View.GONE);
@@ -104,12 +109,13 @@ public class ImageAddAdapter extends RecyclerView.Adapter {
             if (width != 0)
                 targetWidth = width;
             String picPath = picturePaths.get(position);
-            imageView.setTag(picPath);
+//            imageView.setTag(picPath);
             Picasso.with(mContext).load(new File(picPath)).error(R.mipmap.placeholder2).transform(new CompressTransFormation(targetWidth)).into(imageView);
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String picPath2 = (String) v.getTag();
+//                    String picPath2 = (String) v.getTag();
+                    String picPath2 = picturePaths.get(position);
                     Intent intent = new Intent(mContext, OnePictureDisplayActivity.class);
                     intent.putExtra("url", picPath2);
                     Activity activity = (Activity) mContext;
@@ -122,17 +128,21 @@ public class ImageAddAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     picturePaths.remove(position);
                     notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, picturePaths.size());
+                    notifyItemRangeChanged(0, picturePaths.size());
                 }
             });
         } else {
             imageView.setImageURI(null);
-            imageView.setBackgroundResource(R.drawable.ic_add_picture);
+//            imageView.setBackgroundResource(R.drawable.ic_add_picture);
+            Drawable drawable = mContext.getResources().getDrawable(R.drawable.ic_add_picture);
+            imageView.setImageDrawable(drawable);
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    BottomSheetDialog bottomSheetDialog = showSelectDialog(mContext);
-                    bottomSheetDialog.show();
+//                    BottomSheetDialog bottomSheetDialog = showSelectDialog(mContext);
+//                    bottomSheetDialog.show();
+                    if (onAddPictureListener != null)
+                        onAddPictureListener.onAdd();
 
                 }
             });
@@ -145,38 +155,38 @@ public class ImageAddAdapter extends RecyclerView.Adapter {
         return 1 + picturePaths.size();
     }
 
-    private BottomSheetDialog showSelectDialog(final Context context) {
-        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(mContext);
-        View contentView = LayoutInflater.from(mContext).inflate(R.layout.sheetdialog_carmera_or_gallery, null, false);
-        TextView camera_tv = (TextView) contentView.findViewById(R.id.camera);
-        TextView album_tv = (TextView) contentView.findViewById(R.id.album);
-        TextView cancel_tv = (TextView) contentView.findViewById(R.id.cancel);
-        camera_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setCameraCachePath(CommonUtils.camera(context));
-                bottomSheetDialog.dismiss();
-            }
-        });
-        album_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, PictureSelectorActivity.class);
-                Activity activity = (Activity) mContext;
-                activity.startActivityForResult(intent, SELECT_IMG_RESULT);
-                bottomSheetDialog.dismiss();
-            }
-        });
-        cancel_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetDialog.dismiss();
-            }
-        });
-        bottomSheetDialog.setContentView(contentView);
-        bottomSheetDialog.setCanceledOnTouchOutside(true);
-        return bottomSheetDialog;
-    }
+//    private BottomSheetDialog showSelectDialog(final Context context) {
+//        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(mContext);
+//        View contentView = LayoutInflater.from(mContext).inflate(R.layout.sheetdialog_carmera_or_gallery, null, false);
+//        TextView camera_tv = (TextView) contentView.findViewById(R.id.camera);
+//        TextView album_tv = (TextView) contentView.findViewById(R.id.album);
+//        TextView cancel_tv = (TextView) contentView.findViewById(R.id.cancel);
+//        camera_tv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                setCameraCachePath(CommonUtils.camera(context));
+//                bottomSheetDialog.dismiss();
+//            }
+//        });
+//        album_tv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(mContext, PictureSelectorActivity.class);
+//                Activity activity = (Activity) mContext;
+//                activity.startActivityForResult(intent, SELECT_IMG_RESULT);
+//                bottomSheetDialog.dismiss();
+//            }
+//        });
+//        cancel_tv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                bottomSheetDialog.dismiss();
+//            }
+//        });
+//        bottomSheetDialog.setContentView(contentView);
+//        bottomSheetDialog.setCanceledOnTouchOutside(true);
+//        return bottomSheetDialog;
+//    }
 
 
     public String getCameraCachePath() {
@@ -186,4 +196,13 @@ public class ImageAddAdapter extends RecyclerView.Adapter {
     public void setCameraCachePath(String cameraCachePath) {
         this.cameraCachePath = cameraCachePath;
     }
+
+    public void setOnAddPictureListener(ImageAddAdapter.onAddPictureListener onAddPictureListener) {
+        this.onAddPictureListener = onAddPictureListener;
+    }
+
+    public interface onAddPictureListener {
+        public void onAdd();
+    }
+
 }

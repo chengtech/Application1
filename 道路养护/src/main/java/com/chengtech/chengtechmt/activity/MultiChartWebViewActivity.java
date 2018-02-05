@@ -50,7 +50,7 @@ public class MultiChartWebViewActivity extends AppCompatActivity {
         titleList.add("养护业务-资金数据分析");
         titleList.add("养护业务数据提交及时率");
         titleList.add("机械设备年度利用率、完好率");
-        titleList.add("");
+        titleList.add("工程进度统计");
         urlList.add(MyConstants.PRE_URL + "ms/sys/homechart/maintenanceBusinessEchart.action");
         urlList.add(MyConstants.PRE_URL + "ms/sys/homechart/dbmSectionAndBridgeEchart.action");
         urlList.add(MyConstants.PRE_URL + "ms/sys/homechart/projectCapitalEchart.action");

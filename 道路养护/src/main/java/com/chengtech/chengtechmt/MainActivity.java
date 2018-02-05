@@ -112,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         initEvent();
         handler.sendEmptyMessageDelayed(0, 5000);
 
+        HttpclientUtil.setCookie(this);
+
         //生成待办事项中的权限字典
 //        new Thread(new Runnable() {
 //

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -26,9 +28,11 @@ import com.chengtech.chengtechmt.util.ActivityCollector;
 import com.chengtech.chengtechmt.util.MyDialogUtil;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class BaseActivity extends AppCompatActivity {
+public  class BaseActivity extends AppCompatActivity {
+    public static final int DEPT_INFO_OK = 0x66;
     protected Toolbar toolbar;
     protected Bundle bundle;
     protected FloatingActionButton up_action, down_action;
@@ -42,7 +46,13 @@ public class BaseActivity extends AppCompatActivity {
     public int maxPage = 1; //默认最大页为1，然后进行加减
     public Map<String, String> deptTree = new HashMap<>();
     protected Toast mToast;
-
+//
+//    protected Handler mHandler = new Handler(){
+//        @Override
+//        public void handleMessage(Message msg) {
+//
+//        }
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

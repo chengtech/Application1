@@ -11,12 +11,13 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import org.apache.http.Header;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * 作者: LiuFuYingWang on 2016/6/28 15:08.
  */
-public class DeptG {
+public class DeptG implements Serializable{
 
     public List<Dept> listFirstDept;
     public List<Dept> listSecondDept;

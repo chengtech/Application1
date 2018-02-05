@@ -54,8 +54,8 @@
 
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="20dp"
-                            android:text="语音录入："/>
+                            android:layout_height="wrap_content"
+                            android:text="语音录入：\n(最多录入5条)"/>
 
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/recordRecyclerView"
@@ -116,7 +116,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="语音识别结果："/>
+                            android:text="病害描述："/>
 
                         <EditText
                             android:id="@+id/showMsg"
@@ -195,15 +195,16 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="陪同人员："
+                            android:text="* 陪同人员："
                             />
 
                         <TextView
                             android:id="@+id/fellowMen"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="10dp"
-                            android:minWidth="150dp"/>
+                            android:maxWidth="250dp"
+                            android:minWidth="150dp"
+                            android:paddingLeft="10dp"/>
 
                         <ImageView
                             android:id="@+id/fellowMenAdd"

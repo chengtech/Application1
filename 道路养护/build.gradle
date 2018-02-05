@@ -9,8 +9,9 @@ android {
         applicationId "com.chengtech.chengtechmt"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 30
-        versionName "1.3.20171201"
+        versionCode 31
+        versionName "1.3.20180112"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -70,7 +71,11 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'me.gujun.android.taggroup:library:1.4'
     compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'id.zelory:compressor:2.1.0'
+    compile 'cn.finalteam:galleryfinal:1.4.8.7'
+    compile 'com.baoyz.actionsheet:library:1.1.7'
     testCompile 'junit:junit:4.12'
+
 }
 repositories {
     mavenCentral()

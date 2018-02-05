@@ -169,6 +169,10 @@
         </activity>
         <activity android:name=".activity.monitoremergency.weathermonitor.WeatherMonitorLocationActivity">
         </activity>
+        <activity android:name=".activity.integratequery.gis.MaintenanceSituation.MaintenanceSituationActivity">
+        </activity>
+        <activity android:name=".activity.integratequery.gis.DiseaseRecord.DiseaseRecordActivity">
+        </activity>
     </application>
 
 </manifest>

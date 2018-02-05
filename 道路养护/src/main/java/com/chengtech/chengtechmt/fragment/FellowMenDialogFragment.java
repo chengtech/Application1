@@ -132,7 +132,8 @@ public class FellowMenDialogFragment extends DialogFragment {
                 } else {
                     data.add(new FellowMen(inputContent, false));
                     adapter.notifyDataSetChanged();
-                    adapter.notifyItemRangeChanged(0, data.size());
+                    adapter.notifyItemRangeChanged(data.size()-1, data.size());
+                    recyclerView.scrollToPosition(data.size()-1);
                     ObjectSaveUtils.saveObject(getActivity(), FELLOW_MEN_LIST_1, data);
                     input_et.setText("");
                 }

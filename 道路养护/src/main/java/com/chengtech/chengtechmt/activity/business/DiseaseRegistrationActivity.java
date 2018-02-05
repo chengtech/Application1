@@ -27,6 +27,7 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.baoyz.actionsheet.ActionSheet;
 import com.chengtech.chengtechmt.BaseActivity;
 import com.chengtech.chengtechmt.R;
 import com.chengtech.chengtechmt.adapter.ImageAddAdapter;
@@ -46,12 +47,14 @@ import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.RecognizerListener;
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -72,7 +75,7 @@ import static com.chengtech.chengtechmt.util.HttpclientUtil.SAVE_SUCCESS;
 /**
  * 病害登记表
  */
-public class DiseaseRegistrationActivity extends BaseActivity implements AMapLocationListener, FellowMenDialogFragment.OnDismissListener {
+public class DiseaseRegistrationActivity extends BaseActivity implements AMapLocationListener, FellowMenDialogFragment.OnDismissListener,ImageAddAdapter.onAddPictureListener {
 
     private static final int GET_LOCAL_INFO_SUCCESS = 0x13;
     private static final int GET_LOCAL_INFO_FAILED = 0x14;
@@ -105,6 +108,8 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
     private String longitude, latitude;
     private boolean isSaveLocal;
     private RecyclerView.AdapterDataObserver adapterDataObserver;
+    private boolean canAddSpeechRecord = true; //能否添加语音，最大条目是5条；
+    private int maxSpeenchRecordNum = 5;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -287,11 +292,14 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
             @Override
             public void onItemRangeRemoved(int positionStart, int itemCount) {
                 super.onItemRangeRemoved(positionStart, itemCount);
-                StringBuffer sb = new StringBuffer();
-                for (int i = 0; i < myRecordList.size(); i++) {
-                    sb.append(myRecordList.get(i).recordContent);
-                }
-                resultShow_et.setText(sb.toString());
+//                StringBuffer sb = new StringBuffer();
+//                for (int i = 0; i < myRecordList.size(); i++) {
+//                    sb.append(myRecordList.get(i).recordContent);
+//                }
+                if (myRecordList.size() < 5)
+                    canAddSpeechRecord = true;
+//                resultShow_et.setText("");
+//                resultShow_et.setText(sb.toString());
             }
         };
         recordAdapter.registerAdapterDataObserver(adapterDataObserver);
@@ -349,6 +357,7 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
         }
         imageAddAdapter = new ImageAddAdapter(this, picPaths);
         recyclerView.setAdapter(imageAddAdapter);
+        imageAddAdapter.setOnAddPictureListener(this);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         recordAdapter = new RecordAdapter(this, myRecordList);
         recordRecyclerView.setAdapter(recordAdapter);
@@ -398,6 +407,11 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        if (myRecordList.size() >= maxSpeenchRecordNum) {
+                            showTip("语音的数目已经超过上限..");
+                            canAddSpeechRecord = false;
+                            return true;
+                        }
                         DiseaseVoiceRecord record = new DiseaseVoiceRecord();
                         String dateStr = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
                         record.recordPath = getExternalCacheDir() + "/record/iat-" + dateStr + ".wav";
@@ -408,6 +422,9 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
                         break;
 
                     case MotionEvent.ACTION_UP:
+                        if (!canAddSpeechRecord) {
+                            return true;
+                        }
                         recognizeEndTime = System.currentTimeMillis();
                         myRecordList.get(myRecordList.size() - 1).recordLength = String.valueOf((recognizeEndTime - recognizeStartTime) / 1000);
                         speechRecognizer.stopListening();
@@ -466,7 +483,8 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
                 sb.append("巡查人:" + AppAccount.name + ";拍照时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date) + ";");
                 sb.append("经度:" + longitude + "\u3000\u3000");
                 sb.append("纬度:" + latitude + ";");
-                sb.append("位置信息：" + site);
+                sb.append("位置信息：" + site + ";");
+                sb.append("陪同人员：" + fellowMen);
                 waterMarkParam.put("picName", picName);
                 waterMarkParam.put("waterMarkMsg", sb.toString());
                 waterMarkParam.put("imgPath", picPath);
@@ -485,11 +503,12 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
                 DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
                 String picName = "DiseaseRecord-" + format.format(date) + ".jpg";
                 StringBuffer sb = new StringBuffer();
-                sb.append("登记人:超级管理员;拍照时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date) + ";");
+                sb.append("巡查人:" + AppAccount.name + ";拍照时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date) + ";");
 //                if (!TextUtils.isEmpty(site)) {
                 sb.append("经度:" + longitude + "\u3000\u3000");
                 sb.append("纬度:" + latitude + ";");
-                sb.append("位置信息：" + site);
+                sb.append("位置信息：" + site + ";");
+                sb.append("陪同人员：" + fellowMen);
 //                }
                 waterMarkParam.put("picName", picName);
                 waterMarkParam.put("waterMarkMsg", sb.toString());
@@ -513,7 +532,12 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
             showTip("路线不能为空");
             return;
         } else {
-            ObjectSaveUtils.saveObject(this, AppAccount.name + "_section_default", routeSpinner.getText().toString().trim());
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    ObjectSaveUtils.saveObject(DiseaseRegistrationActivity.this, AppAccount.name + "_section_default", routeSpinner.getText().toString().trim());
+                }
+            }).run();
         }
         if (TextUtils.isEmpty(fellowMen_et.getText().toString().trim())) {
             showTip("陪同人员不能为空");
@@ -675,6 +699,54 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
         }
         fellowMen_et.setText(fellowMen);
     }
+
+
+    //点击添加图片时候回调的方法
+    @Override
+    public void onAdd() {
+        ActionSheet.createBuilder(DiseaseRegistrationActivity.this, getSupportFragmentManager())
+                .setCancelableOnTouchOutside(true)
+                .setCancelButtonTitle("取消")
+                .setOtherButtonTitles("打开相册", "打开相机")
+                .setListener(new ActionSheet.ActionSheetListener() {
+                    @Override
+                    public void onDismiss(ActionSheet actionSheet, boolean isCancel) {
+
+                    }
+
+                    @Override
+                    public void onOtherButtonClick(ActionSheet actionSheet, int index) {
+                        switch (index) {
+                            case 0:
+//                                GalleryFinal.openGallerySingle(0, mOnHanlderResultCallback);
+                                break;
+                            case 1:
+//                                GalleryFinal.openCamera(1, mOnHanlderResultCallback);
+                                break;
+                        }
+                    }
+                })
+                .show();
+    }
+
+//    private GalleryFinal.OnHanlderResultCallback mOnHanlderResultCallback = new GalleryFinal.OnHanlderResultCallback() {
+//        @Override
+//        public void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList) {
+//            try {
+//                if (resultList != null) {
+//                    File file = new File(resultList.get(0).getPhotoPath());
+//                    File compressFile = new Compressor(DiseaseRegistrationActivity.this).compressToFile(file);
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        @Override
+//        public void onHanlderFailure(int requestCode, String errorMsg) {
+//            Toast.makeText(DiseaseRegistrationActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
+//        }
+//    };
 }
 
 

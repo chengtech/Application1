@@ -97,7 +97,7 @@ public class WebViewAdapter extends RecyclerView.Adapter {
             settings.setSupportZoom(true);
             settings.setBuiltInZoomControls(true);
             // 设置cookie
-            setWebViewCookie();
+//            setWebViewCookie();
         }
 
         private void setWebViewCookie() {

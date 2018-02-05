@@ -51,7 +51,7 @@ public class RecordAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (new File("file://" + audio.recordPath).exists()) {
+                        if (new File(audio.recordPath).exists()) {
                             final MediaPlayer mediaPlayer = new MediaPlayer();
                             mediaPlayer.setDataSource("file://" + audio.recordPath);
                             mediaPlayer.prepare();

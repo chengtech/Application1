@@ -27,6 +27,7 @@ import com.chengtech.chengtechmt.R;
 import com.chengtech.chengtechmt.adapter.business.DiseaseRegAdapter;
 import com.chengtech.chengtechmt.entity.business.DiseaseRegistration;
 import com.chengtech.chengtechmt.fragment.FellowMenDialogFragment;
+import com.chengtech.chengtechmt.util.AppAccount;
 import com.chengtech.chengtechmt.util.HttpclientUtil;
 import com.chengtech.chengtechmt.util.MyConstants;
 import com.chengtech.chengtechmt.util.ObjectSaveUtils;
@@ -47,7 +48,7 @@ import java.util.Objects;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class DiseaseRegistrationListActivity extends AppCompatActivity implements FellowMenDialogFragment.OnDismissListener {
-    public static final String DISEASE_REGISTRATION_LIST = "disease_registration_list";
+    public static final String DISEASE_REGISTRATION_LIST = AppAccount.name+"_"+"disease_registration_list";
     private Toolbar toolbar;
     private FloatingActionButton floatingActionButton;
     private RecyclerView recyclerView;
@@ -97,8 +98,8 @@ public class DiseaseRegistrationListActivity extends AppCompatActivity implement
 
                     } catch (JSONException e) {
                         if (dialog != null && dialog.isShowing()) {
-//                            dialog.setTitleText("json解析失败").setContentText(e.toString()).changeAlertType(SweetAlertDialog.ERROR_TYPE);
-                            dialog.setTitleText("网络信号差，上传不成功。").setContentText(e.toString()).changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                            dialog.setTitleText("json解析失败").setContentText(e.toString()).changeAlertType(SweetAlertDialog.ERROR_TYPE);
+//                            dialog.setTitleText("网络信号差，上传不成功。").setContentText(e.toString()).changeAlertType(SweetAlertDialog.ERROR_TYPE);
                         }
                     }
                     break;
@@ -119,6 +120,17 @@ public class DiseaseRegistrationListActivity extends AppCompatActivity implement
                                     count++;
                                     upLoadData(checkedIndex);
 
+                                } else {
+                                    List<DiseaseRegistration> diseaseRegistrationList = new ArrayList<>();
+                                    for (DiseaseRegistration diseaseRegistration : data) {
+                                        if (!diseaseRegistration.isUpload){
+                                            diseaseRegistrationList.add(diseaseRegistration);
+                                        }
+//
+                                    }
+                                    data.clear();
+                                    data.addAll(diseaseRegistrationList);
+                                    diseaseRegAdapter.notifyDataSetChanged();
                                 }
                             }
                         } else {
@@ -244,7 +256,7 @@ public class DiseaseRegistrationListActivity extends AppCompatActivity implement
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DiseaseRegistrationActivity.startAction(DiseaseRegistrationListActivity.this, null, -1);
+                DiseaseRegistrationActivity.startAction(DiseaseRegistrationListActivity.this, null, 0);
             }
         });
 
