@@ -17,6 +17,7 @@ import com.chengtech.chengtechmt.activity.integratequery.gis.MaintenanceSituatio
 import com.chengtech.chengtechmt.adapter.gis.DiseaseRecordHandleExpandableAdapter;
 import com.chengtech.chengtechmt.adapter.gis.ProjectAndMSgExpandableAdapter;
 import com.chengtech.chengtechmt.entity.gis.DiseaseRecordHandle;
+import com.chengtech.chengtechmt.entity.gis.DiseaseRecordHandleItem;
 import com.chengtech.chengtechmt.entity.gis.ProjectAndMsg;
 import com.chengtech.chengtechmt.entity.gis.ProjectAndMsgItem;
 import com.chengtech.chengtechmt.fragment.BaseFragment2;
@@ -35,9 +36,10 @@ import java.util.List;
  * 病害处理情况
  */
 
-public class DiseaseHandlerFragment extends BaseFragment2 implements ExpandableListView.OnGroupClickListener{
+public class DiseaseHandlerFragment extends BaseFragment2 implements ExpandableListView.OnGroupClickListener {
 
     private String url = MyConstants.PRE_URL + "mt/integratequery/diseaserecord/listDiseaseRecordHandleJson.action?";
+    private String itemUrl = MyConstants.PRE_URL + "mt/integratequery/diseaserecord/listDetailedInfoJson.action?";
     private WebView webView;
     private ExpandableListView expandableListView;
     private View rootView;
@@ -65,33 +67,31 @@ public class DiseaseHandlerFragment extends BaseFragment2 implements ExpandableL
                         }
                         adapter = new DiseaseRecordHandleExpandableAdapter(getActivity(), diseaseRecordHandleList);
                         expandableListView.setAdapter(adapter);
-
-//                        expandableListView.setOnGroupExpandListener(ProjectAndMsgFragment.this);
                     } catch (Exception e) {
 
                     }
                     break;
                 default:
-//                    List<ProjectAndMsgItem> projectAndMsgItems = new ArrayList<>();
-//                    try {
-//                        JSONObject jsonObject = new JSONObject(json);
-//                        JSONArray rows = jsonObject.getJSONArray("rows");
-//                        if (rows != null && rows.length() > 0) {
-//                            for (int i = 0; i < rows.length(); i++) {
-//                                String rowsString = rows.getString(i);
-//                                ProjectAndMsgItem projectAndMsgItem = gson.fromJson(rowsString, ProjectAndMsgItem.class);
-//                                projectAndMsgItems.add(projectAndMsgItem);
-//                            }
-//                        }
-//                    } catch (Exception e) {
-//
-//                    }
-//                    if (projectAndMsgList != null && projectAndMsgList.size() > 0) {
-//                        ProjectAndMsg projectAndMsg = projectAndMsgList.get(msg.what);
-//                        projectAndMsg.projectAndMsgItem = projectAndMsgItems;
-//                    }
-//                    adapter.notifyDataSetChanged();
-//                    expandableListView.expandGroup(msg.what,true);
+                    List<DiseaseRecordHandleItem> handleItems = new ArrayList<>();
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        JSONArray rows = jsonObject.getJSONArray("rows");
+                        if (rows != null && rows.length() > 0) {
+                            for (int i = 0; i < rows.length(); i++) {
+                                String rowsString = rows.getString(i);
+                                DiseaseRecordHandleItem handleItem = gson.fromJson(rowsString, DiseaseRecordHandleItem.class);
+                                handleItems.add(handleItem);
+                            }
+                        }
+                    } catch (Exception e) {
+
+                    }
+                    if (diseaseRecordHandleList != null && diseaseRecordHandleList.size() > 0) {
+                        DiseaseRecordHandle diseaseRecordHandle = diseaseRecordHandleList.get(msg.what);
+                        diseaseRecordHandle.diseaseRecordHandleItem = handleItems;
+                    }
+                    adapter.notifyDataSetChanged();
+                    expandableListView.expandGroup(msg.what, true);
 
                     break;
             }
@@ -126,7 +126,6 @@ public class DiseaseHandlerFragment extends BaseFragment2 implements ExpandableL
     }
 
 
-
     @Override
     public void fetchData() {
         DiseaseRecordActivity activity = (DiseaseRecordActivity) getActivity();
@@ -137,25 +136,23 @@ public class DiseaseHandlerFragment extends BaseFragment2 implements ExpandableL
 
     @Override
     public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-//        DiseaseRecordActivity activity = (DiseaseRecordActivity) getActivity();
-//        ProjectAndMsg projectAndMsg = projectAndMsgList.get(groupPosition);
-//        if (activity.filter.equals(filter_cache)) {
-//            if (projectAndMsg.projectAndMsgItem != null)
-//                return false;
-//            //如果ProjectAndMsg里面的projectAndMsgItem为null，则需要请求网络
-//            String filter = activity.filter.substring(0, activity.filter.indexOf("&projectItemType="));
-//            filter = filter + "&projectItemType=" + projectAndMsg.projectType + "&implementSituation=" +
-//                    projectAndMsg.implementSituation;
-//            HttpclientUtil.getData(getActivity(), itemUrl + filter, handler, groupPosition);
-//        } else {
-//            filter_cache = activity.filter;
-//            if (!TextUtils.isEmpty(activity.filter)) {
-//                String filter = activity.filter.substring(0, activity.filter.indexOf("&projectItemType="));
-//                filter = filter + "&projectItemType=" + projectAndMsg.projectType + "&implementSituation=" +
-//                        projectAndMsg.implementSituation;
-//                HttpclientUtil.getData(getActivity(), itemUrl + filter, handler, groupPosition);
-//            }
-//        }
+        DiseaseRecordActivity activity = (DiseaseRecordActivity) getActivity();
+        DiseaseRecordHandle diseaseRecordHandle = diseaseRecordHandleList.get(groupPosition);
+        if (activity.filter.equals(filter_cache)) {
+            if (diseaseRecordHandle.diseaseRecordHandleItem != null)
+                return false;
+            //如果ProjectAndMsg里面的projectAndMsgItem为null，则需要请求网络
+            String filter = activity.filter.substring(0, activity.filter.lastIndexOf("&") + 1);
+            filter = filter + "situation=" + diseaseRecordHandle.dealSituation;
+            HttpclientUtil.getData(getActivity(), itemUrl + filter, handler, groupPosition);
+        } else {
+            filter_cache = activity.filter;
+            if (!TextUtils.isEmpty(activity.filter)) {
+                String filter = activity.filter.substring(0, activity.filter.lastIndexOf("&") + 1);
+                filter = filter + "situation=" + diseaseRecordHandle.dealSituation;
+                HttpclientUtil.getData(getActivity(), itemUrl + filter, handler, groupPosition);
+            }
+        }
         return true;
     }
 }

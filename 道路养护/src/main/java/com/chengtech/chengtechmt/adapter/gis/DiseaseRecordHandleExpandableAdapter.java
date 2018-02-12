@@ -8,11 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chengtech.chengtechmt.R;
 import com.chengtech.chengtechmt.entity.gis.DiseaseRecordHandle;
+import com.chengtech.chengtechmt.entity.gis.DiseaseRecordHandleItem;
 import com.chengtech.chengtechmt.entity.gis.ProjectAndMsg;
 import com.chengtech.chengtechmt.entity.gis.ProjectAndMsgItem;
 import com.chengtech.chengtechmt.util.ViewHolder;
@@ -47,7 +49,7 @@ public class DiseaseRecordHandleExpandableAdapter extends BaseExpandableListAdap
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return data.get(groupPosition).diseaseRecordHandleItem==null?0:data.get(groupPosition).diseaseRecordHandleItem.size();
+        return data.get(groupPosition).diseaseRecordHandleItem == null ? 0 : data.get(groupPosition).diseaseRecordHandleItem.size();
     }
 
     @Override
@@ -85,37 +87,50 @@ public class DiseaseRecordHandleExpandableAdapter extends BaseExpandableListAdap
         TextView tv2 = ViewHolder.get(convertView, R.id.tv2);
         TextView tv3 = ViewHolder.get(convertView, R.id.tv3);
         tv1.setText(dict.get(diseaseRecordHandle.dealSituation));
-        tv2.setText( diseaseRecordHandle.diseaseNum+"");
+        tv2.setText(diseaseRecordHandle.diseaseNum + "");
         if (!TextUtils.isEmpty(diseaseRecordHandle.proportion)) {
-            float v = Float.parseFloat(diseaseRecordHandle.proportion);
-            int b = (int) (v*100);
-            tv3.setText(String.valueOf(b));
-        };
+            try {
+                float v = Float.parseFloat(diseaseRecordHandle.proportion);
+                int b = (int) (v * 100);
+                tv3.setText(String.valueOf(b));
+            } catch (Exception e) {
+                tv3.setText("-");
+            }
+        }else {
+            tv3.setText("-");
+        }
+        ;
         return convertView;
     }
 
     @Override
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-//        if (data.get(groupPosition).projectAndMsgItem == null)
-//            return null;
-//        if (convertView == null) {
-//            convertView = inflater.inflate(R.layout.item_projectandmsg_child, parent, false);
-//        }
-//
-//        ProjectAndMsgItem projectAndMsgItem = data.get(groupPosition).projectAndMsgItem.get(childPosition);
-//        TextView tv1 = ViewHolder.get(convertView, R.id.tv1);
-//        TextView tv2 = ViewHolder.get(convertView, R.id.tv2);
-//        TextView tv3 = ViewHolder.get(convertView, R.id.tv3);
-//        TextView tv4 = ViewHolder.get(convertView, R.id.tv4);
+        if (data.get(groupPosition).diseaseRecordHandleItem == null)
+            return null;
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.item_diseasehandle_child, parent, false);
+        }
+
+        DiseaseRecordHandleItem handleItem = data.get(groupPosition).diseaseRecordHandleItem.get(childPosition);
+        LinearLayout layout = ViewHolder.get(convertView, R.id.title);
+        if (childPosition == 0) {
+            layout.setVisibility(View.VISIBLE);
+        } else {
+            layout.setVisibility(View.GONE);
+        }
+        TextView tv1 = ViewHolder.get(convertView, R.id.tv1);
+        TextView tv2 = ViewHolder.get(convertView, R.id.tv2);
+        TextView tv3 = ViewHolder.get(convertView, R.id.tv3);
+        TextView tv4 = ViewHolder.get(convertView, R.id.tv4);
 //        TextView tv5 = ViewHolder.get(convertView, R.id.tv5);
 //        TextView tv6 = ViewHolder.get(convertView, R.id.tv6);
 //        TextView tv7 = ViewHolder.get(convertView, R.id.tv7);
 //        TextView tv8 = ViewHolder.get(convertView, R.id.tv8);
-//
-//        tv1.setText("路线编号：" + projectAndMsgItem.routeCode);
-//        tv2.setText("开始桩号：" + projectAndMsgItem.startPeg);
-//        tv3.setText("结束桩号：" + projectAndMsgItem.endPeg);
-//        tv4.setText("项目名称：" + projectAndMsgItem.projectName);
+
+        tv1.setText(handleItem.routeCode);
+        tv2.setText(handleItem.diseaseName);
+        tv3.setText(handleItem.diseaseType);
+        tv4.setText(handleItem.diseaseSeverity);
 //        tv5.setText("建设单位：" + projectAndMsgItem.buildUnit);
 //        tv6.setText("投资金额（千万）：" + String.valueOf(projectAndMsgItem.totalInvestment));
 //        tv7.setText("支出金额（千万）：" + String.valueOf(projectAndMsgItem.totalPaidFund));

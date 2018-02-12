@@ -66,7 +66,10 @@ import java.util.List;
 
 import java.util.Map;
 
+import cn.finalteam.galleryfinal.GalleryFinal;
+import cn.finalteam.galleryfinal.model.PhotoInfo;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import id.zelory.compressor.Compressor;
 
 import static com.chengtech.chengtechmt.activity.business.DiseaseRegistrationListActivity.DISEASE_REGISTRATION_LIST;
 import static com.chengtech.chengtechmt.util.HttpclientUtil.SAVE_FAILED;
@@ -75,7 +78,7 @@ import static com.chengtech.chengtechmt.util.HttpclientUtil.SAVE_SUCCESS;
 /**
  * 病害登记表
  */
-public class DiseaseRegistrationActivity extends BaseActivity implements AMapLocationListener, FellowMenDialogFragment.OnDismissListener,ImageAddAdapter.onAddPictureListener {
+public class DiseaseRegistrationActivity extends BaseActivity implements AMapLocationListener, FellowMenDialogFragment.OnDismissListener, ImageAddAdapter.onAddPictureListener {
 
     private static final int GET_LOCAL_INFO_SUCCESS = 0x13;
     private static final int GET_LOCAL_INFO_FAILED = 0x14;
@@ -466,59 +469,57 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CommonUtils.TAKE_PHOTO && resultCode == RESULT_OK) {
-            String picPath = imageAddAdapter.getCameraCachePath();
-
-            try {
-                File file = new File(picPath);
-                if (!file.exists())
-                    return;
-                Map<String, Object> waterMarkParam = new HashMap<>();
-                Date date = new Date(System.currentTimeMillis());
-                DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-                String picName = "DiseaseRecord-" + format.format(date) + ".jpg";
-                StringBuffer sb = new StringBuffer();
-                sb.append("巡查人:" + AppAccount.name + ";拍照时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date) + ";");
-                sb.append("经度:" + longitude + "\u3000\u3000");
-                sb.append("纬度:" + latitude + ";");
-                sb.append("位置信息：" + site + ";");
-                sb.append("陪同人员：" + fellowMen);
-                waterMarkParam.put("picName", picName);
-                waterMarkParam.put("waterMarkMsg", sb.toString());
-                waterMarkParam.put("imgPath", picPath);
-                waterMarkParam.put("imgPaths", picPaths);
-                waterMarkParam.put("handler", handler);
-                new Thread(new WarterMarkRunnable(this, waterMarkParam)).start();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        } else if (requestCode == ImageAddAdapter.SELECT_IMG_RESULT && resultCode == RESULT_OK) {
-            ArrayList<String> picturePath = data.getStringArrayListExtra("PicturePath");
-            for (int i = 0; i < picturePath.size(); i++) {
-                Map<String, Object> waterMarkParam = new HashMap<>();
-                Date date = new Date(System.currentTimeMillis() + i * 1000); //这里之所以要加上i*1000,是为了防止名称重复，造成重复加载。
-                DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-                String picName = "DiseaseRecord-" + format.format(date) + ".jpg";
-                StringBuffer sb = new StringBuffer();
-                sb.append("巡查人:" + AppAccount.name + ";拍照时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date) + ";");
-//                if (!TextUtils.isEmpty(site)) {
-                sb.append("经度:" + longitude + "\u3000\u3000");
-                sb.append("纬度:" + latitude + ";");
-                sb.append("位置信息：" + site + ";");
-                sb.append("陪同人员：" + fellowMen);
-//                }
-                waterMarkParam.put("picName", picName);
-                waterMarkParam.put("waterMarkMsg", sb.toString());
-                waterMarkParam.put("imgPath", picturePath.get(i));
-                waterMarkParam.put("imgPaths", picPaths);
-                waterMarkParam.put("handler", handler);
-                new Thread(new WarterMarkRunnable(this, waterMarkParam)).start();
-            }
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == CommonUtils.TAKE_PHOTO && resultCode == RESULT_OK) {
+//            String picPath = imageAddAdapter.getCameraCachePath();
+//
+//            try {
+//                File file = new File(picPath);
+//                if (!file.exists())
+//                    return;
+//                Map<String, Object> waterMarkParam = new HashMap<>();
+//                Date date = new Date(System.currentTimeMillis());
+//                DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+//                String picName = "DiseaseRecord-" + format.format(date) + ".jpg";
+//                StringBuffer sb = new StringBuffer();
+//                sb.append("巡查人:" + AppAccount.name + ";拍照时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date) + ";");
+//                sb.append("经度:" + longitude + "\u3000\u3000");
+//                sb.append("纬度:" + latitude + ";");
+//                sb.append("位置信息：" + site + ";");
+//                sb.append("陪同人员：" + fellowMen);
+//                waterMarkParam.put("picName", picName);
+//                waterMarkParam.put("waterMarkMsg", sb.toString());
+//                waterMarkParam.put("imgPath", picPath);
+//                waterMarkParam.put("imgPaths", picPaths);
+//                waterMarkParam.put("handler", handler);
+//                new Thread(new WarterMarkRunnable(this, waterMarkParam)).start();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//
+//        } else if (requestCode == ImageAddAdapter.SELECT_IMG_RESULT && resultCode == RESULT_OK) {
+//            ArrayList<String> picturePath = data.getStringArrayListExtra("PicturePath");
+//            for (int i = 0; i < picturePath.size(); i++) {
+//                Map<String, Object> waterMarkParam = new HashMap<>();
+//                Date date = new Date(System.currentTimeMillis() + i * 1000); //这里之所以要加上i*1000,是为了防止名称重复，造成重复加载。
+//                DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+//                String picName = "DiseaseRecord-" + format.format(date) + ".jpg";
+//                StringBuffer sb = new StringBuffer();
+//                sb.append("巡查人:" + AppAccount.name + ";拍照时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date) + ";");
+//                sb.append("经度:" + longitude + "\u3000\u3000");
+//                sb.append("纬度:" + latitude + ";");
+//                sb.append("位置信息：" + site + ";");
+//                sb.append("陪同人员：" + fellowMen);
+//                waterMarkParam.put("picName", picName);
+//                waterMarkParam.put("waterMarkMsg", sb.toString());
+//                waterMarkParam.put("imgPath", picturePath.get(i));
+//                waterMarkParam.put("imgPaths", picPaths);
+//                waterMarkParam.put("handler", handler);
+//                new Thread(new WarterMarkRunnable(this, waterMarkParam)).start();
+//            }
+//        }
+//    }
 
     public static void startAction(Context context, DiseaseRegistration diseaseRegistration, int position) {
         Intent intent = new Intent(context, DiseaseRegistrationActivity.class);
@@ -718,10 +719,10 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
                     public void onOtherButtonClick(ActionSheet actionSheet, int index) {
                         switch (index) {
                             case 0:
-//                                GalleryFinal.openGallerySingle(0, mOnHanlderResultCallback);
+                                GalleryFinal.openGalleryMuti(0, 5, mOnHanlderResultCallback);
                                 break;
                             case 1:
-//                                GalleryFinal.openCamera(1, mOnHanlderResultCallback);
+                                GalleryFinal.openCamera(1, mOnHanlderResultCallback);
                                 break;
                         }
                     }
@@ -729,24 +730,42 @@ public class DiseaseRegistrationActivity extends BaseActivity implements AMapLoc
                 .show();
     }
 
-//    private GalleryFinal.OnHanlderResultCallback mOnHanlderResultCallback = new GalleryFinal.OnHanlderResultCallback() {
-//        @Override
-//        public void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList) {
-//            try {
-//                if (resultList != null) {
+    private GalleryFinal.OnHanlderResultCallback mOnHanlderResultCallback = new GalleryFinal.OnHanlderResultCallback() {
+        @Override
+        public void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList) {
+            try {
+                if (resultList != null) {
 //                    File file = new File(resultList.get(0).getPhotoPath());
 //                    File compressFile = new Compressor(DiseaseRegistrationActivity.this).compressToFile(file);
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        @Override
-//        public void onHanlderFailure(int requestCode, String errorMsg) {
-//            Toast.makeText(DiseaseRegistrationActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
-//        }
-//    };
+                    for (int i = 0; i < resultList.size(); i++) {
+                        Map<String, Object> waterMarkParam = new HashMap<>();
+                        Date date = new Date(System.currentTimeMillis() + i * 1000); //这里之所以要加上i*1000,是为了防止名称重复，造成重复加载。
+                        DateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+                        String picName = "DiseaseRecord-" + format.format(date) + ".jpg";
+                        StringBuffer sb = new StringBuffer();
+                        sb.append("巡查人:" + AppAccount.name + ";拍照时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date) + ";");
+                        sb.append("经度:" + longitude + "\u3000\u3000");
+                        sb.append("纬度:" + latitude + ";");
+                        sb.append("位置信息：" + site + ";");
+                        sb.append("陪同人员：" + fellowMen);
+                        waterMarkParam.put("picName", picName);
+                        waterMarkParam.put("waterMarkMsg", sb.toString());
+                        waterMarkParam.put("imgPath", resultList.get(i).getPhotoPath());
+                        waterMarkParam.put("imgPaths", picPaths);
+                        waterMarkParam.put("handler", handler);
+                        new Thread(new WarterMarkRunnable(DiseaseRegistrationActivity.this, waterMarkParam)).start();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onHanlderFailure(int requestCode, String errorMsg) {
+            Toast.makeText(DiseaseRegistrationActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
+        }
+    };
 }
 
 

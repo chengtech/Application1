@@ -33,7 +33,7 @@ import org.json.JSONObject;
  */
 
 public class MainFragment extends BaseFragment2 {
-//    String url1 = MyConstants.PRE_URL + "mt/integratequery/maintenancesituation/mediumAndProjectEchartIndex.action?";
+    //    String url1 = MyConstants.PRE_URL + "mt/integratequery/maintenancesituation/mediumAndProjectEchartIndex.action?";
     String url2 = MyConstants.PRE_URL + "mt/integratequery/maintenancesituation/getProjectMapMsg.action?";
     private WebView webView;
     private MapView mapView;
@@ -55,6 +55,14 @@ public class MainFragment extends BaseFragment2 {
                                 String x = jsonObject.getString("x");
                                 String y = jsonObject.getString("y");
                                 String name = jsonObject.getString("name");
+                                if (jsonObject.has("xydwid")) {
+                                    jsonObject.remove("xydwid");
+                                }
+                                ;
+                                if (jsonObject.has("y"))
+                                    jsonObject.remove("y");
+                                if (jsonObject.has("x"))
+                                    jsonObject.remove("x");
                                 LatLng latLng = new LatLng(Double.parseDouble(y), Double.parseDouble(x));
                                 CoordinateConverter converter = new CoordinateConverter();
                                 converter.from(CoordinateConverter.CoordType.GPS);
@@ -62,22 +70,23 @@ public class MainFragment extends BaseFragment2 {
                                 LatLng convert = converter.convert();
 
                                 int iconId = R.mipmap.ic_launcher; //默认
-                                String snippet = jsonArray.getString(i);
-                                if(snippet.contains("green-small")) {
+//                                String snippet = jsonArray.getString(i);
+                                String snippet = jsonObject.toString();
+                                if (snippet.contains("green-small")) {
                                     iconId = R.mipmap.green_small;
-                                }else if (snippet.contains("green-big")) {
+                                } else if (snippet.contains("green-big")) {
                                     iconId = R.mipmap.green_big;
-                                }else if (snippet.contains("red-small")) {
+                                } else if (snippet.contains("red-small")) {
                                     iconId = R.mipmap.red_small;
-                                }else if (snippet.contains("red-big")) {
+                                } else if (snippet.contains("red-big")) {
                                     iconId = R.mipmap.red_big;
                                 }
                                 snippet = snippet.substring(snippet.indexOf("\"项目名称"), snippet.lastIndexOf(","));
                                 snippet = snippet.replace(",", ",\n");
-                                snippet = snippet.replace("\"","");
+                                snippet = snippet.replace("\"", "");
 
                                 mapView.getMap().addMarker(new MarkerOptions().position(convert).title(name).snippet(snippet)
-                                .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(),iconId))));
+                                        .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), iconId))));
                                 if (i == 0) {
                                     mapView.getMap().moveCamera(CameraUpdateFactory.zoomTo(mapView.getMap().getMaxZoomLevel() - 10));
                                     mapView.getMap().moveCamera(CameraUpdateFactory.changeLatLng(convert));
@@ -95,9 +104,9 @@ public class MainFragment extends BaseFragment2 {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            rootView = inflater.inflate(R.layout.fragment_main_gis, container, false);
-            webView = (WebView) rootView.findViewById(R.id.webView);
-            mapView = (MapView) rootView.findViewById(R.id.mapView);
+        rootView = inflater.inflate(R.layout.fragment_main_gis, container, false);
+        webView = (WebView) rootView.findViewById(R.id.webView);
+        mapView = (MapView) rootView.findViewById(R.id.mapView);
 
 
         return rootView;
@@ -108,7 +117,7 @@ public class MainFragment extends BaseFragment2 {
         super.onViewCreated(view, savedInstanceState);
         mapView.onCreate(savedInstanceState);
         //定位到广州
-        mapView.getMap().moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(Double.parseDouble("23.118988"),Double.parseDouble("113.285392"))));
+        mapView.getMap().moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(Double.parseDouble("23.118988"), Double.parseDouble("113.285392"))));
 
     }
 
@@ -176,7 +185,7 @@ public class MainFragment extends BaseFragment2 {
     @Override
     public void fetchData() {
         MaintenanceSituationActivity activity = (MaintenanceSituationActivity) getActivity();
-        if (!TextUtils.isEmpty(activity.filter)){
+        if (!TextUtils.isEmpty(activity.filter)) {
             HttpclientUtil.getData(getActivity(), url2 + activity.filter, handler, 0x01);
 //            setWebViewCookie();
 //            webView.loadUrl(url1 + activity.filter);

@@ -2,19 +2,30 @@ package com.chengtech.chengtechmt;
 
 import android.app.Application;
 import android.app.DownloadManager;
+import android.content.Context;
 import android.content.IntentFilter;
+import android.os.Environment;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 
+import com.chengtech.chengtechmt.picasso.PicassoImageLoader;
 import com.chengtech.chengtechmt.util.MyConstants;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 import com.pgyersdk.crash.PgyCrashManager;
 
+import java.io.File;
+
+import cn.finalteam.galleryfinal.CoreConfig;
+import cn.finalteam.galleryfinal.FunctionConfig;
+import cn.finalteam.galleryfinal.GalleryFinal;
+import cn.finalteam.galleryfinal.ThemeConfig;
 
 
 /**
  * 作者: LiuFuYingWang on 2016/5/25 16:26.
  */
-public class MyApplication extends Application {
+public class MyApplication extends MultiDexApplication {
 
     @Override
     public void onCreate() {
@@ -23,7 +34,7 @@ public class MyApplication extends Application {
         PgyCrashManager.register(this);
         initSpeech();
         initReceiver();
-//        initGalleyFinalConfig();
+        initGalleyFinalConfig();
         MyConstants.imageDict.put("路线信息", R.mipmap.file);
         MyConstants.imageDict.put("道路数据", R.mipmap.analysis);
         MyConstants.imageDict.put("区间路段信息", R.mipmap.file);
@@ -80,31 +91,38 @@ public class MyApplication extends Application {
         MyConstants.imageDict.put("公路气象监测", R.mipmap.file4);
     }
 
-//    private void initGalleyFinalConfig() {
-//        //设置主题
-//        //ThemeConfig.CYAN
-//
-//        //配置功能
-//        FunctionConfig functionConfig = new FunctionConfig.Builder()
-//                .setEnableCamera(true)
-//                .setEnableEdit(false)
-//                .setEnableCrop(false)
-//                .setEnableRotate(false)
-//                .setCropSquare(false)
-//                .setEnablePreview(true)
-//                .build();
-//
-//        //配置imageloader
-//        PicassoImageLoader imageloader = new PicassoImageLoader();
-//        CoreConfig coreConfig = new CoreConfig.Builder(this, imageloader, ThemeConfig.DEFAULT)
-//                .setFunctionConfig(functionConfig)
-//                .build();
-//        GalleryFinal.init(coreConfig);
-//    }
+    private void initGalleyFinalConfig() {
+        //设置主题
+        //ThemeConfig.CYAN
+
+        //配置功能
+        FunctionConfig functionConfig = new FunctionConfig.Builder()
+                .setEnableCamera(false)
+                .setMutiSelectMaxSize(5)
+                .setEnableEdit(false)
+                .setEnableCrop(false)
+                .setEnableRotate(false)
+                .setCropSquare(false)
+                .setEnablePreview(false)
+                .build();
+
+        //配置imageloader
+        PicassoImageLoader imageloader = new PicassoImageLoader();
+        CoreConfig coreConfig = new CoreConfig.Builder(this, imageloader, ThemeConfig.DEFAULT)
+                .setFunctionConfig(functionConfig)
+                .setTakePhotoFolder(new File(Environment.getExternalStorageDirectory(), "/DCIM/" + "ChengTechmt/"))
+                .build();
+        GalleryFinal.init(coreConfig);
+    }
 
     private void initSpeech() {
         SpeechUtility.createUtility(this, SpeechConstant.APPID + "= 595dd926");
     }
+//    @Override
+//    protected void attachBaseContext(Context base) {
+//        super.attachBaseContext(base);
+//        MultiDex.install(appcont);
+//    }
 
     private void initReceiver() {
     }

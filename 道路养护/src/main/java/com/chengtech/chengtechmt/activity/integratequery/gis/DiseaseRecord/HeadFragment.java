@@ -20,7 +20,6 @@ import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.chengtech.chengtechmt.R;
-import com.chengtech.chengtechmt.activity.integratequery.gis.MaintenanceSituation.MaintenanceSituationActivity;
 import com.chengtech.chengtechmt.fragment.BaseFragment2;
 import com.chengtech.chengtechmt.util.HttpclientUtil;
 import com.chengtech.chengtechmt.util.MyConstants;

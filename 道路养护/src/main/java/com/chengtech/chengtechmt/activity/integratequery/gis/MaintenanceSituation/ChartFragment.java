@@ -20,6 +20,7 @@ import com.chengtech.chengtechmt.util.MyConstants;
 
 public class ChartFragment extends BaseFragment2 {
     private String url1 = MyConstants.PRE_URL + "mt/integratequery/maintenancesituation/mediumAndProjectEchartIndex.action?";
+//    private String url1 = MyConstants.PRE_URL + "mt/integratequery/maintenancesituation/mediumAndProjectEchartIndexMobile.action?";
     private WebView webView;
 
     @Nullable

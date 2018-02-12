@@ -128,12 +128,11 @@ public class ImageAddAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     picturePaths.remove(position);
                     notifyItemRemoved(position);
-                    notifyItemRangeChanged(0, picturePaths.size());
+                    notifyItemRangeChanged(position, picturePaths.size());
                 }
             });
         } else {
             imageView.setImageURI(null);
-//            imageView.setBackgroundResource(R.drawable.ic_add_picture);
             Drawable drawable = mContext.getResources().getDrawable(R.drawable.ic_add_picture);
             imageView.setImageDrawable(drawable);
             imageView.setOnClickListener(new View.OnClickListener() {
